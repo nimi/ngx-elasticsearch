@@ -1,0 +1,14 @@
+# Editor-specific
+.idea
+*.sublime-project
+*.sublime-workspace
+.settings
+.vscode
+
+# Installed libs
+node_modules
+
+# Misc
+npm-debug.log
+.DS_Store
+ignore/
