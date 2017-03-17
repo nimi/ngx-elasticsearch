@@ -1,0 +1,53 @@
+{
+  "name": "@ngx-elasticsearch/core",
+  "version": "0.1.0",
+  "description": "Core package for elastic search components",
+  "main": "index.js",
+  "scripts": {
+    "build": "./node_modules/.bin/tsc;",
+    "build:watch": "./node_modules/.bin/tsc -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nimi/ngx-elasticsearch/packages/core"
+  },
+  "peerDependencies": {
+    "@angular/common": "~4.0.0-rc.4",
+    "@angular/compiler": "~4.0.0-rc.4",
+    "@angular/compiler-cli": "^4.0.0-rc.4",
+    "@angular/core": "~4.0.0-rc.4",
+    "@angular/platform-browser": "~4.0.0-rc.4",
+    "@angular/platform-browser-dynamic": "~4.0.0-rc.4",
+    "@angular/platform-server": "~4.0.0-rc.4",
+    "zone.js": "^0.8.4",
+    "rxjs": "^5.2.0",
+    "core-js": "^2.4.0"
+  },
+  "dependencies": {
+    "@types/history": "^3.2.1",
+    "@types/isomorphic-fetch": "0.0.33",
+    "@types/lodash": "^4.14.55",
+    "@types/whatwg-fetch": "0.0.33",
+    "history": "^4.6.1",
+    "isomorphic-fetch": "^2.2.1",
+    "lodash": "^4.17.4",
+    "qs": "^6.4.0",
+    "typescript": "2.2.1",
+    "zone.js": "^0.8.4"
+  },
+  "devDependencies": {
+    "@angular/common": "~4.0.0-rc.4",
+    "@angular/compiler": "~4.0.0-rc.4",
+    "@angular/compiler-cli": "^4.0.0-rc.4",
+    "@angular/core": "~4.0.0-rc.4",
+    "@angular/platform-browser": "~4.0.0-rc.4",
+    "@angular/platform-browser-dynamic": "~4.0.0-rc.4",
+    "@angular/platform-server": "~4.0.0-rc.4",
+    "zone.js": "^0.8.4",
+    "rxjs": "^5.2.0",
+    "core-js": "^2.4.0"
+  },
+  "author": "Nicholas Mitchell",
+  "license": "MIT"
+}
