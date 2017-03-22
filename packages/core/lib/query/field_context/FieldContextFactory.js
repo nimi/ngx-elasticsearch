@@ -5,11 +5,11 @@ var ChildrenFieldContext_1 = require("./ChildrenFieldContext");
 var EmbeddedFieldContext_1 = require("./EmbeddedFieldContext");
 exports.FieldContextFactory = function (fieldOptions) {
     switch (fieldOptions.type) {
-        case "nested":
+        case 'nested':
             return new NestedFieldContext_1.NestedFieldContext(fieldOptions);
-        case "children":
+        case 'children':
             return new ChildrenFieldContext_1.ChildrenFieldContext(fieldOptions);
-        case "embedded":
+        case 'embedded':
         default:
             return new EmbeddedFieldContext_1.EmbeddedFieldContext(fieldOptions);
     }

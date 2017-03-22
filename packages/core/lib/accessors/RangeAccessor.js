@@ -14,14 +14,13 @@ var FilterBasedAccessor_1 = require("./FilterBasedAccessor");
 var state_1 = require("../state");
 var query_1 = require("../query");
 var lodash_1 = require("lodash");
-var lodash_2 = require("lodash");
 var RangeAccessor = (function (_super) {
     __extends(RangeAccessor, _super);
     function RangeAccessor(key, options) {
         var _this = _super.call(this, key, options.id) || this;
         _this.state = new state_1.ObjectState({});
         _this.options = options;
-        _this.options.fieldOptions = _this.options.fieldOptions || { type: "embedded" };
+        _this.options.fieldOptions = _this.options.fieldOptions || { type: 'embedded' };
         _this.options.fieldOptions.field = _this.options.field;
         _this.fieldContext = query_1.FieldContextFactory(_this.options.fieldOptions);
         return _this;
@@ -51,19 +50,19 @@ var RangeAccessor = (function (_super) {
         return this.getAggregations([
             this.key,
             this.fieldContext.getAggregationPath(),
-            this.key, "buckets"
+            this.key, 'buckets'
         ], []);
     };
     RangeAccessor.prototype.isDisabled = function () {
         if (this.options.loadHistogram) {
-            var maxValue = lodash_2.get(lodash_1.maxBy(this.getBuckets(), "doc_count"), "doc_count", 0);
+            var maxValue = lodash_1.get(lodash_1.maxBy(this.getBuckets(), 'doc_count'), 'doc_count', 0);
             return maxValue === 0;
         }
         else {
             return this.getAggregations([
                 this.key,
                 this.fieldContext.getAggregationPath(),
-                this.key, "value"
+                this.key, 'value'
             ], 0) === 0;
         }
     };
@@ -84,11 +83,11 @@ var RangeAccessor = (function (_super) {
         var metric;
         if (this.options.loadHistogram) {
             metric = query_1.HistogramBucket(this.key, this.options.field, {
-                "interval": this.getInterval(),
-                "min_doc_count": 0,
-                "extended_bounds": {
-                    "min": this.options.min,
-                    "max": this.options.max
+                'interval': this.getInterval(),
+                'min_doc_count': 0,
+                'extended_bounds': {
+                    'min': this.options.min,
+                    'max': this.options.max
                 }
             });
         }

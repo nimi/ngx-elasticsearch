@@ -11,9 +11,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var Accessor_1 = require("./Accessor");
-var mapValues = require("lodash/mapValues");
-var zipObject = require("lodash/zipObject");
-var constant = require("lodash/constant");
 var CustomHighlightAccessor = (function (_super) {
     __extends(CustomHighlightAccessor, _super);
     function CustomHighlightAccessor(request) {

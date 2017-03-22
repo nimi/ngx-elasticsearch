@@ -1,15 +1,15 @@
-import {NestedFieldContext} from "./NestedFieldContext"
-import {ChildrenFieldContext} from "./ChildrenFieldContext"
-import {EmbeddedFieldContext} from "./EmbeddedFieldContext"
+import { NestedFieldContext } from './NestedFieldContext';
+import { ChildrenFieldContext } from './ChildrenFieldContext';
+import { EmbeddedFieldContext } from './EmbeddedFieldContext';
 
-export const FieldContextFactory = (fieldOptions)=>{
+export const FieldContextFactory = (fieldOptions: any) => {
   switch (fieldOptions.type){
-    case "nested":
-      return new NestedFieldContext(fieldOptions)
-    case "children":
-      return new ChildrenFieldContext(fieldOptions)
-    case "embedded":
+    case 'nested':
+      return new NestedFieldContext(fieldOptions);
+    case 'children':
+      return new ChildrenFieldContext(fieldOptions);
+    case 'embedded':
     default:
-      return new EmbeddedFieldContext(fieldOptions)
+      return new EmbeddedFieldContext(fieldOptions);
   }
-}
+};

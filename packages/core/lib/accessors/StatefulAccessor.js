@@ -17,25 +17,23 @@ var StatefulAccessor = (function (_super) {
         var _this = _super.call(this) || this;
         _this.key = key;
         _this.uuid = _this.key + _this.uuid;
-        _this.urlKey = urlString || key && key.replace(/\./g, "_");
+        _this.urlKey = urlString || key && key.replace(/\./g, '_');
         _this.urlWithState = _this.urlWithState.bind(_this);
         return _this;
     }
-    StatefulAccessor.prototype.onStateChange = function (oldState) {
-    };
+    StatefulAccessor.prototype.onStateChange = function (oldState) { };
     StatefulAccessor.prototype.fromQueryObject = function (ob) {
         var value = ob[this.urlKey];
         this.state = this.state.setValue(value);
     };
     StatefulAccessor.prototype.getQueryObject = function () {
         var val = this.state.getValue();
-        return (val) ? (_a = {},
-            _a[this.urlKey] = val,
-            _a) : {};
+        return (val)
+            ? (_a = {}, _a[this.urlKey] = val, _a) : {};
         var _a;
     };
-    StatefulAccessor.prototype.setSearchkitManager = function (searchkit) {
-        _super.prototype.setSearchkitManager.call(this, searchkit);
+    StatefulAccessor.prototype.setSearchManager = function (search) {
+        _super.prototype.setSearchManager.call(this, search);
         this.setResultsState();
     };
     StatefulAccessor.prototype.setResults = function (results) {
@@ -49,7 +47,7 @@ var StatefulAccessor = (function (_super) {
         this.state = this.state.clear();
     };
     StatefulAccessor.prototype.urlWithState = function (state) {
-        return this.searchkit.buildSearchUrl((_a = {}, _a[this.urlKey] = state, _a));
+        return this.searchManager.buildSearchUrl((_a = {}, _a[this.urlKey] = state, _a));
         var _a;
     };
     return StatefulAccessor;

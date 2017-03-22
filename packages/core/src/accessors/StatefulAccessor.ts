@@ -1,57 +1,56 @@
-import {State} from "../state"
-import {ImmutableQuery} from "../query/ImmutableQuery";
-import {Accessor} from "./Accessor"
+import { State } from '../state';
+import { ImmutableQuery } from '../query/ImmutableQuery';
+import { Accessor } from './Accessor';
+import { SearchManager } from '../SearchManager';
 
 export class StatefulAccessor<T extends State<any>> extends Accessor {
-  key:string
-  urlKey:string
-  state:T
-  resultsState:T
+  key: string;
+  urlKey: string;
+  state: T;
+  resultsState: T;
 
-  constructor(key, urlString?){
+  constructor(key: string, urlString?: string){
     super()
-    this.key = key
-    this.uuid = this.key+this.uuid
-    this.urlKey = urlString || key && key.replace(/\./g, "_")
-    this.urlWithState = this.urlWithState.bind(this)
+    this.key = key;
+    this.uuid = this.key + this.uuid;
+    this.urlKey = urlString || key && key.replace(/\./g, '_');
+    this.urlWithState = this.urlWithState.bind(this);
   }
 
-  onStateChange(oldState){
+  onStateChange(oldState: any) { }
 
+  fromQueryObject(ob: any) {
+    let value = ob[this.urlKey];
+    this.state = this.state.setValue(value);
   }
 
-  fromQueryObject(ob){
-    let value = ob[this.urlKey]
-    this.state = this.state.setValue(value)
+  getQueryObject() {
+    let val = this.state.getValue();
+    return (val)
+      ? { [this.urlKey]:val }
+      : {};
   }
 
-  getQueryObject(){
-    let val = this.state.getValue()
-    return (val) ? {
-      [this.urlKey]:val
-    } : {}
+  setSearchManager(search: SearchManager){
+    super.setSearchManager(search);
+    this.setResultsState();
   }
 
-  setSearchkitManager(searchkit){
-    super.setSearchkitManager(searchkit)
-    this.setResultsState()
+  setResults(results: any) {
+    super.setResults(results);
+    this.setResultsState();
   }
 
-  setResults(results){
-    super.setResults(results)
-    this.setResultsState()
+  setResultsState() {
+    this.resultsState = this.state;
   }
 
-  setResultsState(){
-    this.resultsState = this.state
+  resetState() {
+    this.state = this.state.clear();
   }
 
-  resetState(){
-    this.state = this.state.clear()
-  }
-
-  urlWithState(state:T) {
-    return this.searchkit.buildSearchUrl({ [this.urlKey]: state })
+  urlWithState(state: T) {
+    return this.searchManager.buildSearchUrl({ [this.urlKey]: state });
   }
 
 }

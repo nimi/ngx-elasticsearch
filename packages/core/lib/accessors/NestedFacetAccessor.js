@@ -14,11 +14,6 @@ var state_1 = require("../state");
 var FilterBasedAccessor_1 = require("./FilterBasedAccessor");
 var query_1 = require("../query");
 var lodash_1 = require("lodash");
-var lodash_2 = require("lodash");
-var lodash_3 = require("lodash");
-var lodash_4 = require("lodash");
-var lodash_5 = require("lodash");
-var lodash_6 = require("lodash");
 var NestedFacetAccessor = (function (_super) {
     __extends(NestedFacetAccessor, _super);
     function NestedFacetAccessor(key, options) {
@@ -31,7 +26,7 @@ var NestedFacetAccessor = (function (_super) {
         this.resetState();
     };
     NestedFacetAccessor.prototype.getBuckets = function (level) {
-        return this.getAggregations([this.key, "children", "lvl" + level, "children", "buckets"], []);
+        return this.getAggregations([this.key, 'children', 'lvl' + level, 'children', 'buckets'], []);
     };
     NestedFacetAccessor.prototype.buildSharedQuery = function (query) {
         var _this = this;
@@ -40,12 +35,12 @@ var NestedFacetAccessor = (function (_super) {
         var filterTerms = lodash_1.map(levelFilters, function (filter, i) {
             var value = filter[0];
             var isLeaf = i === lastIndex;
-            var subField = isLeaf ? ".value" : ".ancestors";
+            var subField = isLeaf ? '.value' : '.ancestors';
             return query_1.TermQuery(_this.options.field + subField, value);
         });
         if (filterTerms.length > 0) {
-            var leafFilter = lodash_2.get(levelFilters, [levelFilters.length - 1, 0], "");
-            var parentOfleaf = lodash_2.get(levelFilters, [levelFilters.length - 2, 0], this.options.title || this.key);
+            var leafFilter = lodash_1.get(levelFilters, [levelFilters.length - 1, 0], '');
+            var parentOfleaf = lodash_1.get(levelFilters, [levelFilters.length - 2, 0], this.options.title || this.key);
             var selectedFilter = {
                 id: this.key,
                 name: this.translate(parentOfleaf),
@@ -62,14 +57,14 @@ var NestedFacetAccessor = (function (_super) {
         var subAggs = undefined;
         var orderMetric = undefined;
         if (this.options.orderKey) {
-            var orderDirection = this.options.orderDirection || "asc";
+            var orderDirection = this.options.orderDirection || 'asc';
             var orderKey = this.options.orderKey;
-            if (lodash_3.includes(["_count", "_term"], orderKey)) {
+            if (lodash_1.includes(['_count', '_term'], orderKey)) {
                 orderMetric = (_a = {}, _a[orderKey] = orderDirection, _a);
             }
             else {
-                if (lodash_4.startsWith(orderKey, this.options.field + ".")) {
-                    var subAggName = this.options.field + "_order";
+                if (lodash_1.startsWith(orderKey, this.options.field + '.')) {
+                    var subAggName = this.options.field + '_order';
                     orderMetric = (_b = {},
                         _b[subAggName] = orderDirection,
                         _b);
@@ -77,30 +72,30 @@ var NestedFacetAccessor = (function (_super) {
                 }
             }
         }
-        var valueField = this.options.field + ".value";
-        return query_1.TermsBucket("children", valueField, { size: 0, order: orderMetric }, subAggs);
+        var valueField = this.options.field + '.value';
+        return query_1.TermsBucket('children', valueField, { size: 0, order: orderMetric }, subAggs);
         var _a, _b;
     };
     NestedFacetAccessor.prototype.buildOwnQuery = function (query) {
         var aggs = {};
-        var levelField = this.options.field + ".level";
-        var ancestorsField = this.options.field + ".ancestors";
+        var levelField = this.options.field + '.level';
+        var ancestorsField = this.options.field + '.ancestors';
         var startLevel = this.options.startLevel || 1;
         var termAggs = this.getTermAggs();
         var lvlAggs = [];
         var addLevel = function (level, ancestors) {
             if (ancestors === void 0) { ancestors = []; }
-            lvlAggs.push(query_1.FilterBucket("lvl" + level, query_1.BoolMust([query_1.TermQuery(levelField, level + startLevel)].concat(ancestors)), termAggs));
+            lvlAggs.push(query_1.FilterBucket('lvl' + level, query_1.BoolMust([query_1.TermQuery(levelField, level + startLevel)].concat(ancestors)), termAggs));
         };
         addLevel(0);
         var levels = this.state.getValue();
-        lodash_5.each(levels, function (level, i) {
-            var ancestors = lodash_1.map(lodash_6.take(levels, i + 1), function (level) {
+        lodash_1.each(levels, function (level, i) {
+            var ancestors = lodash_1.map(lodash_1.take(levels, i + 1), function (level) {
                 return query_1.TermQuery(ancestorsField, level[0]);
             });
             addLevel(i + 1, ancestors);
         });
-        return query.setAggs(query_1.FilterBucket(this.key, query.getFiltersWithoutKeys(this.uuid), query_1.NestedBucket.apply(void 0, ["children",
+        return query.setAggs(query_1.FilterBucket(this.key, query.getFiltersWithoutKeys(this.uuid), query_1.NestedBucket.apply(void 0, ['children',
             this.options.field].concat(lvlAggs))));
     };
     return NestedFacetAccessor;

@@ -2,7 +2,7 @@ import { State } from './State';
 
 export class ValueState extends State<string|number> {
 
-  toggle(value: string | number) {
+  toggle(value: any) {
     if (this.is(value)) {
       return this.clear();
     } else {
@@ -10,7 +10,7 @@ export class ValueState extends State<string|number> {
     }
   }
 
-  is (value: string | number): boolean {
+  is (value: any): boolean {
     return this.value === value;
   }
 }

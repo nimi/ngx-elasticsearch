@@ -1,26 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var SearchRequest = (function () {
-    function SearchRequest(transport, query, searchkit) {
+    function SearchRequest(transport, query, searchManager) {
         this.transport = transport;
         this.query = query;
-        this.searchkit = searchkit;
+        this.searchManager = searchManager;
         this.active = true;
     }
     SearchRequest.prototype.run = function () {
-        return this.transport.search(this.query).then(this.setResults.bind(this)).catch(this.setError.bind(this));
+        return this.transport.search(this.query)
+            .then(this.setResults.bind(this))
+            .catch(this.setError.bind(this));
     };
     SearchRequest.prototype.deactivate = function () {
         this.active = false;
     };
     SearchRequest.prototype.setResults = function (results) {
         if (this.active) {
-            this.searchkit.setResults(results);
+            this.searchManager.setResults(results);
         }
     };
     SearchRequest.prototype.setError = function (error) {
         if (this.active) {
-            this.searchkit.setError(error);
+            this.searchManager.setError(error);
         }
     };
     return SearchRequest;

@@ -1,18 +1,13 @@
-import {assign} from "lodash"
 
 export interface QueryStringOptions {
-  analyzer?:string
-  fields?:Array<string>
-  default_operator?:string
-  flags?:string
-  [str:string]:any
+  analyzer?: string
+  fields?: Array<string>
+  default_operator?: string
+  flags?: string
+  [str:string]: any
 }
 
-export function QueryString(query, options:QueryStringOptions={}){
-  if(!query){
-    return
-  }
-  return {
-    "query_string":assign({query}, options)
-  }
+export function QueryString(query: any, options: QueryStringOptions = {}) {
+  if(!query){ return }
+  return { "query_string": { query, ...options } };
 }

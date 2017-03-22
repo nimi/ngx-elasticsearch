@@ -16,9 +16,7 @@ var EmbeddedFieldContext = (function (_super) {
     function EmbeddedFieldContext() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    EmbeddedFieldContext.prototype.getAggregationPath = function () {
-        return undefined;
-    };
+    EmbeddedFieldContext.prototype.getAggregationPath = function () { return; };
     EmbeddedFieldContext.prototype.wrapAggregations = function () {
         var aggregations = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -26,9 +24,7 @@ var EmbeddedFieldContext = (function (_super) {
         }
         return aggregations;
     };
-    EmbeddedFieldContext.prototype.wrapFilter = function (filter) {
-        return filter;
-    };
+    EmbeddedFieldContext.prototype.wrapFilter = function (filter) { return filter; };
     return EmbeddedFieldContext;
 }(FieldContext_1.FieldContext));
 exports.EmbeddedFieldContext = EmbeddedFieldContext;

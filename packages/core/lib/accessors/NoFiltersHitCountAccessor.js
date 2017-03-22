@@ -16,11 +16,11 @@ var NoFiltersHitCountAccessor = (function (_super) {
     __extends(NoFiltersHitCountAccessor, _super);
     function NoFiltersHitCountAccessor() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.aggsKey = "no_filters_top_hits";
+        _this.aggsKey = 'no_filters_top_hits';
         return _this;
     }
     NoFiltersHitCountAccessor.prototype.getCount = function () {
-        return this.getAggregations([this.aggsKey, "hits", "total"], 0);
+        return this.getAggregations([this.aggsKey, 'hits', 'total'], 0);
     };
     NoFiltersHitCountAccessor.prototype.buildOwnQuery = function (query) {
         if (query.getQueryString() && query.getSelectedFilters().length > 0) {

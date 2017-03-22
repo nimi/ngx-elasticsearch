@@ -1,36 +1,35 @@
-import {ESTransport} from "./transport"
-import {ImmutableQuery} from "./query"
-import {SearchkitManager} from "./SearchManager";
+import { ESTransport } from "./transport"
+import { ImmutableQuery } from "./query"
+import { SearchManager } from "./SearchManager";
 
 export class SearchRequest {
+  active: boolean = true;
 
-  active:boolean
-  constructor(public transport:ESTransport,
-    public query:Object, public searchkit:SearchkitManager){
-    this.active = true
+  constructor(
+    public transport: ESTransport,
+    public query: ImmutableQuery,
+    public searchManager: SearchManager
+  ){ }
+
+  run() {
+    return this.transport.search(this.query)
+      .then(this.setResults.bind(this))
+      .catch(this.setError.bind(this));
   }
 
-  run(){
-    return this.transport.search(this.query).then(
-      this.setResults.bind(this)
-    ).catch(
-      this.setError.bind(this)
-    )
+  deactivate() {
+    this.active = false;
   }
 
-  deactivate(){
-    this.active = false
-  }
-
-  setResults(results){
+  setResults(results: any) {
     if(this.active){
-      this.searchkit.setResults(results)
+      this.searchManager.setResults(results);
     }
   }
 
-  setError(error){
+  setError(error: any) {
     if(this.active){
-      this.searchkit.setError(error)
+      this.searchManager.setError(error);
     }
   }
 

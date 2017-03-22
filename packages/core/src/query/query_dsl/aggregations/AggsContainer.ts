@@ -1,13 +1,9 @@
-import {assign} from "lodash"
-import {reduce} from "lodash"
-import {compact} from "lodash"
+import {reduce, compact, assign} from 'lodash';
 
-export function AggsContainer(key, inner, aggsArray:Array<any>=[]){
-  aggsArray = compact(aggsArray)
-  if(aggsArray.length > 0){
-    inner.aggs = reduce(aggsArray, assign, {})
+export function AggsContainer(key: string, inner: any, aggsArray: Array<any> = []) {
+  aggsArray = compact(aggsArray);
+  if (aggsArray.length > 0) {
+    inner.aggs = reduce(aggsArray, assign, {});
   }
-  return {
-    [key]:inner
-  }
+  return { [key]: inner };
 }

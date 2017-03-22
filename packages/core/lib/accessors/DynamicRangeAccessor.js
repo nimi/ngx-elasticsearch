@@ -19,7 +19,7 @@ var DynamicRangeAccessor = (function (_super) {
         var _this = _super.call(this, key, options.id) || this;
         _this.state = new state_1.ObjectState({});
         _this.options = options;
-        _this.options.fieldOptions = _this.options.fieldOptions || { type: "embedded" };
+        _this.options.fieldOptions = _this.options.fieldOptions || { type: 'embedded' };
         _this.options.fieldOptions.field = _this.options.field;
         _this.fieldContext = query_1.FieldContextFactory(_this.options.fieldOptions);
         return _this;
@@ -53,7 +53,7 @@ var DynamicRangeAccessor = (function (_super) {
         ], 0);
     };
     DynamicRangeAccessor.prototype.isDisabled = function () {
-        return (this.getStat("count") === 0) || (this.getStat("min") === this.getStat("max"));
+        return (this.getStat('count') === 0) || (this.getStat('min') === this.getStat('max'));
     };
     DynamicRangeAccessor.prototype.buildOwnQuery = function (query) {
         var otherFilters = query.getFiltersWithoutKeys(this.key);

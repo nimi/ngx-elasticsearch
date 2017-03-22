@@ -1,4 +1,4 @@
-import { createHistory, useQueries, History, HistoryQueries } from 'history/index'
+import { createHistory, useQueries } from 'history';
 const qs = require('qs');
 
 export const encodeObjUrl = (obj: any) => {

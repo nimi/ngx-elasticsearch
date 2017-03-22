@@ -1,67 +1,67 @@
-import {State} from "../state"
-import {FilterBasedAccessor} from "./FilterBasedAccessor"
+import {State} from '../state';
+import {FilterBasedAccessor} from './FilterBasedAccessor';
 import {
   CardinalityMetric, BoolMust, SelectedFilter, FilterBucket
-} from "../query";
+} from '../query';
 
-import {assign} from 'lodash'
+import {assign} from 'lodash';
 
 export interface CheckboxFilterAccessorOptions {
-  id:string
+  id: string
   filter: any
-  title?:string
-  label?:string
-  translations?:Object
+  title?: string
+  label?: string
+  translations?: Object
   defaultValue?: boolean
 }
 
 export class CheckboxFilterAccessor extends FilterBasedAccessor<State<boolean>> {
-
-  state = new State<boolean>(false)
-  options:any
-  uuid:string
-  filter: any
+  state: State<boolean> = new State<boolean>(false);
+  options: any;
+  uuid: string;
+  filter: any;
 
   static translations:any = {
-    "checkbox.on":"active"
+    'checkbox.on':'active'
+  };
+
+  constructor(key: any, options:CheckboxFilterAccessorOptions){
+    super(key, options.id);
+    this.options = options;
+    this.filter = options.filter;
+    this.state = this.state.create(options.defaultValue || null);
+    this.translations = assign({}, options.translations);
   }
 
-  constructor(key, options:CheckboxFilterAccessorOptions){
-    super(key, options.id)
-    this.options = options
-    this.filter = options.filter
-    this.state = this.state.create(options.defaultValue)
-    this.translations = assign({}, options.translations)
+  getDocCount() {
+    return this.getAggregations([this.uuid, 'doc_count'], 0);
   }
 
-  getDocCount(){
-    return this.getAggregations([this.uuid, "doc_count"], 0)
-  }
-
-  buildSharedQuery(query){
-    if(this.state.getValue()){
-      query = query.addFilter(this.uuid, this.filter)
+  buildSharedQuery(query: any) {
+    if (this.state.getValue()) {
+      query = query
+        .addFilter(this.uuid, this.filter)
         .addSelectedFilter({
           name:this.options.title || this.translate(this.key),
-          value: this.options.label || this.translate("checkbox.on"),
+          value: this.options.label || this.translate('checkbox.on'),
           id: this.options.id,
           remove:()=> this.state = this.state.setValue(false)
-        })
+        });
     }
 
-    return query
+    return query;
   }
 
-  buildOwnQuery(query){
-    var filters = query.getFilters()
+  buildOwnQuery(query: any) {
+    var filters = query.getFilters();
     if (!this.state.getValue()){
-      if (filters) filters = BoolMust([filters, this.filter])
-      else filters = this.filter
+      if (filters) filters = BoolMust([filters, this.filter]);
+      else filters = this.filter;
     }
     return query
       .setAggs(FilterBucket(
         this.uuid,
         filters
-      ))
+      ));
   }
 }

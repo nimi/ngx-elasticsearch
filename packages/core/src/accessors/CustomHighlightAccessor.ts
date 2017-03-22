@@ -1,18 +1,14 @@
-import {Accessor} from "./Accessor";
-const mapValues = require("lodash/mapValues")
-const zipObject = require("lodash/zipObject")
-const constant = require("lodash/constant")
-
+import {Accessor} from './Accessor';
 
 export class CustomHighlightAccessor extends Accessor {
+  highlightRequest: any;
 
-  highlightRequest: any
   constructor(public request: any) {
-    super()
-    this.highlightRequest = request
+    super();
+    this.highlightRequest = request;
   }
 
-  buildOwnQuery(query) {
-    return query.setHighlight(this.highlightRequest)
+  buildOwnQuery(query: any) {
+    return query.setHighlight(this.highlightRequest);
   }
 }

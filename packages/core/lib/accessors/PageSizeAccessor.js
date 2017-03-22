@@ -15,7 +15,7 @@ var state_1 = require("../state");
 var PageSizeAccessor = (function (_super) {
     __extends(PageSizeAccessor, _super);
     function PageSizeAccessor(defaultSize) {
-        var _this = _super.call(this, "size") || this;
+        var _this = _super.call(this, 'size') || this;
         _this.defaultSize = defaultSize;
         _this.state = new state_1.ValueState();
         return _this;

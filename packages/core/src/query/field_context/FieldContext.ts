@@ -1,10 +1,9 @@
-import {FieldOptions} from "./FieldOptions"
+import { FieldOptions } from './FieldOptions';
 
 export abstract class FieldContext {
-  constructor(public fieldOptions:FieldOptions){
+  constructor(public fieldOptions: FieldOptions){ }
 
-  }
-  abstract getAggregationPath():any
-  abstract wrapAggregations(...aggs):Array<any>
-  abstract wrapFilter(filter:any):any
+  abstract getAggregationPath(): any
+  abstract wrapAggregations(...aggs: any[]): Array<any>
+  abstract wrapFilter(filter: any): any
 }

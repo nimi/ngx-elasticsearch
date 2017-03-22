@@ -19,7 +19,7 @@ var QueryAccessor = (function (_super) {
         if (options === void 0) { options = {}; }
         var _this = _super.call(this, key) || this;
         _this.options = options;
-        _this.options.queryFields = _this.options.queryFields || ["_all"];
+        _this.options.queryFields = _this.options.queryFields || ['_all'];
         return _this;
     }
     QueryAccessor.prototype.fromQueryObject = function (ob) {
@@ -37,7 +37,7 @@ var QueryAccessor = (function (_super) {
             var queries = [simpleQuery];
             if (this.options.prefixQueryFields) {
                 queries.push(query_1.MultiMatchQuery(queryStr, lodash_1.assign(this.options.prefixQueryOptions, {
-                    type: "phrase_prefix",
+                    type: 'phrase_prefix',
                     fields: this.options.prefixQueryFields,
                 })));
             }

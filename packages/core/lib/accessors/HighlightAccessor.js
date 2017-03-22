@@ -12,8 +12,6 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Accessor_1 = require("./Accessor");
 var lodash_1 = require("lodash");
-var lodash_2 = require("lodash");
-var lodash_3 = require("lodash");
 var HighlightAccessor = (function (_super) {
     __extends(HighlightAccessor, _super);
     function HighlightAccessor(fields) {
@@ -24,7 +22,7 @@ var HighlightAccessor = (function (_super) {
     }
     HighlightAccessor.prototype.computeHighlightedFields = function (fields) {
         return {
-            fields: lodash_1.mapValues(lodash_2.zipObject(fields), lodash_3.constant({}))
+            fields: lodash_1.mapValues(lodash_1.zipObject(fields), lodash_1.constant({}))
         };
     };
     HighlightAccessor.prototype.buildOwnQuery = function (query) {

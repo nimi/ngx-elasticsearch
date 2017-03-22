@@ -12,28 +12,26 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var state_1 = require("../state");
 var StatefulAccessor_1 = require("./StatefulAccessor");
-var support_1 = require("../support");
+var utils_1 = require("../utils");
 var lodash_1 = require("lodash");
-var lodash_2 = require("lodash");
-var lodash_3 = require("lodash");
 var SortingAccessor = (function (_super) {
     __extends(SortingAccessor, _super);
     function SortingAccessor(key, options) {
         var _this = _super.call(this, key) || this;
         _this.state = new state_1.ValueState();
         _this.options = options;
-        _this.options.options = support_1.Utils.computeOptionKeys(_this.options.options, ["field", "order"], "none");
+        _this.options.options = utils_1.computeOptionKeys(_this.options.options, ['field', 'order'], 'none');
         return _this;
     }
     SortingAccessor.prototype.getSelectedOption = function () {
         var options = this.options.options;
         return lodash_1.find(options, { key: "" + this.state.getValue() }) ||
             lodash_1.find(options, { defaultOption: true }) ||
-            lodash_2.head(options);
+            lodash_1.head(options);
     };
     SortingAccessor.prototype.getSortQuery = function (sortOption) {
         if (sortOption.fields) {
-            return lodash_3.map(sortOption.fields, function (field) {
+            return lodash_1.map(sortOption.fields, function (field) {
                 return _a = {}, _a[field.field] = field.options || {}, _a;
                 var _a;
             });

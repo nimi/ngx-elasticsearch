@@ -1,14 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var update = require("react-addons-update");
 var query_dsl_1 = require("./query_dsl");
-var Utils_1 = require("../support/Utils");
+var utils_1 = require("../utils");
 var lodash_1 = require("lodash");
-var lodash_2 = require("lodash");
-var lodash_3 = require("lodash");
-var lodash_4 = require("lodash");
-var lodash_5 = require("lodash");
-var lodash_6 = require("lodash");
+var immutability_helper_1 = require("../utils/immutability-helper");
 var ImmutableQuery = (function () {
     function ImmutableQuery(index) {
         if (index === void 0) { index = ImmutableQuery.defaultIndex; }
@@ -32,7 +27,7 @@ var ImmutableQuery = (function () {
         if (this.index._source) {
             query._source = this.index._source;
         }
-        this.query = lodash_1.omitBy(query, lodash_6.isUndefined);
+        this.query = lodash_1.omitBy(query, lodash_1.isUndefined);
     };
     ImmutableQuery.prototype.hasFilters = function () {
         return this.index.filters.length > 0;
@@ -67,7 +62,7 @@ var ImmutableQuery = (function () {
         return this.index.selectedFilters;
     };
     ImmutableQuery.prototype.addAnonymousFilter = function (bool) {
-        return this.addFilter(Utils_1.Utils.guid(), bool);
+        return this.addFilter(utils_1.guid(), bool);
     };
     ImmutableQuery.prototype.addFilter = function (key, filter) {
         return this.update({
@@ -77,7 +72,7 @@ var ImmutableQuery = (function () {
         var _a;
     };
     ImmutableQuery.prototype.setAggs = function (aggs) {
-        return this.deepUpdate("aggs", aggs);
+        return this.deepUpdate('aggs', aggs);
     };
     ImmutableQuery.prototype.getFilters = function (keys) {
         if (keys === void 0) { keys = []; }
@@ -85,14 +80,14 @@ var ImmutableQuery = (function () {
     };
     ImmutableQuery.prototype._getFilters = function (keys, method) {
         keys = [].concat(keys);
-        var filters = lodash_3.values(method(this.index.filtersMap || {}, keys));
+        var filters = lodash_1.values(method(this.index.filtersMap || {}, keys));
         return query_dsl_1.BoolMust(filters);
     };
     ImmutableQuery.prototype.getFiltersWithKeys = function (keys) {
-        return this._getFilters(keys, lodash_4.pick);
+        return this._getFilters(keys, lodash_1.pick);
     };
     ImmutableQuery.prototype.getFiltersWithoutKeys = function (keys) {
-        return this._getFilters(keys, lodash_2.omit);
+        return this._getFilters(keys, lodash_1.omit);
     };
     ImmutableQuery.prototype.setSize = function (size) {
         return this.update({ $merge: { size: size } });
@@ -104,7 +99,7 @@ var ImmutableQuery = (function () {
         return this.update({ $merge: { _source: _source } });
     };
     ImmutableQuery.prototype.setHighlight = function (highlight) {
-        return this.deepUpdate("highlight", highlight);
+        return this.deepUpdate('highlight', highlight);
     };
     ImmutableQuery.prototype.getSize = function () {
         return this.query.size;
@@ -121,7 +116,7 @@ var ImmutableQuery = (function () {
     ImmutableQuery.prototype.deepUpdate = function (key, ob) {
         return this.update({
             $merge: (_a = {},
-                _a[key] = lodash_5.merge({}, this.index[key] || {}, ob),
+                _a[key] = lodash_1.merge({}, this.index[key] || {}, ob),
                 _a)
         });
         var _a;
@@ -132,7 +127,7 @@ var ImmutableQuery = (function () {
         });
     };
     ImmutableQuery.prototype.update = function (updateDef) {
-        return new ImmutableQuery(update(this.index, updateDef));
+        return new ImmutableQuery(immutability_helper_1.update(this.index, updateDef));
     };
     ImmutableQuery.prototype.getJSON = function () {
         return this.query;
@@ -143,7 +138,7 @@ var ImmutableQuery = (function () {
     return ImmutableQuery;
 }());
 ImmutableQuery.defaultIndex = {
-    queryString: "",
+    queryString: '',
     filtersMap: {},
     selectedFilters: [],
     queries: [],

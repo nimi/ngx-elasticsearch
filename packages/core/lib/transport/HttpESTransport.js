@@ -16,14 +16,30 @@ var HttpESTransport = (function () {
         this.options = __assign({ headers: {}, searchUrlPath: '/_search', timeout: HttpESTransport.timeout }, options);
         var credentials = HttpESTransport.parseCredentials(this.options);
         var config = __assign({ baseURL: this.host, timeout: this.options.timeout, headers: this.options.headers }, credentials);
-        this.http = new http_1.Http(config);
+        this.http = new http_1.HttpClient();
+        this.http.configure(function (c) {
+            c
+                .withBaseUrl(config.baseURL)
+                .withDefaults({
+                credentials: 'omit',
+                mode: 'cors',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'Fetch'
+                }
+            });
+        });
     }
     HttpESTransport.prototype.search = function (query) {
-        return this.http.post(this.options.searchUrlPath, query)
+        console.log(query, this.http, this.options);
+        return this.http
+            .post(this.options.searchUrlPath, query, this.options)
             .then(this.getData);
     };
     HttpESTransport.prototype.getData = function (response) {
-        return response.data;
+        var json = response.json();
+        console.log('asdfsadfasdf', response, json);
+        return json.data;
     };
     HttpESTransport.parseCredentials = function (options) {
         var credentials = {};

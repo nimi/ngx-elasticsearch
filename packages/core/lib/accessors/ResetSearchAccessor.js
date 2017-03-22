@@ -21,23 +21,23 @@ var ResetSearchAccessor = (function (_super) {
         return _this;
     }
     ResetSearchAccessor.prototype.canReset = function () {
-        var query = this.searchkit.query;
+        var query = this.searchManager.query;
         var options = this.options;
         return ((options.pagination && query.getFrom() > 0) ||
             (options.query && query.getQueryString().length > 0) ||
             (options.filter && query.getSelectedFilters().length > 0));
     };
     ResetSearchAccessor.prototype.performReset = function () {
-        var query = this.searchkit.query;
+        var query = this.searchManager.query;
         if (this.options.query) {
-            this.searchkit.getQueryAccessor().resetState();
+            this.searchManager.getQueryAccessor().resetState();
         }
         if (this.options.filter) {
-            var filters = this.searchkit.getAccessorsByType(_1.FilterBasedAccessor);
+            var filters = this.searchManager.getAccessorsByType(_1.FilterBasedAccessor);
             lodash_1.each(filters, function (accessor) { return accessor.resetState(); });
             lodash_1.each(query.getSelectedFilters() || [], function (f) { return f.remove(); });
         }
-        var paginationAccessor = this.searchkit.getAccessorByType(_1.PaginationAccessor);
+        var paginationAccessor = this.searchManager.getAccessorByType(_1.PaginationAccessor);
         if (this.options.pagination && paginationAccessor) {
             paginationAccessor.resetState();
         }

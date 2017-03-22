@@ -1,13 +1,13 @@
-import {Accessor} from "./Accessor";
-import {SourceFilterType} from "../query"
+import {Accessor} from './Accessor';
+import {SourceFilterType} from '../query';
 
 export class SourceFilterAccessor extends Accessor {
 
-  constructor(public source:SourceFilterType){
-    super()
+  constructor(public source: SourceFilterType) {
+    super();
   }
 
-  buildSharedQuery(query){
+  buildSharedQuery(query: any){
     return query.setSource(this.source)
   }
 }

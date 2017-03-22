@@ -17,20 +17,20 @@ var ChildrenFieldContext = (function (_super) {
     __extends(ChildrenFieldContext, _super);
     function ChildrenFieldContext(fieldOptions) {
         var _this = _super.call(this, fieldOptions) || this;
-        if (!lodash_1.get(_this.fieldOptions, "options.childType")) {
-            throw new Error("fieldOptions type:children requires options.childType");
+        if (!lodash_1.get(_this.fieldOptions, 'options.childType')) {
+            throw new Error('fieldOptions type:children requires options.childType');
         }
         return _this;
     }
     ChildrenFieldContext.prototype.getAggregationPath = function () {
-        return "inner";
+        return 'inner';
     };
     ChildrenFieldContext.prototype.wrapAggregations = function () {
         var aggregations = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             aggregations[_i] = arguments[_i];
         }
-        return [query_dsl_1.ChildrenBucket.apply(void 0, ["inner",
+        return [query_dsl_1.ChildrenBucket.apply(void 0, ['inner',
                 this.fieldOptions.options.childType].concat(aggregations))];
     };
     ChildrenFieldContext.prototype.wrapFilter = function (filter) {

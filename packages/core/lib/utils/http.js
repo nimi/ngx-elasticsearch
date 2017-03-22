@@ -9,248 +9,324 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("isomorphic-fetch");
-var Request = (function () {
-    function Request(method, url, opts) {
-        if (opts === void 0) { opts = {}; }
-        method = method.toUpperCase();
-        this.options = __assign({ mode: 'cors', cache: 'no-cache', credentials: 'include', headers: {}, query: {}, prefix: '', method: method }, opts);
-        this.url = this.options.prefix + url;
-        // fetch will normalize the headers
-        var headers = this.options.headers;
-        Object.keys(headers).forEach(function (h) {
-            if (h !== h.toLowerCase()) {
-                headers[h.toLowerCase()] = headers[h];
-                delete headers[h];
-            }
-        });
+/**
+ * Create a Blob containing JSON-serialized data.
+ * Useful for easily creating JSON fetch request bodies.
+ *
+ * @param body The object to be serialized to JSON.
+ * @returns A Blob containing the JSON serialized body.
+ */
+function json(body) {
+    return new Blob([JSON.stringify((body !== undefined ? body : {}))], { type: 'application/json' });
+}
+exports.json = json;
+/**
+ * A class for configuring HttpClients.
+ */
+var HttpClientConfiguration = (function () {
+    function HttpClientConfiguration() {
+        /**
+         * The base URL to be prepended to each Request's url before sending.
+         */
+        this.baseUrl = '';
+        /**
+         * Default values to apply to init objects when creating Requests. Note that
+         * defaults cannot be applied when Request objects are manually created because
+         * Request provides its own defaults and discards the original init object.
+         * See also https://developer.mozilla.org/en-US/docs/Web/API/Request/Request
+         */
+        this.defaults = {};
+        /**
+         * Interceptors to be added to the HttpClient.
+         */
+        this.interceptors = [];
     }
     /**
-     * Set Options
+     * Sets the baseUrl.
      *
-     * Examples:
-     *
-     *   .config('credentials', 'omit')
-     *   .config({ credentials: 'omit' })
-     *
-     * @param {String|Object} key
-     * @param {Any} value
-     * @return {Request}
+     * @param baseUrl The base URL.
+     * @returns The chainable instance of this configuration object.
+     * @chainable
      */
-    Request.prototype.config = function (key, value) {
-        var options = this.options;
-        if (typeof key === 'object') {
-            Object.keys(key).forEach(function (k) { return options[k] = key[k]; });
-        }
-        else {
-            options[key] = value;
-        }
+    HttpClientConfiguration.prototype.withBaseUrl = function (baseUrl) {
+        this.baseUrl = baseUrl;
         return this;
     };
     /**
-     * Set header
+     * Sets the defaults.
      *
-     * Examples:
-     *
-     *   .set('Accept', 'application/json')
-     *   .set({ Accept: 'application/json' })
-     *
-     * @param {String|Object} key
-     * @param {String} value
-     * @return {Request}
+     * @param defaults The defaults.
+     * @returns The chainable instance of this configuration object.
+     * @chainable
      */
-    Request.prototype.set = function (key, value) {
-        var headers = this.options.headers;
-        if (typeof key === 'object') {
-            Object.keys(key).forEach(function (k) { return headers[k] = key[k]; });
-        }
-        else {
-            headers[key.toLowerCase()] = value;
-        }
+    HttpClientConfiguration.prototype.withDefaults = function (defaults) {
+        this.defaults = defaults;
         return this;
     };
     /**
-     * Set Content-Type
+     * Adds an interceptor to be run on all requests or responses.
      *
-     * @param {String} type
+     * @param interceptor An object with request, requestError,
+     * response, or responseError methods. request and requestError act as
+     * resolve and reject handlers for the Request before it is sent.
+     * response and responseError act as resolve and reject handlers for
+     * the Response after it has been received.
+     * @returns The chainable instance of this configuration object.
+     * @chainable
      */
-    Request.prototype.type = function (type) {
-        switch (type) {
-            case 'json':
-                type = 'application/json';
-                break;
-            case 'form':
-            case 'urlencoded':
-                type = 'application/x-www-form-urlencoded';
-                break;
-        }
-        this.options.headers['content-type'] = type;
+    HttpClientConfiguration.prototype.withInterceptor = function (interceptor) {
+        this.interceptors.push(interceptor);
         return this;
     };
     /**
-     * Add query string
-     *
-     * @param {Object} object
-     * @return {Request}
+     * Applies a configuration that addresses common application needs, including
+     * configuring same-origin credentials, and using rejectErrorResponses.
+     * @returns The chainable instance of this configuration object.
+     * @chainable
      */
-    Request.prototype.query = function (object) {
-        var query = this.options.query;
-        for (var i in object) {
-            query[i] = object[i];
-        }
-        return this;
+    HttpClientConfiguration.prototype.useStandardConfiguration = function () {
+        var standardConfig = { credentials: 'same-origin' };
+        Object.assign(this.defaults, standardConfig, this.defaults);
+        return this.rejectErrorResponses();
     };
     /**
-     * Send data
-     *
-     * Examples:
-     *
-     *   .send('name=hello')
-     *   .send({ name: 'hello' })
-     *
-     * @param {String|Object} data
-     * @return {Request}
+     * Causes Responses whose status codes fall outside the range 200-299 to reject.
+     * The fetch API only rejects on network errors or other conditions that prevent
+     * the request from completing, meaning consumers must inspect Response.ok in the
+     * Promise continuation to determine if the server responded with a success code.
+     * This method adds a response interceptor that causes Responses with error codes
+     * to be rejected, which is common behavior in HTTP client libraries.
+     * @returns The chainable instance of this configuration object.
+     * @chainable
      */
-    Request.prototype.send = function (data) {
-        var type = this.options.headers['content-type'];
-        if (isObject(data) && isObject(this._body)) {
-            // merge body
-            for (var key in data) {
-                this._body[key] = data[key];
+    HttpClientConfiguration.prototype.rejectErrorResponses = function () {
+        return this.withInterceptor({ response: rejectOnError });
+    };
+    return HttpClientConfiguration;
+}());
+exports.HttpClientConfiguration = HttpClientConfiguration;
+function rejectOnError(response) {
+    if (!response.ok) {
+        throw response;
+    }
+    return response;
+}
+/**
+ * An HTTP client based on the Fetch API.
+ */
+var HttpClient = (function () {
+    /**
+     * Creates an instance of HttpClient.
+     */
+    function HttpClient() {
+        /**
+         * The current number of active requests.
+         * Requests being processed by interceptors are considered active.
+         */
+        this.activeRequestCount = 0;
+        /**
+         * Indicates whether or not the client is currently making one or more requests.
+         */
+        this.isRequesting = false;
+        /**
+         * Indicates whether or not the client has been configured.
+         */
+        this.isConfigured = false;
+        /**
+         * The base URL set by the config.
+         */
+        this.baseUrl = '';
+        /**
+         * The default request init to merge with values specified at request time.
+         */
+        this.defaults = null;
+        /**
+         * The interceptors to be run during requests.
+         */
+        this.interceptors = [];
+        if (typeof fetch === 'undefined') {
+            throw new Error('HttpClient requires a Fetch API implementation, but the current environment doesn\'t support it. You may need to load a polyfill such as https://github.com/github/fetch.');
+        }
+    }
+    /**
+     * Configure this client with default settings to be used by all requests.
+     *
+     * @param config A configuration object, or a function that takes a config
+     * object and configures it.
+     * @returns The chainable instance of this HttpClient.
+     * @chainable
+     */
+    HttpClient.prototype.configure = function (config) {
+        var normalizedConfig;
+        if (typeof config === 'object') {
+            normalizedConfig = { defaults: config };
+        }
+        else if (typeof config === 'function') {
+            normalizedConfig = new HttpClientConfiguration();
+            normalizedConfig.baseUrl = this.baseUrl;
+            normalizedConfig.defaults = Object.assign({}, this.defaults);
+            normalizedConfig.interceptors = this.interceptors;
+            var c = config(normalizedConfig);
+            if (HttpClientConfiguration.prototype.isPrototypeOf(c)) {
+                normalizedConfig = c;
             }
         }
-        else if (typeof data === 'string') {
-            if (!type) {
-                this.options.headers['content-type'] = type = 'application/x-www-form-urlencoded';
+        else {
+            throw new Error('invalid config');
+        }
+        var defaults = normalizedConfig.defaults;
+        if (defaults && Headers.prototype.isPrototypeOf(defaults.headers)) {
+            // Headers instances are not iterable in all browsers. Require a plain
+            // object here to allow default headers to be merged into request headers.
+            throw new Error('Default headers must be a plain object.');
+        }
+        this.baseUrl = normalizedConfig.baseUrl;
+        this.defaults = defaults;
+        this.interceptors = normalizedConfig.interceptors || [];
+        this.isConfigured = true;
+        return this;
+    };
+    /**
+     * Starts the process of fetching a resource. Default configuration parameters
+     * will be applied to the Request. The constructed Request will be passed to
+     * registered request interceptors before being sent. The Response will be passed
+     * to registered Response interceptors before it is returned.
+     *
+     * See also https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
+     *
+     * @param input The resource that you wish to fetch. Either a
+     * Request object, or a string containing the URL of the resource.
+     * @param init An options object containing settings to be applied to
+     * the Request.
+     * @returns A Promise for the Response from the fetch request.
+     */
+    HttpClient.prototype.fetch = function (input, init) {
+        var _this = this;
+        trackRequestStart.call(this);
+        var request = Promise.resolve().then(function () { return buildRequest.call(_this, input, init, _this.defaults); });
+        var promise = processRequest(request, this.interceptors)
+            .then(function (result) {
+            var response = null;
+            if (Response.prototype.isPrototypeOf(result)) {
+                response = result;
             }
-            if (type.indexOf('x-www-form-urlencoded') !== -1) {
-                this._body = this._body ? this._body + '&' + data : data;
+            else if (Request.prototype.isPrototypeOf(result)) {
+                request = Promise.resolve(result);
+                response = fetch(result);
             }
             else {
-                this._body = (this._body || '') + data;
+                throw new Error("An invalid result was returned by the interceptor chain. Expected a Request or Response instance, but got [" + result + "]");
             }
-        }
-        else {
-            this._body = data;
-        }
-        // default to json
-        if (!type) {
-            this.options.headers['content-type'] = 'application/json';
-        }
-        return this;
-    };
-    /**
-     * Append formData
-     *
-     * Examples:
-     *
-     *   .append(name, 'hello')
-     *
-     * @param {String} key
-     * @param {String} value
-     * @return {Request}
-     */
-    Request.prototype.append = function (key, value) {
-        if (!(this._body instanceof FormData)) {
-            this._body = new FormData();
-        }
-        this._body.append(key, value);
-        return this;
-    };
-    Request.prototype.promise = function () {
-        var options = this.options;
-        var url = this.url;
-        var beforeRequest = options.beforeRequest, afterResponse = options.afterResponse;
-        try {
-            if (['GET', 'HEAD', 'OPTIONS'].indexOf(options.method.toUpperCase()) === -1) {
-                if (this._body instanceof FormData) {
-                    options.body = this._body;
-                }
-                else if (isObject(this._body) && isJsonType(options.headers['content-type'])) {
-                    options.body = JSON.stringify(this._body);
-                }
-                else if (isObject(this._body)) {
-                    options.body = stringify(this._body);
-                }
-                else {
-                    options.body = this._body;
-                }
-            }
-            if (isObject(options.query)) {
-                if (url.indexOf('?') >= 0) {
-                    url += '&' + stringify(options.query);
-                }
-                else {
-                    url += '?' + stringify(options.query);
-                }
-            }
-            if (beforeRequest) {
-                var canceled = beforeRequest(url, options.body);
-                if (canceled === false) {
-                    return Promise.reject(new Error('request canceled by beforeRequest'));
-                }
-            }
-        }
-        catch (e) {
-            return Promise.reject(e);
-        }
-        if (afterResponse) {
-            return fetch(url, options)
-                .then(function (res) {
-                afterResponse(res);
-                return res;
-            });
-        }
-        return fetch(url, options);
-    };
-    Request.prototype.json = function (strict) {
-        if (strict === void 0) { strict = true; }
-        return this.promise()
-            .then(function (res) { return res.json(); })
-            .then(function (json) {
-            if (strict && !isObject(json)) {
-                throw new TypeError('response is not strict json');
-            }
-            return json;
+            return request.then(function (_result) { return processResponse(response, _this.interceptors, _result); });
         });
+        return trackRequestEndWith.call(this, promise);
     };
-    Request.prototype.text = function () {
-        return this.promise().then(function (res) { return res.text(); });
+    HttpClient.prototype.get = function (url, options) {
+        return this.fetch(url, __assign({}, options, { method: 'get' }));
     };
-    return Request;
+    HttpClient.prototype.post = function (url, body, options) {
+        return this.fetch(url, __assign({}, options, { body: body, method: 'post' }));
+    };
+    HttpClient.prototype.put = function (url, body, options) {
+        return this.fetch(url, __assign({}, options, { body: body, method: 'put' }));
+    };
+    HttpClient.prototype.delete = function (url, options) {
+        return this.fetch(url, __assign({}, options, { method: 'delete' }));
+    };
+    HttpClient.prototype.options = function (url, options) {
+        return this.fetch(url, __assign({}, options, { method: 'options' }));
+    };
+    HttpClient.prototype.head = function (url, options) {
+        return this.fetch(url, __assign({}, options, { method: 'head' }));
+    };
+    return HttpClient;
 }());
-/**
- * Private utils
- */
-function isObject(obj) {
-    return obj && typeof obj === 'object';
+exports.HttpClient = HttpClient;
+var absoluteUrlRegexp = /^([a-z][a-z0-9+\-.]*:)?\/\//i;
+function trackRequestStart() {
+    this.isRequesting = !!(++this.activeRequestCount);
 }
-function isJsonType(contentType) {
-    if (contentType === void 0) { contentType = ''; }
-    return contentType && contentType.indexOf('application/json') === 0;
+function trackRequestEnd() {
+    this.isRequesting = !!(--this.activeRequestCount);
 }
-function stringify(obj) {
-    if (obj === void 0) { obj = {}; }
-    return Object.keys(obj).map(function (key) {
-        return key + '=' + obj[key];
-    }).join('&');
+function trackRequestEndWith(promise) {
+    var handle = trackRequestEnd.bind(this);
+    promise.then(handle, handle);
+    return promise;
 }
-/**
- * Fetch
- */
-var Http = (function () {
-    function Http(options) {
-        if (options === void 0) { options = {}; }
-        this.options = options;
+function parseHeaderValues(headers) {
+    var parsedHeaders = {};
+    for (var name_1 in headers || {}) {
+        if (headers.hasOwnProperty(name_1)) {
+            parsedHeaders[name_1] = (typeof headers[name_1] === 'function') ? headers[name_1]() : headers[name_1];
+        }
     }
-    return Http;
-}());
-exports.Http = Http;
-var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'];
-methods.forEach(function (method) {
-    method = method.toLowerCase();
-    Http.prototype[method] = function (url) {
-        var opts = Object.assign({}, this.options);
-        return new Request(method, url, opts);
-    };
-});
+    return parsedHeaders;
+}
+function buildRequest(input, init) {
+    var defaults = this.defaults || {};
+    var request;
+    var body;
+    var requestContentType;
+    var parsedDefaultHeaders = parseHeaderValues(defaults.headers);
+    if (Request.prototype.isPrototypeOf(input)) {
+        request = input;
+        requestContentType = new Headers(request.headers).get('Content-Type');
+    }
+    else {
+        init || (init = {});
+        body = init.body;
+        var bodyObj = body ? { body: body } : null;
+        var requestInit = Object.assign({}, defaults, { headers: {} }, init, bodyObj);
+        requestContentType = new Headers(requestInit.headers).get('Content-Type');
+        request = new Request(getRequestUrl(this.baseUrl, input), requestInit);
+    }
+    if (!requestContentType && new Headers(parsedDefaultHeaders).has('content-type')) {
+        request.headers.set('Content-Type', new Headers(parsedDefaultHeaders).get('content-type'));
+    }
+    setDefaultHeaders(request.headers, parsedDefaultHeaders);
+    if (body && Blob.prototype.isPrototypeOf(body) && body.type) {
+        // work around bug in IE & Edge where the Blob type is ignored in the request
+        // https://connect.microsoft.com/IE/feedback/details/2136163
+        request.headers.set('Content-Type', body.type);
+    }
+    return request;
+}
+function getRequestUrl(baseUrl, url) {
+    if (absoluteUrlRegexp.test(url)) {
+        return url;
+    }
+    return (baseUrl || '') + url;
+}
+function setDefaultHeaders(headers, defaultHeaders) {
+    for (var name_2 in defaultHeaders || {}) {
+        if (defaultHeaders.hasOwnProperty(name_2) && !headers.has(name_2)) {
+            headers.set(name_2, defaultHeaders[name_2]);
+        }
+    }
+}
+function processRequest(request, interceptors) {
+    return applyInterceptors(request, interceptors, 'request', 'requestError');
+}
+function processResponse(response, interceptors, request) {
+    return applyInterceptors(response, interceptors, 'response', 'responseError', request);
+}
+function applyInterceptors(input, interceptors, successName, errorName) {
+    var interceptorArgs = [];
+    for (var _i = 4; _i < arguments.length; _i++) {
+        interceptorArgs[_i - 4] = arguments[_i];
+    }
+    return (interceptors || [])
+        .reduce(function (chain, interceptor) {
+        var successHandler = interceptor[successName];
+        var errorHandler = interceptor[errorName];
+        return chain.then(successHandler && (function (value) { return successHandler.call.apply(successHandler, [interceptor, value].concat(interceptorArgs)); }) || identity, errorHandler && (function (reason) { return errorHandler.call.apply(errorHandler, [interceptor, reason].concat(interceptorArgs)); }) || thrower);
+    }, Promise.resolve(input));
+}
+function identity(x) {
+    return x;
+}
+function thrower(x) {
+    throw x;
+}
 //# sourceMappingURL=http.js.map

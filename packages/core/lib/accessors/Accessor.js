@@ -1,11 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var support_1 = require("../support");
+var utils_1 = require("../utils");
 var lodash_1 = require("lodash");
-var lodash_2 = require("lodash");
 var Accessor = (function () {
     function Accessor() {
-        this.uuid = support_1.Utils.guid();
+        this.uuid = utils_1.guid();
         this.active = true;
         this.translations = {};
         this.refCount = 0;
@@ -20,14 +19,13 @@ var Accessor = (function () {
         this.active = active;
         return this;
     };
-    Accessor.prototype.setSearchkitManager = function (searchkit) {
-        this.searchkit = searchkit;
+    Accessor.prototype.setSearchManager = function (search) {
+        this.searchManager = search;
     };
     Accessor.prototype.translate = function (key, interpolations) {
-        var translation = ((this.searchkit && this.searchkit.translate(key)) ||
-            this.translations[key] ||
-            key);
-        return support_1.Utils.translate(translation, interpolations);
+        var translation = ((this.searchManager && this.searchManager.translate(key)) ||
+            this.translations[key] || key);
+        return utils_1.translate(translation, interpolations);
     };
     Accessor.prototype.getResults = function () {
         return this.results;
@@ -37,11 +35,10 @@ var Accessor = (function () {
     };
     Accessor.prototype.getAggregations = function (path, defaultValue) {
         var results = this.getResults();
-        var getPath = lodash_2.compact(['aggregations'].concat(path));
+        var getPath = lodash_1.compact(['aggregations'].concat(path));
         return lodash_1.get(results, getPath, defaultValue);
     };
-    Accessor.prototype.beforeBuildQuery = function () {
-    };
+    Accessor.prototype.beforeBuildQuery = function () { };
     Accessor.prototype.buildSharedQuery = function (query) {
         return query;
     };

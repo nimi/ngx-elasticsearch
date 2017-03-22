@@ -1,26 +1,25 @@
-import {Accessor} from "./Accessor";
-import {mapValues} from "lodash"
-import {zipObject} from "lodash"
-import {constant} from "lodash"
+import {Accessor} from './Accessor';
+import {mapValues, zipObject, constant} from 'lodash';
+import { ImmutableQuery } from '../query/ImmutableQuery';
 
 
 export class HighlightAccessor extends Accessor {
+  highlightFields: any;
 
-  highlightFields:any
-  constructor(public fields:Array<string>){
-    super()
-    this.highlightFields = this.computeHighlightedFields(fields)
+  constructor(public fields: Array<string>) {
+    super();
+    this.highlightFields = this.computeHighlightedFields(fields);
   }
 
-  computeHighlightedFields(fields) {
+  computeHighlightedFields(fields: any) {
     return {
-      fields:mapValues(
+      fields: mapValues(
         zipObject(fields),
         constant({})
       )
-    }
+    };
   }
-  buildOwnQuery(query){
-    return query.setHighlight(this.highlightFields)
+  buildOwnQuery(query: ImmutableQuery) {
+    return query.setHighlight(this.highlightFields);
   }
 }

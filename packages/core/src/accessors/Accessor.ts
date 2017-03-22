@@ -1,70 +1,63 @@
-import {ImmutableQuery} from "../query/ImmutableQuery";
-import {SearchkitManager} from "../SearchManager";
-import {Utils} from "../support"
-import {get} from "lodash"
-import {compact} from "lodash"
+import { ImmutableQuery } from '../query/ImmutableQuery';
+import { SearchManager } from '../SearchManager';
+import { translate, guid } from '../utils';
+import { get, compact } from 'lodash';
 
 export class Accessor {
-  searchkit:SearchkitManager
-  uuid:string
-  results:any
-  active:boolean
-  translations:Object
-  refCount:number
-  constructor(){
-    this.uuid = Utils.guid()
-    this.active = true
-    this.translations = {}
-    this.refCount = 0
+  searchManager: SearchManager;
+  uuid: string = guid();
+  results: any;
+  active: boolean = true;
+  translations: any = {};
+  refCount: number = 0;
+
+  incrementRef() {
+    this.refCount++;
   }
 
-  incrementRef(){
-    this.refCount++
+  decrementRef() {
+    this.refCount--;
   }
 
-  decrementRef(){
-    this.refCount--
+  setActive(active: boolean) {
+    this.active = active;
+    return this;
   }
 
-  setActive(active:boolean){
-    this.active = active
-    return this
-  }
-
-  setSearchkitManager(searchkit){
-    this.searchkit = searchkit
+  setSearchManager(search: SearchManager){
+    this.searchManager = search;
   }
 
 
-  translate(key, interpolations?){
+  translate(key: string, interpolations?: any) {
     let translation = (
-      (this.searchkit && this.searchkit.translate(key)) ||
-       this.translations[key] ||
-       key)
-    return Utils.translate(translation, interpolations)
+      (this.searchManager && this.searchManager.translate(key)) ||
+       this.translations[key] || key
+    );
+    return translate(translation, interpolations);
   }
 
-  getResults(){
-    return this.results
+  getResults() {
+    return this.results;
   }
 
-  setResults(results){
-    this.results = results
+  setResults(results: any) {
+    this.results = results;
   }
 
-  getAggregations(path, defaultValue){
-    const results = this.getResults()
-    const getPath = compact(['aggregations',...path])
-    return get(results, getPath, defaultValue)
+  getAggregations(path: any[], defaultValue: any) {
+    const results = this.getResults();
+    const getPath = compact(['aggregations', ...path]);
+    return get(results, getPath, defaultValue);
   }
 
-  beforeBuildQuery(){
+  beforeBuildQuery(){ }
 
+  buildSharedQuery(query: ImmutableQuery) {
+    return query;
   }
-  buildSharedQuery(query:ImmutableQuery){
-    return query
-  }
-  buildOwnQuery(query:ImmutableQuery){
-    return query
+
+  buildOwnQuery(query: ImmutableQuery) {
+    return query;
   }
 }

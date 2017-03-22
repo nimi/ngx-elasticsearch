@@ -2,6 +2,8 @@
   "extends": "../../tsconfig.common.json",
   "compilerOptions": {
     "outDir": "lib/",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "lib": [
       "dom",
       "es2015",

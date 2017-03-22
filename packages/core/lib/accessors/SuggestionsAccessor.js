@@ -20,7 +20,7 @@ var SuggestionsAccessor = (function (_super) {
         return _this;
     }
     SuggestionsAccessor.prototype.getSuggestion = function () {
-        return lodash_1.get(this.searchkit.getSuggestions(), [0, "options", 0, "text"], false);
+        return lodash_1.get(this.searchManager.getSuggestions(), [0, 'options', 0, 'text'], false);
     };
     SuggestionsAccessor.prototype.buildOwnQuery = function (query) {
         var queryText = query.getQueryString();
@@ -34,8 +34,8 @@ var SuggestionsAccessor = (function (_super) {
                         max_errors: 1,
                         gram_size: 4,
                         direct_generator: [{
-                                field: "_all",
-                                suggest_mode: "always",
+                                field: '_all',
+                                suggest_mode: 'always',
                                 min_word_length: 1
                             }]
                     }

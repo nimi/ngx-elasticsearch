@@ -1,73 +1,67 @@
-import {State, LevelState} from "../state"
-import {FilterBasedAccessor} from "./FilterBasedAccessor";
+import {State, LevelState} from '../state';
+import {FilterBasedAccessor} from './FilterBasedAccessor';
 import {
   TermQuery, TermsBucket, FilterBucket,
-  BoolShould, BoolMust
-} from "../query/";
-import {map} from "lodash"
-import {each} from "lodash"
-import {compact} from "lodash"
-import {take} from "lodash"
-import {omitBy} from "lodash"
-import {isUndefined} from "lodash"
+  BoolShould, BoolMust, ImmutableQuery
+} from '../query/';
+import {map, each, compact, take, omitBy, isUndefined} from 'lodash';
 
-export interface HierarchicalFacetAccessorOptions{
-  fields:Array<string>
-  size:number
-  id:string
-  title:string
-  orderKey?:string
-  orderDirection?:string
+export interface HierarchicalFacetAccessorOptions {
+  fields: Array<string>
+  size: number
+  id: string
+  title: string
+  orderKey?: string
+  orderDirection?: string
 }
 
 export class HierarchicalFacetAccessor extends FilterBasedAccessor<LevelState> {
+  state: LevelState = new LevelState()
+  options: any;
+  uuids: Array<String>;
 
-  state = new LevelState()
-  options:any
-  uuids:Array<String>
-
-  constructor(key, options:HierarchicalFacetAccessorOptions){
-    super(key)
-    this.options = options
-    this.computeUuids()
+  constructor(key: any, options:HierarchicalFacetAccessorOptions) {
+    super(key);
+    this.options = options;
+    this.computeUuids();
   }
 
-  computeUuids(){
+  computeUuids() {
     this.uuids = map(
       this.options.fields, field => this.uuid + field)
   }
 
-  onResetFilters(){
-    this.resetState()
+  onResetFilters() {
+    this.resetState();
   }
 
-  getBuckets(level){
-    var field = this.options.fields[level]
-    return this.getAggregations([this.options.id, field, field, "buckets"], [])
+  getBuckets(level: number) {
+    var field = this.options.fields[level];
+    return this.getAggregations([this.options.id, field, field, 'buckets'], []);
   }
 
 
-  getOrder(){
-    if(this.options.orderKey){
-      let orderDirection = this.options.orderDirection || "asc"
-      return {[this.options.orderKey]:orderDirection}
+  getOrder() {
+    if (this.options.orderKey) {
+      let orderDirection = this.options.orderDirection || 'asc';
+      return {[this.options.orderKey]:orderDirection};
     }
   }
 
-  buildSharedQuery(query) {
+  buildSharedQuery(query: any) {
 
-    each(this.options.fields, (field:string, i:number) => {
+    each(this.options.fields, (field: string, i: number) => {
       var filters = this.state.getLevel(i);
       var parentFilter = this.state.getLevel(i-1);
-      var isLeaf = !this.state.levelHasFilters(i+1)
-      var filterTerms = map(filters, TermQuery.bind(null, field))
+      var isLeaf = !this.state.levelHasFilters(i+1);
+      var filterTerms = map(filters, TermQuery.bind(null, field));
 
       if(filterTerms.length > 0){
         query = query.addFilter(
           this.uuids[i],
           (filterTerms.length  > 1 ) ?
           BoolShould(filterTerms) : filterTerms[0])
-        }
+        };
 
       if(isLeaf){
         var selectedFilters = map(filters, (filter)=> {
@@ -79,18 +73,18 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor<LevelState> {
               this.state = this.state.remove(i, filter)
             }
           }
-        })
-        query = query.addSelectedFilters(selectedFilters)
+        });
+        query = query.addSelectedFilters(selectedFilters);
       }
 
-    })
+    });
 
-    return query
+    return query;
   }
 
-  buildOwnQuery(query){
-    var filters = this.state.getValue()
-    var field = this.options.fields[0]
+  buildOwnQuery(query: any){
+    var filters = this.state.getValue();
+    var field = this.options.fields[0];
     let lvlAggs = compact(map(this.options.fields, (field:string, i:number) => {
       if (this.state.levelHasFilters(i-1) || i == 0) {
         return FilterBucket(
@@ -99,7 +93,7 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor<LevelState> {
           TermsBucket(field, field, omitBy({
             size:this.options.size, order:this.getOrder()
           }, isUndefined))
-        )
+        );
       }
     }));
 
@@ -107,9 +101,9 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor<LevelState> {
       this.options.id,
       query.getFiltersWithoutKeys(this.uuids),
       ...lvlAggs
-    )
+    );
 
-    return query.setAggs(aggs)
+    return query.setAggs(aggs);
   }
 
 }

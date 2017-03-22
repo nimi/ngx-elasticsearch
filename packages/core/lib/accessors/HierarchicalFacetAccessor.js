@@ -14,11 +14,6 @@ var state_1 = require("../state");
 var FilterBasedAccessor_1 = require("./FilterBasedAccessor");
 var _1 = require("../query/");
 var lodash_1 = require("lodash");
-var lodash_2 = require("lodash");
-var lodash_3 = require("lodash");
-var lodash_4 = require("lodash");
-var lodash_5 = require("lodash");
-var lodash_6 = require("lodash");
 var HierarchicalFacetAccessor = (function (_super) {
     __extends(HierarchicalFacetAccessor, _super);
     function HierarchicalFacetAccessor(key, options) {
@@ -37,18 +32,18 @@ var HierarchicalFacetAccessor = (function (_super) {
     };
     HierarchicalFacetAccessor.prototype.getBuckets = function (level) {
         var field = this.options.fields[level];
-        return this.getAggregations([this.options.id, field, field, "buckets"], []);
+        return this.getAggregations([this.options.id, field, field, 'buckets'], []);
     };
     HierarchicalFacetAccessor.prototype.getOrder = function () {
         if (this.options.orderKey) {
-            var orderDirection = this.options.orderDirection || "asc";
+            var orderDirection = this.options.orderDirection || 'asc';
             return _a = {}, _a[this.options.orderKey] = orderDirection, _a;
         }
         var _a;
     };
     HierarchicalFacetAccessor.prototype.buildSharedQuery = function (query) {
         var _this = this;
-        lodash_2.each(this.options.fields, function (field, i) {
+        lodash_1.each(this.options.fields, function (field, i) {
             var filters = _this.state.getLevel(i);
             var parentFilter = _this.state.getLevel(i - 1);
             var isLeaf = !_this.state.levelHasFilters(i + 1);
@@ -57,6 +52,7 @@ var HierarchicalFacetAccessor = (function (_super) {
                 query = query.addFilter(_this.uuids[i], (filterTerms.length > 1) ?
                     _1.BoolShould(filterTerms) : filterTerms[0]);
             }
+            ;
             if (isLeaf) {
                 var selectedFilters = lodash_1.map(filters, function (filter) {
                     return {
@@ -77,11 +73,11 @@ var HierarchicalFacetAccessor = (function (_super) {
         var _this = this;
         var filters = this.state.getValue();
         var field = this.options.fields[0];
-        var lvlAggs = lodash_3.compact(lodash_1.map(this.options.fields, function (field, i) {
+        var lvlAggs = lodash_1.compact(lodash_1.map(this.options.fields, function (field, i) {
             if (_this.state.levelHasFilters(i - 1) || i == 0) {
-                return _1.FilterBucket(field, query.getFiltersWithKeys(lodash_4.take(_this.uuids, i)), _1.TermsBucket(field, field, lodash_5.omitBy({
+                return _1.FilterBucket(field, query.getFiltersWithKeys(lodash_1.take(_this.uuids, i)), _1.TermsBucket(field, field, lodash_1.omitBy({
                     size: _this.options.size, order: _this.getOrder()
-                }, lodash_6.isUndefined)));
+                }, lodash_1.isUndefined)));
             }
         }));
         var aggs = _1.FilterBucket.apply(void 0, [this.options.id,

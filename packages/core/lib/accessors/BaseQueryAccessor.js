@@ -20,12 +20,12 @@ var BaseQueryAccessor = (function (_super) {
         return _this;
     }
     BaseQueryAccessor.prototype.keepOnlyQueryState = function () {
-        this.setQueryString(this.getQueryString(), true);
+        this.setQueryString(this.getQueryString() || '', true);
     };
     BaseQueryAccessor.prototype.setQueryString = function (queryString, withReset) {
         if (withReset === void 0) { withReset = false; }
         if (withReset) {
-            this.searchkit.resetState();
+            this.searchManager.resetState();
         }
         this.state = this.state.setValue(queryString);
     };

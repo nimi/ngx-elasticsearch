@@ -1,134 +1,120 @@
-import {Accessor, StatefulAccessor, BaseQueryAccessor, noopQueryAccessor} from  "./accessors"
-import {Utils} from "./support"
-import {ImmutableQuery} from "./query"
-import {filter} from "lodash"
-import {values} from "lodash"
-import {reduce} from "lodash"
-import {assign} from "lodash"
-import {each} from "lodash"
-import {without} from "lodash"
-import {find} from "lodash"
+import { Accessor, StatefulAccessor, BaseQueryAccessor, noopQueryAccessor } from './accessors';
+import * as Utils from './utils';
+import { ImmutableQuery } from './query';
+import { filter, values, reduce, assign, each, without, find } from 'lodash';
 
 type StatefulAccessors = Array<StatefulAccessor<any>>
 
 export class AccessorManager {
+  accessors: Accessor[] = [];
+  statefulAccessors: any = {};
+  queryAccessor: BaseQueryAccessor = noopQueryAccessor;
 
-  accessors:Array<Accessor>
-  statefulAccessors:{}
-  queryAccessor:BaseQueryAccessor
-
-  constructor() {
-    this.accessors = []
-    this.queryAccessor = noopQueryAccessor
-    this.statefulAccessors = {}
+  getAccessors() {
+    return this.accessors;
   }
 
-  getAccessors(){
-    return this.accessors
+  getActiveAccessors() {
+    return filter(this.accessors, {active:true});
   }
 
-  getActiveAccessors(){
-    return filter(this.accessors, {active:true})
+  getStatefulAccessors() {
+    return values(this.statefulAccessors) as StatefulAccessors;
   }
 
-  getStatefulAccessors(){
-    return values(this.statefulAccessors) as StatefulAccessors
+  getAccessorsByType(type: any) {
+    return filter(this.accessors, Utils.instanceOf(type));
   }
 
-  getAccessorsByType(type){
-    return filter(this.accessors, Utils.instanceOf(type))
+  getAccessorByType(type: any) {
+    return find(this.accessors, Utils.instanceOf(type));
   }
 
-  getAccessorByType(type){
-    return find(this.accessors, Utils.instanceOf(type))
-  }
-
-  add(accessor){
-    if(accessor instanceof StatefulAccessor){
-      if(accessor instanceof BaseQueryAccessor && accessor.key == "q"){
+  add(accessor: any) {
+    if (accessor instanceof StatefulAccessor) {
+      if (accessor instanceof BaseQueryAccessor && accessor.key === 'q') {
         if(this.queryAccessor !== noopQueryAccessor){
-          throw new Error("Only a single instance of BaseQueryAccessor is allowed")
+          throw new Error('Only a single instance of BaseQueryAccessor is allowed');
         } else {
-          this.queryAccessor = accessor
+          this.queryAccessor = accessor;
         }
       }
-      let existingAccessor = this.statefulAccessors[accessor.key]
-      if(existingAccessor){
-        existingAccessor.incrementRef()
-        return existingAccessor
+      let existingAccessor = this.statefulAccessors[accessor.key];
+      if (existingAccessor) {
+        existingAccessor.incrementRef();
+        return existingAccessor;
       } else {
-        this.statefulAccessors[accessor.key] = accessor
+        this.statefulAccessors[accessor.key] = accessor;
       }
     }
-    accessor.incrementRef()
-    this.accessors.push(accessor)
-    return accessor
+    accessor.incrementRef();
+    this.accessors.push(accessor);
+    return accessor;
   }
 
-  remove(accessor){
-    if(!accessor){
-      return
-    }
-    accessor.decrementRef()
-    if(accessor.refCount === 0){
-      if(accessor instanceof StatefulAccessor){
-        if(this.queryAccessor == accessor){
-          this.queryAccessor = noopQueryAccessor
+  remove(accessor: any) {
+    if(!accessor){ return; }
+
+    accessor.decrementRef();
+    if (accessor.refCount === 0) {
+      if (accessor instanceof StatefulAccessor) {
+        if (this.queryAccessor == accessor) {
+          this.queryAccessor = noopQueryAccessor;
         }
-        delete this.statefulAccessors[accessor.key]
+        delete this.statefulAccessors[accessor.key];
       }
-      this.accessors = without(this.accessors, accessor)
+      this.accessors = without(this.accessors, accessor);
     }
   }
 
-  getState(){
-    return reduce(this.getStatefulAccessors(), (state, accessor)=> {
+  getState() {
+    return reduce(this.getStatefulAccessors(), (state: any, accessor: any) => {
       return assign(state, accessor.getQueryObject())
-    }, {})
+    }, {});
   }
 
-  setState(state){
+  setState(state: any) {
     each(
       this.getStatefulAccessors(),
-      accessor=>accessor.fromQueryObject(state)
-    )
+      (accessor: any) => accessor.fromQueryObject(state)
+    );
   }
-  notifyStateChange(oldState){
+  notifyStateChange(oldState: any) {
     each(
       this.getStatefulAccessors(),
-      accessor => accessor.onStateChange(oldState)
-    )
+      (accessor: any) => accessor.onStateChange(oldState)
+    );
   }
 
   getQueryAccessor(){
-    return this.queryAccessor
+    return this.queryAccessor;
   }
 
-  buildSharedQuery(query){
-    return reduce(this.getActiveAccessors(), (query, accessor)=>{
+  buildSharedQuery(query: any) {
+    return reduce(this.getActiveAccessors(), (query, accessor) => {
       return accessor.buildSharedQuery(query)
-    }, query)
+    }, query);
   }
 
-  buildOwnQuery(query){
-    return reduce(this.getActiveAccessors(), (query, accessor)=>{
+  buildOwnQuery(query: any) {
+    return reduce(this.getActiveAccessors(), (query, accessor) => {
       return accessor.buildOwnQuery(query)
-    }, query)
+    }, query);
   }
 
-  buildQuery(){
-    each(this.getActiveAccessors(), accessor => accessor.beforeBuildQuery())
+  buildQuery() {
+    each(this.getActiveAccessors(), accessor => accessor.beforeBuildQuery());
     return this.buildOwnQuery(
       this.buildSharedQuery(new ImmutableQuery())
-    )
+    );
   }
 
-  setResults(results){
-    each(this.accessors, a => a.setResults(results))
+  setResults(results: any) {
+    each(this.accessors, a => a.setResults(results));
   }
 
-  resetState(){
-    each(this.getStatefulAccessors(), a => a.resetState())
+  resetState() {
+    each(this.getStatefulAccessors(), a => a.resetState());
   }
 
 }

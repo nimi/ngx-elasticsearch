@@ -1,4 +1,4 @@
-import { Http } from '../utils/http';
+import { HttpClient } from '../utils/http';
 import { ESTransport } from "./ESTransport"
 
 export interface ESTransportOptions {
@@ -14,7 +14,7 @@ export class HttpESTransport implements ESTransport {
   http: any;
   options: ESTransportOptions;
 
-  constructor(public host:string, options: ESTransportOptions = {}){
+  constructor(public host: string, options: ESTransportOptions = {}){
     this.options = {
       headers: {},
       searchUrlPath: '/_search',
@@ -29,16 +29,32 @@ export class HttpESTransport implements ESTransport {
       headers: this.options.headers,
       ...credentials
     };
-    this.http = new Http(config);
+    this.http = new HttpClient();
+    this.http.configure((c: any) => {
+      c
+        .withBaseUrl(config.baseURL)
+        .withDefaults({
+          credentials: 'omit',
+          mode: 'cors',
+          headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'Fetch'
+          }
+        })
+    })
   }
 
-  search(query:Object): Promise<any> {
-    return this.http.post(this.options.searchUrlPath, query)
+  search(query: Object): Promise<any> {
+    console.log(query, this.http, this.options);
+    return this.http
+      .post(this.options.searchUrlPath, query, this.options)
       .then(this.getData)
   }
 
   getData(response: any){
-    return response.data
+    const json = response.json();
+    console.log('asdfsadfasdf', response, json);
+    return json.data;
   }
 
   private static parseCredentials(options: ESTransportOptions): any {

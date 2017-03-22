@@ -1,32 +1,35 @@
-import {Accessor} from "./Accessor";
+import { Accessor } from './Accessor';
 
 
 export interface HitsOptions{
-  scrollTo:string|boolean
+  scrollTo: string | boolean
 }
 
 export class HitsAccessor extends Accessor {
 
-  constructor(public options:HitsOptions){
-    super()
+  constructor(public options: HitsOptions){
+    super();
   }
 
-  setResults(results){
-    super.setResults(results)
-    this.scrollIfNeeded()
+  setResults(results: any[]) {
+    super.setResults(results);
+    this.scrollIfNeeded();
   }
 
   scrollIfNeeded(){
-    if(this.searchkit.hasHitsChanged()){
-      if(this.options.scrollTo){
-  			document.querySelector(this.getScrollSelector()).scrollTop = 0;
+    if (this.searchManager.hasHitsChanged()) {
+      if (this.options.scrollTo) {
+        const el = document.querySelector(this.getScrollSelector());
+        if (el) {
+          el.scrollTop = 0;
+        }
       }
     }
   }
 
   getScrollSelector(){
     return (this.options.scrollTo == true) ?
-      "body" :
+      'body' :
       this.options.scrollTo.toString();
   }
 }

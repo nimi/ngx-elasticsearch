@@ -3,12 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var query_1 = require("./query");
 var accessors_1 = require("./accessors");
 var AccessorManager_1 = require("./AccessorManager");
-var history_1 = require("./history");
 var transport_1 = require("./transport");
 var SearchRequest_1 = require("./SearchRequest");
-var support_1 = require("./support");
+var utils_1 = require("./utils");
 var lodash_1 = require("lodash");
-var qs_1 = require("qs");
+var qs = require('qs');
 var SearchManager = (function () {
     function SearchManager(host, options) {
         if (options === void 0) { options = {}; }
@@ -19,10 +18,10 @@ var SearchManager = (function () {
             searchOnLoad: true
         });
         this.host = host;
-        this.transport = this.options.transport || new transport_1.AxiosESTransport(host, {
+        this.transport = this.options.transport || new transport_1.HttpESTransport(host, {
             headers: this.options.httpHeaders,
             basicAuth: this.options.basicAuth,
-            searchUrlPath: this.options.searchUrlPath,
+            searchUrlPath: this.options.searchUrlPath || '_search',
             timeout: this.options.timeout
         });
         this.accessors = new AccessorManager_1.AccessorManager();
@@ -30,26 +29,18 @@ var SearchManager = (function () {
             _this.completeRegistration = resolve;
         });
         this.translateFunction = lodash_1.constant(undefined);
-        this.queryProcessor = identity;
+        this.queryProcessor = lodash_1.identity;
         // this.primarySearcher = this.createSearcher()
         this.query = new query_1.ImmutableQuery();
-        this.emitter = new support_1.EventEmitter();
-        this.resultsEmitter = new support_1.EventEmitter();
+        this.emitter = new utils_1.EventEmitter();
+        this.resultsEmitter = new utils_1.EventEmitter();
     }
-    SearchManager.mock = function () {
-        var searchkit = new SearchManager('/', {
-            useHistory: false,
-            transport: new transport_1.MockESTransport()
-        });
-        searchkit.setupListeners();
-        return searchkit;
-    };
     SearchManager.prototype.setupListeners = function () {
         this.initialLoading = true;
         if (this.options.useHistory) {
-            this.unlistenHistory();
-            this.history = history_1.createHistoryInstance();
-            this.listenToHistory();
+            // this.unlistenHistory();
+            // this.history = createHistoryInstance();
+            // this.listenToHistory();
         }
         else {
             this.runInitialSearch();
@@ -91,11 +82,9 @@ var SearchManager = (function () {
         this._unlistenHistory = this.history.listen(lodash_1.after(callsBeforeListen, function (location) {
             //action is POP when the browser modified
             if (location.action === 'POP') {
-                _this.registrationCompleted.then(function () {
-                    _this.searchFromUrlQuery(location.query);
-                }).catch(function (e) {
-                    console.error(e.stack);
-                });
+                _this.registrationCompleted
+                    .then(function () { return _this.searchFromUrlQuery(location.query); })
+                    .catch(function (e) { return console.error(e.stack); });
             }
         }));
     };
@@ -127,7 +116,7 @@ var SearchManager = (function () {
     SearchManager.prototype.buildSearchUrl = function (extraParams) {
         if (extraParams === void 0) { extraParams = {}; }
         var params = lodash_1.defaults(extraParams, this.state || this.accessors.getState());
-        var queryString = qs_1.default.stringify(params, { encode: true });
+        var queryString = qs.stringify(params, { encode: true });
         return window.location.pathname + '?' + queryString;
     };
     SearchManager.prototype.reloadSearch = function () {
@@ -197,7 +186,6 @@ var SearchManager = (function () {
     };
     SearchManager.prototype.setError = function (error) {
         this.error = error;
-        console.error(this.error);
         this.results = null;
         this.accessors.setResults(null);
         this.onResponseChange();

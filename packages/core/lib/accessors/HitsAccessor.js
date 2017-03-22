@@ -23,15 +23,18 @@ var HitsAccessor = (function (_super) {
         this.scrollIfNeeded();
     };
     HitsAccessor.prototype.scrollIfNeeded = function () {
-        if (this.searchkit.hasHitsChanged()) {
+        if (this.searchManager.hasHitsChanged()) {
             if (this.options.scrollTo) {
-                document.querySelector(this.getScrollSelector()).scrollTop = 0;
+                var el = document.querySelector(this.getScrollSelector());
+                if (el) {
+                    el.scrollTop = 0;
+                }
             }
         }
     };
     HitsAccessor.prototype.getScrollSelector = function () {
         return (this.options.scrollTo == true) ?
-            "body" :
+            'body' :
             this.options.scrollTo.toString();
     };
     return HitsAccessor;

@@ -21,20 +21,21 @@ var CheckboxFilterAccessor = (function (_super) {
         _this.state = new state_1.State(false);
         _this.options = options;
         _this.filter = options.filter;
-        _this.state = _this.state.create(options.defaultValue);
+        _this.state = _this.state.create(options.defaultValue || null);
         _this.translations = lodash_1.assign({}, options.translations);
         return _this;
     }
     CheckboxFilterAccessor.prototype.getDocCount = function () {
-        return this.getAggregations([this.uuid, "doc_count"], 0);
+        return this.getAggregations([this.uuid, 'doc_count'], 0);
     };
     CheckboxFilterAccessor.prototype.buildSharedQuery = function (query) {
         var _this = this;
         if (this.state.getValue()) {
-            query = query.addFilter(this.uuid, this.filter)
+            query = query
+                .addFilter(this.uuid, this.filter)
                 .addSelectedFilter({
                 name: this.options.title || this.translate(this.key),
-                value: this.options.label || this.translate("checkbox.on"),
+                value: this.options.label || this.translate('checkbox.on'),
                 id: this.options.id,
                 remove: function () { return _this.state = _this.state.setValue(false); }
             });
@@ -55,7 +56,7 @@ var CheckboxFilterAccessor = (function (_super) {
     return CheckboxFilterAccessor;
 }(FilterBasedAccessor_1.FilterBasedAccessor));
 CheckboxFilterAccessor.translations = {
-    "checkbox.on": "active"
+    'checkbox.on': 'active'
 };
 exports.CheckboxFilterAccessor = CheckboxFilterAccessor;
 //# sourceMappingURL=CheckboxFilterAccessor.js.map
