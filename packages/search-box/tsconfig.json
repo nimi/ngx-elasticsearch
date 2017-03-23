@@ -1,16 +1,16 @@
 {
-  "compileOnSave": false,
+  "extends": "../../tsconfig.common.json",
   "compilerOptions": {
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
+    "outDir": "lib/",
     "experimentalDecorators": true,
-    "target": "es5",
+    "emitDecoratorMetadata": true,
     "lib": [
-      "es2016",
-      "dom"
+      "dom",
+      "es2015",
+      "es2016"
     ]
-  }
+  },
+  "files": [
+    "./src/index.ts"
+  ]
 }
