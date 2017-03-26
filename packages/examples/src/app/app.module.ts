@@ -7,6 +7,7 @@ import { Routing } from './app.routing';
 
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
+import { RootComponentsModule } from './root-components/root-components.module';
 import { ExamplesModule, components as exampleComponents } from './examples/examples.module';
 import { examples } from './examples';
 import { ComponentRegistryService, provideExperiments } from './shared/services/component-registry.service';
@@ -24,6 +25,7 @@ import { getModuleForExamples } from './utils/module';
     HttpModule,
     SharedModule,
     ExamplesModule,
+    RootComponentsModule,
     Routing
   ],
   providers: [

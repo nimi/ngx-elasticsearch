@@ -2,21 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { RootContainerComponent } from './containers/root-container/root-container.component';
-import { PreviewContainerComponent } from './containers/preview-container/preview-container.component';
-import { LayoutComponent } from './components/layout/layout.component';
-import { NavComponent } from './components/nav/nav.component';
-import { RendererComponent } from './components/renderer/renderer.component';
-import { StageComponent } from './components/stage/stage.component';
-import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { LayoutComponent } from './layout/layout.component';
+import { NavComponent } from './nav/nav.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 
 const components = [
-  RootContainerComponent,
-  PreviewContainerComponent,
   LayoutComponent,
   NavComponent,
-  RendererComponent,
-  StageComponent,
   ToolbarComponent
 ];
 
@@ -26,6 +18,6 @@ const components = [
     RouterModule
   ],
   declarations: [ ...components ],
-  exports: [ ...components ]
+  exports: [ ...components, CommonModule ]
 })
 export class SharedModule { }

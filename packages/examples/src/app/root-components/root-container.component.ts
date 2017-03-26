@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ComponentRegistryService } from '../../services/component-registry.service';
+import { ComponentRegistryService } from '../shared/services/component-registry.service';
 
 @Component({
   selector: 'example-root-container',
@@ -9,6 +9,7 @@ import { ComponentRegistryService } from '../../services/component-registry.serv
       <div class="grow">
         <router-outlet></router-outlet>
       </div>
+      <example-controls-container></example-controls-container>
     </example-layout>
   `,
   styles: [`

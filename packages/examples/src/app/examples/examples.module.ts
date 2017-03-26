@@ -5,7 +5,14 @@ import { NgxElasticsearchModule } from '@ngx-elasticsearch/core';
 import { NgxSearchBoxModule, NgxSearchBoxComponent } from '@ngx-elasticsearch/search-box';
 
 const url = "http://localhost:9200/";
-const options = { useHistory: false };
+const options = {
+  useHistory: false,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+};
+
+
 
 export let esModule = NgxElasticsearchModule.forRoot({ url, options });
 export const components = [

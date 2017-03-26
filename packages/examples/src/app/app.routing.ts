@@ -10,16 +10,16 @@ const routes: Routes = [
     redirectTo: '/components',
     pathMatch: 'full'
   },
-  {
-    path: 'components',
-    component: RootContainerComponent,
-    children: [
-      {
-        path: 'preview/:componentID/:versionID',
-        component: PreviewContainerComponent
-      },
-    ],
-  },
+  // {
+  //   path: 'components',
+  //   component: RootContainerComponent,
+  //   children: [
+  //     {
+  //       path: 'preview/:componentID/:versionID',
+  //       component: PreviewContainerComponent
+  //     },
+  //   ],
+  // },
 ];
 
 

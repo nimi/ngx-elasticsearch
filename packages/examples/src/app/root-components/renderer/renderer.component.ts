@@ -7,8 +7,8 @@ import {
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
-import { ComponentService } from '../../services/component.service';
-import { ComponentRegistryService } from '../../services/component-registry.service';
+import { ComponentService } from '../../shared/services/component.service';
+import { ComponentRegistryService } from '../../shared/services/component-registry.service';
 
 @Component({
   selector: 'example-renderer',

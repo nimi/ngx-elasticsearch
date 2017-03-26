@@ -2,7 +2,7 @@ import { ComponentExample, ComponentExampleSuite } from '../shared/models/compon
 
 export interface ExampleConfig {
   context?: any;
-  template: string;
+  template: Function | string;
   showSource?: boolean;
   styles?: string[];
 }
@@ -10,10 +10,19 @@ export interface ExampleConfig {
 export class ExampleSuite implements ComponentExampleSuite {
   id: string;
   examples: ComponentExample[] = [];
+  plugins: any[] = [];
   private _callCount = 0;
+  kind: string;
 
   constructor(public name: string, public module?: any) {
-    this.id = `exp-${module ? module.id : name}`;
+    this.kind = module ? module.id : name;
+    this.id = `exp-${this.name}`;
+  }
+
+  addPlugin(fn: Function) {
+    fn((v) => {}, { kind: this.kind, example: this.id });
+
+    return this;
   }
 
   addExample(description: string, config: ExampleConfig): this {

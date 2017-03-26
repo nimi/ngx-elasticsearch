@@ -1,4 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
+import { Http } from '@angular/http';
 
 @Component({
   selector: 'example-app',
@@ -53,4 +54,17 @@ import { Component, ViewEncapsulation } from '@angular/core';
     }
   `]
 })
-export class AppComponent { }
+export class AppComponent {
+
+  constructor(private http: Http) {
+    this.http.post(
+      'http://localhost:9200/_search',
+      // {"query":{"bool":{"should":[{"simple_query_string":{"query":"M*","fields":["_all"]}},{"multi_match":{"query":"M*","type":"phrase_prefix","fields":["_all"]}}]}}}
+      {"query":{"simple_query_string":{"query":"mikael*","fields":["desc^5"]}}}
+    )
+      .subscribe((res) => {
+        const data = res.json();
+        console.log('POSTED', data);
+      })
+  }
+}
