@@ -7,22 +7,29 @@
     "preserveConstEnums": true,
     "sourceMap": true,
     "declaration": false,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
     "suppressImplicitAnyIndexErrors": true,
     "module": "commonjs",
     "target": "es5",
     "lib": [
-      "es2015"
+      "es2015",
+      "dom"
     ]
   },
+  "typeRoots": [
+    "node_modules/@types"
+  ],
   "compileOnSave": true,
   "defaultExtension": "ts",
   "formatCodeOptions": {
     "indentSize": 2,
     "tabSize": 2
   },
-  "files": [
-    "./src/index.ts"
+  "include": [
+    "src/index.ts"
+  ],
+  "exclude": [
+    "**/*.spec.ts"
   ]
 }

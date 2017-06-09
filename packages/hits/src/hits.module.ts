@@ -1,20 +1,24 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { NgxElasticsearchModule } from '@ngx-elasticsearch/core';
 
-import { NgxSearchBoxComponent } from './components/search-box/search-box.component';
+import { NgxHitsListComponent } from './components/hits-list/hits-list.component';
+import { NgxHitsListItemComponent } from './components/hits-list-item/hits-list-item.component';
 
-export * from './components/search-box/search-box.component';
+export * from './components/hits-list/hits-list.component';
+export * from './components/hits-list-item/hits-list-item.component';
 
 @NgModule({
   declarations: [
-    NgxSearchBoxComponent
+    NgxHitsListComponent,
+    NgxHitsListItemComponent
   ],
   imports: [
-    FormsModule
+    CommonModule
   ],
   exports: [
-    NgxSearchBoxComponent
+    NgxHitsListComponent,
+    NgxHitsListItemComponent
   ]
 })
-export class NgxSearchBoxModule { }
+export class NgxHitsModule { }

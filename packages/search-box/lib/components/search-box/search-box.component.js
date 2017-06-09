@@ -32,16 +32,15 @@ var NgxSearchBoxComponent = (function (_super) {
          */
         _this.searchOnThrottleTime = 200;
         /**
+         * An array of elasticsearch fields to search within.
+         * Can specify boosting on particular fields. Will search _all by default.
+         */
+        _this.queryFields = ['_all'];
+        /**
          * Placeholder for the input box
          * @type {string}
          */
         _this.placeholder = '';
-        /**
-         * An array of elasticsearch fields to search within. Can specify boosting on particular fields.
-         * Will search _all by default. Will only be used if searchOnChange is true.
-         * @type {string[]}
-         */
-        _this.prefixQueryFields = ['_all'];
         /**
          * When searchOnChange={false} Configure behavior of the SearchBox when
          * the user blur's out of the field. Defaults to search
@@ -61,16 +60,22 @@ var NgxSearchBoxComponent = (function (_super) {
         _this.service = service;
         return _this;
     }
+    NgxSearchBoxComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        _super.prototype.ngOnInit.call(this);
+        this.service.searchManager.emitter.addListener(function () {
+            console.log('results found!', _this.getResults());
+        });
+    };
     NgxSearchBoxComponent.prototype.defineAccessor = function () {
         var _a = this, id = _a.id, prefixQueryFields = _a.prefixQueryFields, queryFields = _a.queryFields, queryBuilder = _a.queryBuilder, queryOptions = _a.queryOptions, prefixQueryOptions = _a.prefixQueryOptions;
         return new core_2.QueryAccessor(id, {
             prefixQueryFields: prefixQueryFields,
             prefixQueryOptions: Object.assign({}, prefixQueryOptions),
-            queryFields: queryFields || ['_all'],
+            queryFields: queryFields,
             queryOptions: Object.assign({}, queryOptions),
             queryBuilder: queryBuilder,
             onQueryStateChange: function () {
-                console.log('query state change');
                 // if (!this.unmounted && this.state.input){
                 //   this.setState({input: undefined})
                 // }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ControlStoreService } from './control-store.service';
 
 // This is used by _mayCallChannel to determine how long to wait to before triggering a panel update
-const PANEL_UPDATE_INTERVAL = 400;
+const PANEL_UPDATE_INTERVAL = 0;
 
 @Injectable()
 export class ControlManagerService {
@@ -34,14 +34,14 @@ export class ControlManagerService {
 
     controlStore.set(name, controlInfo);
 
-    console.log('set control', this, controlStore.get(name));
-
+    console.log('gettting control value', name, controlStore.get(name));
     return controlStore.get(name).value;
   }
 
   resetStore() {
-    this.controlStoreMap = {}
+    this.controlStoreMap = {};
     this.controlStore.reset();
+    this.channel.emit();
   }
 
   wrapSuite(channel, exampleFn, context) {
@@ -67,7 +67,6 @@ export class ControlManagerService {
     // unused controls from the panel. This function sends the `setControls` message to the channel
     // triggering a panel re-render.
 
-    console.log('calling');
     if (this.calling) {
       // If a call to channel has already registered ignore this call.
       // Once the previous call is completed all the changes to controlStore including the one that
@@ -77,10 +76,10 @@ export class ControlManagerService {
     }
     this.calling = true;
 
-    setTimeout(() => {
+    window.setTimeout(() => {
       this.calling = false;
       // emit to the channel and trigger a panel re-render
-      this.channel.emit('addon:controls:setControls', this.controlStore.getAll());
+      this.channel.emit(this.controlStore.getAllValues());
     }, PANEL_UPDATE_INTERVAL);
   }
 }

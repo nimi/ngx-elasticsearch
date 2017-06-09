@@ -144,7 +144,7 @@ ImmutableQuery.defaultIndex = {
     queries: [],
     filters: [],
     _source: null,
-    size: 0
+    size: 10
 };
 exports.ImmutableQuery = ImmutableQuery;
 //# sourceMappingURL=ImmutableQuery.js.map

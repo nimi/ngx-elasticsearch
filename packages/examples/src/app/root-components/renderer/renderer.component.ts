@@ -15,13 +15,13 @@ import { ComponentRegistryService } from '../../shared/services/component-regist
   template: `
     <div class="example" #exampleContainer></div>
     <details *ngIf="source">
-        <summary style="margin: 1em auto">Source</summary>
-        <pre>{{source}}</pre>
+        <summary>Source</summary>
+        <pre style="white-space: pre-wrap;">{{source}}</pre>
     </details>`
 })
 export class RendererComponent implements OnDestroy {
   private _ref: ComponentRef<any>;
-  public source: string;
+  public source: any;
   @ViewChild('exampleContainer', { read: ViewContainerRef }) public exampleContainer: ViewContainerRef;
 
   constructor(
@@ -37,7 +37,11 @@ export class RendererComponent implements OnDestroy {
 
     this._ref = this.exampleContainer.createComponent(factory, 0, injector, []);
     const componentCase = this.componentRegistry.getComponentExample(id);
-    this.source = componentCase.showSource ? componentCase.template : '';
+    this.source = componentCase.showSource ? componentCase.template : () => {};
+
+    if (typeof this.source === 'function') {
+      this.source = this.source();
+    }
   }
 
   ngOnDestroy() {

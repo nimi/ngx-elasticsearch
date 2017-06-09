@@ -2,7 +2,7 @@ export interface ComponentExample {
   id: string;
   description: string;
   context?: any;
-  template: string;
+  template: string | Function;
   styles?: string[];
   showSource?: boolean;
 }
@@ -10,6 +10,6 @@ export interface ComponentExample {
 export interface ComponentExampleSuite {
   id: string;
   name: string;
-  module?: NodeModule;
+  module?: any;
   examples: ComponentExample[];
 }

@@ -12,7 +12,7 @@ export class ExampleSuite implements ComponentExampleSuite {
   examples: ComponentExample[] = [];
   plugins: any[] = [];
   private _callCount = 0;
-  kind: string;
+  private kind: string;
 
   constructor(public name: string, public module?: any) {
     this.kind = module ? module.id : name;

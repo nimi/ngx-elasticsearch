@@ -12,6 +12,7 @@ import { Component } from '@angular/core';
       height: 100%;
       box-sizing: border-box;
       padding: 20px;
+      overflow: auto;
     }
   `]
 })

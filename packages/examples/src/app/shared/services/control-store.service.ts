@@ -2,48 +2,49 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class ControlStoreService {
-  store: any = {};
-  callbacks: Function[] = [];
+  store: Map<string, any> = new Map();
 
   has(key) {
-    return this.store[key] !== undefined;
+    return this.store.has(key);
   }
 
   set(key, value) {
-    this.store[key] = value;
-    this.store[key].used = true;
-    this.callbacks.forEach(cb => cb());
+    Object.assign(value, { used: true });
+    this.store.set(key, value);
   }
 
   get(key) {
-    const control = this.store[key];
-    if (control) {
-      control.used = true;
-    }
+    const control = this.store.get(key);
+    if (control) { control.used = true; }
     return control;
   }
 
   getAll() {
-    return this.store;
+    let o = {};
+    this.store.forEach((v, k) => o[k] = v);
+    return o;
+  }
+
+  getAllKeys() {
+    let arr = [];
+    this.store.forEach((v, k) => arr.push(k));
+    return arr;
+  }
+
+  getAllValues() {
+    let arr = [];
+    this.store.forEach((v, k) => arr.push(v));
+    return arr;
   }
 
   reset() {
-    this.store = {};
+    this.store = new Map();
   }
 
   markAllUnused() {
-    Object.keys(this.store).forEach(controlName => {
-      this.store[controlName].used = false;
-    });
-  }
-
-  subscribe(cb) {
-    this.callbacks.push(cb);
-  }
-
-  unsubscribe(cb) {
-    const index = this.callbacks.indexOf(cb);
-    this.callbacks.splice(index, 1);
+    // Object.keys(this.store).forEach(controlName => {
+    //   this.store[controlName].used = false;
+    // });
   }
 
 }

@@ -4,7 +4,7 @@ import { NgxSearchBoxComponent } from '@ngx-elasticsearch/search-box';
 
 export const suite = () =>
   createSuite(NgxSearchBoxComponent.name)
-    .addPlugin(useControls)
+    // .addPlugin(useControls)
     .addExample('simple example', {
       template: () => `<ngx-search-box></ngx-search-box>`,
       showSource: true
@@ -12,17 +12,26 @@ export const suite = () =>
 
     .addExample('simple w/ placeholder example', {
       context: () => ({
-        placeholder: text('Placeholder', 'placeholder!'),
+        placeholder: text('placeholder', 'placeholder!'),
         searchOnChange: boolean('searchOnChange', true)
       }),
       template: () => `
-        <ngx-search-box [placeholder]="placeholder" [searchOnChange]="searchOnChange">
+        <ngx-search-box
+          [placeholder]="placeholder"
+          [searchOnChange]="searchOnChange"
+        >
         </ngx-search-box>
       `,
       showSource: true
     })
     .addExample('custom query fields', {
-      context: () => ({ placeholder: 'placeholder' }),
       template: () => `<ngx-search-box [queryFields]="['desc^5']"></ngx-search-box>`,
+      showSource: true
+    })
+    .addExample('with hits list', {
+      template: () => `
+        <ngx-search-box [queryFields]="['desc^5']"></ngx-search-box>
+        <ngx-hits-list></ngx-hits-list>
+      `,
       showSource: true
     });

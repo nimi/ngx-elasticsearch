@@ -12,7 +12,9 @@ export class SearchRequest {
   ){ }
 
   run() {
+    console.log('runnnnn');
     return this.transport.search(this.query)
+      .then((q) => { console.log('SEARCH RESULTS', q); return q; })
       .then(this.setResults.bind(this))
       .catch(this.setError.bind(this));
   }
@@ -22,12 +24,15 @@ export class SearchRequest {
   }
 
   setResults(results: any) {
+    console.log('RESULTOS', results);
     if(this.active){
       this.searchManager.setResults(results);
     }
   }
 
   setError(error: any) {
+    console.log('ERRRRROOOOOORRRRR', error);
+
     if(this.active){
       this.searchManager.setError(error);
     }

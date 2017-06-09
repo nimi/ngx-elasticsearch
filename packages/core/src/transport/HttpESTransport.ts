@@ -37,8 +37,6 @@ export class HttpESTransport implements ESTransport {
           credentials: 'omit',
           mode: 'cors',
           headers: {
-            'Accept': 'application/json',
-            'X-Requested-With': 'Fetch'
           }
         })
     })
@@ -53,8 +51,7 @@ export class HttpESTransport implements ESTransport {
 
   getData(response: any){
     const json = response.json();
-    console.log('asdfsadfasdf', response, json);
-    return json.data;
+    return json;
   }
 
   private static parseCredentials(options: ESTransportOptions): any {

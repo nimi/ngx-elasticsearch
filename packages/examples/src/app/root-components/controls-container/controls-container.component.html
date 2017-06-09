@@ -1,4 +1,13 @@
-<p>
-  controls-container works!
-  <button (click)="changeValue($event)">change</button>
-</p>
+<div *ngIf="controls" class="component-controls">
+  <h3>Component Controls</h3>
+
+  <div *ngFor="let control of controls">
+    <label>{{ control.name }}</label>
+    <input
+      #textInput
+      (input)="handleInputChange(textInput.value, control)"
+      type="text"
+      [value]="control.value"
+    />
+  </div>
+</div>

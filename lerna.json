@@ -1,5 +1,13 @@
 {
   "lerna": "2.0.0-beta.38",
+  "commands": {
+    "publish": {
+      "ignore": [
+        "example/**",
+        "test/**"
+      ]
+    }
+  },
   "packages": [
     "packages/*"
   ],

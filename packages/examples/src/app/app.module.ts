@@ -10,10 +10,14 @@ import { SharedModule } from './shared/shared.module';
 import { RootComponentsModule } from './root-components/root-components.module';
 import { ExamplesModule, components as exampleComponents } from './examples/examples.module';
 import { examples } from './examples';
-import { ComponentRegistryService, provideExperiments } from './shared/services/component-registry.service';
+import { ComponentRegistryService, provideExamples } from './shared/services/component-registry.service';
 import { ComponentService, provideResolvedExampleModule } from './shared/services/component.service';
 
 import { getModuleForExamples } from './utils/module';
+
+const exampleModule = getModuleForExamples(ExamplesModule, examples);
+const resolvedExampleModule = provideResolvedExampleModule(exampleModule);
+const componentExamples = provideExamples(examples);
 
 @NgModule({
   declarations: [
@@ -31,8 +35,8 @@ import { getModuleForExamples } from './utils/module';
   providers: [
     ComponentRegistryService,
     ComponentService,
-    provideResolvedExampleModule(getModuleForExamples(ExamplesModule, examples)),
-    provideExperiments(examples)
+    resolvedExampleModule,
+    componentExamples
   ],
   entryComponents: [ ...exampleComponents ],
   bootstrap: [AppComponent]

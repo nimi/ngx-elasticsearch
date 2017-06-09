@@ -23,10 +23,7 @@ var HttpESTransport = (function () {
                 .withDefaults({
                 credentials: 'omit',
                 mode: 'cors',
-                headers: {
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'Fetch'
-                }
+                headers: {}
             });
         });
     }
@@ -38,8 +35,7 @@ var HttpESTransport = (function () {
     };
     HttpESTransport.prototype.getData = function (response) {
         var json = response.json();
-        console.log('asdfsadfasdf', response, json);
-        return json.data;
+        return json;
     };
     HttpESTransport.parseCredentials = function (options) {
         var credentials = {};

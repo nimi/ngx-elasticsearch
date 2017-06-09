@@ -18,7 +18,7 @@ export class ImmutableQuery {
     queries: [],
     filters: [],
     _source: null,
-    size: 0
+    size: 10
   };
 
   constructor(index: any = ImmutableQuery.defaultIndex) {

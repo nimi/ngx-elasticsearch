@@ -332,8 +332,13 @@ export class HttpClient {
     return this.fetch(url, { ...options,  method: 'get' });
   }
 
-  post(url: Request | string, body: any, options?: any): Promise<Response> {
-    return this.fetch(url, { ...options, body,  method: 'post' });
+  post(url: Request | string, body: any = {}, options?: any): Promise<Response> {
+    return this.fetch(url,{
+      ...options,
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(body),
+      method: 'post'
+    });
   }
 
   put(url: Request | string, body: any, options?: any): Promise<Response> {

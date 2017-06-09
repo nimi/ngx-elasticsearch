@@ -9,15 +9,16 @@ import { manager } from '../../shared/services/control-utils';
 })
 export class ControlsContainerComponent implements OnInit {
   manager: ControlManagerService = manager;
-  controls: any;
+  controls: any[];
 
   ngOnInit() {
-    this.controls = this.manager.controlStoreMap;
-    console.log(this.manager, this.controls);
+    this.manager.channel.subscribe(() => {
+      this.controls = this.manager.controlStore.getAllValues();
+    });
   }
 
-  changeValue(event: any) {
-    this.manager.channel.emit({ placeholder: 'foo' });
+  handleInputChange(text: string, control: any) {
+    this.manager.channel.emit({ [control.name]: text });
   }
 
 }

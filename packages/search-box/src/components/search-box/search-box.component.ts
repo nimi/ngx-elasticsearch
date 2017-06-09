@@ -42,7 +42,7 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
    * An array of elasticsearch fields to search within.
    * Can specify boosting on particular fields. Will search _all by default.
    */
-  @Input() queryFields: string[];
+  @Input() queryFields: string[] = ['_all'];
   /**
    * Used to create the query going to elastic. defaults to SimpleQueryString.
    * Supports QueryString or custom Function (query:string, options:Object) => {}
@@ -63,7 +63,7 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
    * Will search _all by default. Will only be used if searchOnChange is true.
    * @type {string[]}
    */
-  @Input() prefixQueryFields: string[] = ['_all'];
+  @Input() prefixQueryFields: string[];
   /**
    * An object of options for MultiMatchQuery
    */
@@ -94,6 +94,13 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
     this.service = service;
   }
 
+  ngOnInit() {
+    super.ngOnInit();
+    this.service.searchManager.emitter.addListener(() => {
+      console.log('results found!', this.getResults());
+    });
+  }
+
   defineAccessor() {
     const {
       id, prefixQueryFields, queryFields, queryBuilder,
@@ -102,11 +109,10 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
     return new QueryAccessor(id, {
       prefixQueryFields,
       prefixQueryOptions: Object.assign({}, prefixQueryOptions),
-      queryFields:queryFields || ['_all'],
+      queryFields: queryFields,
       queryOptions: Object.assign({}, queryOptions),
       queryBuilder,
       onQueryStateChange: () => {
-        console.log('query state change');
         // if (!this.unmounted && this.state.input){
         //   this.setState({input: undefined})
         // }

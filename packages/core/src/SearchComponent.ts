@@ -2,24 +2,31 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgxSearchManagerService } from './SearchManagerService';
 import { Accessor } from './';
 import { ImmutableQuery } from './query/ImmutableQuery';
+import { SearchManager } from './SearchManager';
 
 @Component({
   selector: 'ngx-search-component',
-  template: 'test'
+  template: ''
 })
 export class NgxElasticsearchComponent implements OnDestroy {
-  private accessor: Accessor;
+  private accessor: Accessor | void;
+  private manager: SearchManager;
   unmounted: boolean = false;
 
-  constructor(public esx: NgxSearchManagerService) {}
+  constructor(public service: NgxSearchManagerService) {
+    this.manager = service.searchManager;
+  }
 
   ngOnInit() {
-    console.log(this);
+    this.accessor = this.defineAccessor();
+    if (this.accessor) {
+      this.accessor = this.manager.addAccessor(this.accessor);
+    }
   }
 
   ngOnDestroy() {
-    if (this.esx && this.accessor) {
-      this.esx.searchManager.removeAccessor(this.accessor);
+    if (this.manager && this.accessor) {
+      this.manager.removeAccessor(this.accessor);
     }
     this.unmounted = true;
   }
@@ -27,38 +34,38 @@ export class NgxElasticsearchComponent implements OnDestroy {
   defineAccessor() {}
 
   getResults() {
-    return this.esx.searchManager.results;
+    return this.manager.results;
   }
 
   getHits() {
-    return this.esx.searchManager.getHits();
+    return this.manager.getHits();
   }
 
   getHitsCount() {
-    return this.esx.searchManager.getHitsCount();
+    return this.manager.getHitsCount();
   }
 
   hasHits() {
-    return this.esx.searchManager.hasHits();
+    return this.manager.hasHits();
   }
 
   hasHitsChanged() {
-    return this.esx.searchManager.hasHitsChanged();
+    return this.manager.hasHitsChanged();
   }
 
   getQuery(): ImmutableQuery {
-    return this.esx.searchManager.query;
+    return this.manager.query;
   }
 
   isInitialLoading() {
-    return this.esx.searchManager.initialLoading;
+    return this.manager.initialLoading;
   }
 
   isLoading() {
-    return this.esx.searchManager.loading;
+    return this.manager.loading;
   }
 
   getError() {
-    return this.esx.searchManager.error;
+    return this.manager.error;
   }
 }

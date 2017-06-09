@@ -1,3 +1,4 @@
+import { Subject } from 'rxjs';
 import { ImmutableQuery } from './query';
 import { Accessor, BaseQueryAccessor, AnonymousAccessor } from './accessors';
 import { AccessorManager } from './AccessorManager';
@@ -22,6 +23,8 @@ export interface SearchManagerOptions {
 
 export class SearchManager {
   private registrationCompleted: Promise<any>;
+  private search$: Subject<any> = new Subject<any>();
+  private results$: Subject<any> = new Subject<any>();
   host: string;
   completeRegistration: Function;
   state: any;

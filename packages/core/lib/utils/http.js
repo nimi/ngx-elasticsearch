@@ -225,7 +225,8 @@ var HttpClient = (function () {
         return this.fetch(url, __assign({}, options, { method: 'get' }));
     };
     HttpClient.prototype.post = function (url, body, options) {
-        return this.fetch(url, __assign({}, options, { body: body, method: 'post' }));
+        if (body === void 0) { body = {}; }
+        return this.fetch(url, __assign({}, options, { headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(body), method: 'post' }));
     };
     HttpClient.prototype.put = function (url, body, options) {
         return this.fetch(url, __assign({}, options, { body: body, method: 'put' }));

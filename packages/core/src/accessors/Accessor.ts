@@ -28,7 +28,6 @@ export class Accessor {
     this.searchManager = search;
   }
 
-
   translate(key: string, interpolations?: any) {
     let translation = (
       (this.searchManager && this.searchManager.translate(key)) ||

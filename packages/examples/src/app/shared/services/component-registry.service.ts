@@ -36,6 +36,6 @@ function byId<T extends { id: string }>(entities: IdMap<T> = {}, next: T): IdMap
 }
 
 
-export function provideExperiments(exampleSuites: ComponentExampleSuite[]) {
+export function provideExamples(exampleSuites: ComponentExampleSuite[]) {
   return { provide: COMPONENT_EXAMPLE_SUITES, useValue: exampleSuites };
 }

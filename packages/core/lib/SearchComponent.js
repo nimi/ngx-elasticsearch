@@ -12,46 +12,50 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var SearchManagerService_1 = require("./SearchManagerService");
 var NgxElasticsearchComponent = (function () {
-    function NgxElasticsearchComponent(esx) {
-        this.esx = esx;
+    function NgxElasticsearchComponent(service) {
+        this.service = service;
         this.unmounted = false;
+        this.manager = service.searchManager;
     }
     NgxElasticsearchComponent.prototype.ngOnInit = function () {
-        console.log(this);
+        this.accessor = this.defineAccessor();
+        if (this.accessor) {
+            this.accessor = this.manager.addAccessor(this.accessor);
+        }
     };
     NgxElasticsearchComponent.prototype.ngOnDestroy = function () {
-        if (this.esx && this.accessor) {
-            this.esx.searchManager.removeAccessor(this.accessor);
+        if (this.manager && this.accessor) {
+            this.manager.removeAccessor(this.accessor);
         }
         this.unmounted = true;
     };
     NgxElasticsearchComponent.prototype.defineAccessor = function () { };
     NgxElasticsearchComponent.prototype.getResults = function () {
-        return this.esx.searchManager.results;
+        return this.manager.results;
     };
     NgxElasticsearchComponent.prototype.getHits = function () {
-        return this.esx.searchManager.getHits();
+        return this.manager.getHits();
     };
     NgxElasticsearchComponent.prototype.getHitsCount = function () {
-        return this.esx.searchManager.getHitsCount();
+        return this.manager.getHitsCount();
     };
     NgxElasticsearchComponent.prototype.hasHits = function () {
-        return this.esx.searchManager.hasHits();
+        return this.manager.hasHits();
     };
     NgxElasticsearchComponent.prototype.hasHitsChanged = function () {
-        return this.esx.searchManager.hasHitsChanged();
+        return this.manager.hasHitsChanged();
     };
     NgxElasticsearchComponent.prototype.getQuery = function () {
-        return this.esx.searchManager.query;
+        return this.manager.query;
     };
     NgxElasticsearchComponent.prototype.isInitialLoading = function () {
-        return this.esx.searchManager.initialLoading;
+        return this.manager.initialLoading;
     };
     NgxElasticsearchComponent.prototype.isLoading = function () {
-        return this.esx.searchManager.loading;
+        return this.manager.loading;
     };
     NgxElasticsearchComponent.prototype.getError = function () {
-        return this.esx.searchManager.error;
+        return this.manager.error;
     };
     return NgxElasticsearchComponent;
 }());
