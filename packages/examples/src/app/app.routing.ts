@@ -1,12 +1,16 @@
 import { ModuleWithProviders } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
+import { ImdbComponent } from './imdb/imdb.component';
 
 const routes: Routes = [
   {
     path: '',
     redirectTo: '/components',
     pathMatch: 'full'
+  },
+  {
+    path: 'imdb',
+    component: ImdbComponent
   }
 ];
 

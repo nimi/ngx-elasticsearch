@@ -15,9 +15,23 @@ import { ComponentService, provideResolvedExampleModule } from './shared/service
 
 import { getModuleForExamples } from './utils/module';
 
-const exampleModule = getModuleForExamples(ExamplesModule, examples);
-const resolvedExampleModule = provideResolvedExampleModule(exampleModule);
-const componentExamples = provideExamples(examples);
+const exampleModule = () => getModuleForExamples(ExamplesModule, examples);
+const resolvedExampleModule = () => provideResolvedExampleModule(exampleModule());
+const componentExamples = () => provideExamples(examples);
+
+
+import { NgxElasticsearchModule } from '@ngx-elasticsearch/core';
+import { ImdbModule } from './imdb/imdb.module';
+
+const url = "http://localhost:9200/";
+const options = {
+  useHistory: false,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+};
+
+export let esModule = NgxElasticsearchModule.forRoot({ url, options });
 
 @NgModule({
   declarations: [
@@ -30,13 +44,16 @@ const componentExamples = provideExamples(examples);
     SharedModule,
     ExamplesModule,
     RootComponentsModule,
-    Routing
+    Routing,
+
+    esModule,
+    ImdbModule
   ],
   providers: [
     ComponentRegistryService,
     ComponentService,
-    resolvedExampleModule,
-    componentExamples
+    resolvedExampleModule(),
+    componentExamples()
   ],
   entryComponents: [ ...exampleComponents ],
   bootstrap: [AppComponent]

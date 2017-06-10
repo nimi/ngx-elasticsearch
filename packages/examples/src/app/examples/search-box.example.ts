@@ -4,7 +4,7 @@ import { NgxSearchBoxComponent } from '@ngx-elasticsearch/search-box';
 
 export const suite = () =>
   createSuite(NgxSearchBoxComponent.name)
-    // .addPlugin(useControls)
+    .addPlugin(useControls)
     .addExample('simple example', {
       template: () => `<ngx-search-box></ngx-search-box>`,
       showSource: true

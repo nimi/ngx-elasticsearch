@@ -7,7 +7,10 @@
 
 # Installed libs
 node_modules
-packages/**/node_modules
+/packages/**/node_modules
+/packages/**/lib
+/packages/**/.angular-cli.json
+
 
 # Misc
 npm-debug.log
