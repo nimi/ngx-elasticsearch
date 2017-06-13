@@ -16,12 +16,10 @@ var immutability_helper_1 = require("../utils/immutability-helper");
 var LevelState = (function (_super) {
     __extends(LevelState, _super);
     function LevelState() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.value = [];
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     LevelState.prototype.getValue = function () {
-        return this.value;
+        return this.value || [];
     };
     LevelState.prototype.add = function (level, val) {
         var ob = this.getValue();
@@ -33,6 +31,7 @@ var LevelState = (function (_super) {
         ob = immutability_helper_1.update(ob, (_b = {},
             _b[level] = { $push: [val] },
             _b));
+        console.log('add', ob, level, val);
         return this.create(ob);
         var _a, _b;
     };
@@ -58,6 +57,7 @@ var LevelState = (function (_super) {
         }
     };
     LevelState.prototype.getLevel = function (level) {
+        console.log('getting level', this.getValue(), this, level);
         return this.getValue()[level] || [];
     };
     LevelState.prototype.levelHasFilters = function (level) {
@@ -70,6 +70,7 @@ var LevelState = (function (_super) {
         return level === this.getLeafLevel();
     };
     LevelState.prototype.toggleLevel = function (level, key) {
+        console.log('level state', this, level, key, this.contains(level, key), this.isLeafLevel(level));
         if (this.contains(level, key)) {
             if (this.isLeafLevel(level)) {
                 return this.clear(level);

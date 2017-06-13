@@ -1,17 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var Subject_1 = require("rxjs/Subject");
 var query_1 = require("./query");
 var accessors_1 = require("./accessors");
 var AccessorManager_1 = require("./AccessorManager");
 var transport_1 = require("./transport");
 var SearchRequest_1 = require("./SearchRequest");
-var utils_1 = require("./utils");
 var lodash_1 = require("lodash");
 var qs = require('qs');
 var SearchManager = (function () {
     function SearchManager(host, options) {
         if (options === void 0) { options = {}; }
         var _this = this;
+        this.searching$$ = new Subject_1.Subject();
+        this.results$$ = new Subject_1.Subject();
         this.options = lodash_1.defaults(options, {
             useHistory: true,
             httpHeaders: {},
@@ -32,8 +34,6 @@ var SearchManager = (function () {
         this.queryProcessor = lodash_1.identity;
         // this.primarySearcher = this.createSearcher()
         this.query = new query_1.ImmutableQuery();
-        this.emitter = new utils_1.EventEmitter();
-        this.resultsEmitter = new utils_1.EventEmitter();
     }
     SearchManager.prototype.setupListeners = function () {
         this.initialLoading = true;
@@ -67,9 +67,6 @@ var SearchManager = (function () {
     };
     SearchManager.prototype.resetState = function () {
         this.accessors.resetState();
-    };
-    SearchManager.prototype.addResultsListener = function (fn) {
-        return this.resultsEmitter.addListener(fn);
     };
     SearchManager.prototype.unlistenHistory = function () {
         if (this.options.useHistory && this._unlistenHistory) {
@@ -130,12 +127,13 @@ var SearchManager = (function () {
     SearchManager.prototype._search = function () {
         this.state = this.accessors.getState();
         var query = this.buildQuery();
+        console.log('search query', query.getJSON(), this.query.getJSON());
         if (this.query && lodash_1.isEqual(query.getJSON(), this.query.getJSON())) {
             return;
         }
         this.query = query;
         this.loading = true;
-        this.emitter.trigger();
+        this.searching$$.next(this.loading);
         var queryObject = this.queryProcessor(this.query.getJSON());
         this.currentSearchRequest && this.currentSearchRequest.deactivate();
         this.currentSearchRequest = new SearchRequest_1.SearchRequest(this.transport, queryObject, this);
@@ -147,7 +145,7 @@ var SearchManager = (function () {
         this.error = null;
         this.accessors.setResults(results);
         this.onResponseChange();
-        this.resultsEmitter.trigger(this.results);
+        this.results$$.next(this.getHits());
     };
     SearchManager.prototype.compareResults = function (previousResults, results) {
         var ids = lodash_1.map(lodash_1.get(results, ['hits', 'hits'], []), '_id').join(',');
@@ -192,8 +190,8 @@ var SearchManager = (function () {
     };
     SearchManager.prototype.onResponseChange = function () {
         this.loading = false;
+        this.searching$$.next(this.loading);
         this.initialLoading = false;
-        this.emitter.trigger();
     };
     return SearchManager;
 }());

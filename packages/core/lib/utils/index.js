@@ -4,9 +4,9 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 var lodash_1 = require("lodash");
-__export(require("./EventEmitter"));
 __export(require("./http"));
 __export(require("./immutability-helper"));
+__export(require("./bem-helper"));
 var guidCounter = 0;
 exports.guid = function (prefix) {
     if (prefix === void 0) { prefix = ''; }

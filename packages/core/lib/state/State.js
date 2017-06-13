@@ -6,7 +6,10 @@ var State = (function () {
         this.value = value;
     }
     State.prototype.create = function (value) {
-        return new this.constructor(value);
+        var item = new this.constructor(value);
+        console.log(item, value);
+        item.value = value;
+        return item;
     };
     State.prototype.setValue = function (value) {
         return this.create(value);

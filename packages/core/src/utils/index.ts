@@ -1,8 +1,8 @@
 import {reduce, map, reject, isUndefined} from 'lodash';
 
-export * from './EventEmitter';
 export * from './http';
 export * from './immutability-helper';
+export * from './bem-helper';
 
 let guidCounter: number = 0;
 export const guid = (prefix: string = '') => {

@@ -15,7 +15,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var core_2 = require("@ngx-elasticsearch/core");
-var NgxHitsListComponent = (function (_super) {
+var selector = 'hits';
+var NgxHitsListComponent = NgxHitsListComponent_1 = (function (_super) {
     __extends(NgxHitsListComponent, _super);
     function NgxHitsListComponent(service) {
         var _this = _super.call(this, service) || this;
@@ -24,16 +25,22 @@ var NgxHitsListComponent = (function (_super) {
          * @type {number}
          */
         _this.hitsPerPage = 10;
+        _this.listType = 'list';
         _this.service = service;
         return _this;
     }
     NgxHitsListComponent.prototype.ngOnInit = function () {
-        var _this = this;
         _super.prototype.ngOnInit.call(this);
-        this.service.searchManager.emitter.addListener(function () {
-            _this.hits = _this.service.searchManager.getHits();
+        this.listClassName = core_2.block(selector + "-" + this.listType);
+        this.itemClassName = core_2.block(selector + "-" + this.listType + "-hit").mix(this.listClassName('item'));
+    };
+    NgxHitsListComponent.prototype.ngAfterViewInit = function () {
+        var _this = this;
+        this.service.results$
+            .subscribe(function (results) {
+            _this.hits = results;
+            console.log('hits', results);
         });
-        // this.hits = this.service.manager.getHits();
     };
     NgxHitsListComponent.prototype.defineAccessor = function () {
         return new core_2.PageSizeAccessor(this.hitsPerPage);
@@ -50,15 +57,20 @@ __decorate([
 ], NgxHitsListComponent.prototype, "hitsPerPage", void 0);
 __decorate([
     core_1.Input(),
+    __metadata("design:type", String)
+], NgxHitsListComponent.prototype, "listType", void 0);
+__decorate([
+    core_1.Input(),
+    core_1.ContentChild(NgxHitsListComponent_1, { read: core_1.TemplateRef }),
     __metadata("design:type", core_1.TemplateRef)
 ], NgxHitsListComponent.prototype, "itemTemplate", void 0);
-NgxHitsListComponent = __decorate([
+NgxHitsListComponent = NgxHitsListComponent_1 = __decorate([
     core_1.Component({
         selector: 'ngx-hits-list',
-        template: "\n    <div class=\"ngx-hits-list\">\n      <div *ngFor=\"let hit of hits\">\n        <ng-container *ngTemplateOutlet=\"itemTemplate || defaultItem; context: { $implicit: hit }\"></ng-container>\n      </div>\n    </div>\n    <ng-template #defaultItem let-hit>\n      <ngx-hits-list-item [item]=\"hit\"></ngx-hits-list-item>\n    </ng-template>\n  ",
+        template: "\n    <div [attr.class]=\"listClassName\">\n      <div [attr.class]=\"itemClassName\" *ngFor=\"let hit of hits\">\n        <ng-content *ngTemplateOutlet=\"itemTemplate || defaultItem; context: { $implicit: hit }\"></ng-content>\n      </div>\n    </div>\n    <ng-template #defaultItem let-hit>\n      <ngx-hits-list-item [item]=\"hit\"></ngx-hits-list-item>\n    </ng-template>\n  ",
     }),
     __metadata("design:paramtypes", [typeof (_a = typeof core_2.NgxSearchManagerService !== "undefined" && core_2.NgxSearchManagerService) === "function" && _a || Object])
 ], NgxHitsListComponent);
 exports.NgxHitsListComponent = NgxHitsListComponent;
-var _a;
+var NgxHitsListComponent_1, _a;
 //# sourceMappingURL=hits-list.component.js.map

@@ -1,0 +1,6 @@
+{
+  "/api": {
+    "target": "http://demo.searchkit.co",
+    "secure": false
+  }
+}

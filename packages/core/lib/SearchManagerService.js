@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
+var Observable_1 = require("rxjs/Observable");
 var NgxSearchManagerService = (function () {
     function NgxSearchManagerService() {
         this.initialized = false;
@@ -21,6 +22,7 @@ var NgxSearchManagerService = (function () {
         if (!this.manager && manager) {
             this.manager = manager;
             this.initialized = true;
+            this.setObservables(this.manager);
         }
     };
     NgxSearchManagerService.prototype.register = function () {
@@ -35,6 +37,38 @@ var NgxSearchManagerService = (function () {
             this.initialized = false;
             delete this.manager;
         }
+    };
+    NgxSearchManagerService.prototype.setObservables = function (manager) {
+        this.searching$ = Observable_1.Observable.create(function (observer) {
+            var listener = manager.searching$$
+                .subscribe(function (val) {
+                try {
+                    observer.next(val);
+                }
+                catch (err) {
+                    observer.error(err);
+                }
+            });
+            return function unsubscribe() {
+                listener.unsubscribe();
+            };
+        });
+        this.results$ = Observable_1.Observable.create(function (observer) {
+            console.log(manager, manager.results$$);
+            var listener = manager.results$$
+                .subscribe(function (val) {
+                console.log(val);
+                try {
+                    observer.next(val);
+                }
+                catch (err) {
+                    observer.error(err);
+                }
+            });
+            return function unsubscribe() {
+                listener.unsubscribe();
+            };
+        });
     };
     return NgxSearchManagerService;
 }());

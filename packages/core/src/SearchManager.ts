@@ -1,11 +1,9 @@
-import { Subject } from 'rxjs';
+import { Subject } from 'rxjs/Subject';
 import { ImmutableQuery } from './query';
-import { Accessor, BaseQueryAccessor, AnonymousAccessor } from './accessors';
+import { BaseQueryAccessor, AnonymousAccessor } from './accessors';
 import { AccessorManager } from './AccessorManager';
-import { createHistoryInstance } from './history';
 import { ESTransport, HttpESTransport } from './transport';
 import { SearchRequest } from './SearchRequest';
-import { EventEmitter } from './utils';
 
 import { defaults, constant, map, isEqual, get, after, identity } from 'lodash';
 
@@ -23,8 +21,6 @@ export interface SearchManagerOptions {
 
 export class SearchManager {
   private registrationCompleted: Promise<any>;
-  private search$: Subject<any> = new Subject<any>();
-  private results$: Subject<any> = new Subject<any>();
   host: string;
   completeRegistration: Function;
   state: any;
@@ -34,8 +30,6 @@ export class SearchManager {
   _unlistenHistory: Function;
   options: SearchManagerOptions;
   transport: ESTransport;
-  emitter: EventEmitter;
-  resultsEmitter: EventEmitter;
   accessors: AccessorManager;
   queryProcessor: Function;
   query: ImmutableQuery;
@@ -43,6 +37,9 @@ export class SearchManager {
   initialLoading: boolean;
   error: any;
   results: any;
+
+  public searching$$: Subject<any> = new Subject<any>();
+  public results$$: Subject<any> = new Subject<any>();
 
   constructor(host: string, options: SearchManagerOptions = {}){
     this.options = defaults(options, {
@@ -60,14 +57,12 @@ export class SearchManager {
     });
     this.accessors = new AccessorManager();
 		this.registrationCompleted = new Promise((resolve) => {
-			this.completeRegistration = resolve
+			this.completeRegistration = resolve;
 		});
     this.translateFunction = constant(undefined);
     this.queryProcessor = identity;
     // this.primarySearcher = this.createSearcher()
     this.query = new ImmutableQuery();
-    this.emitter = new EventEmitter();
-    this.resultsEmitter = new EventEmitter();
   }
 
   setupListeners() {
@@ -108,10 +103,6 @@ export class SearchManager {
 
   resetState() {
     this.accessors.resetState();
-  }
-
-  addResultsListener(fn: Function) {
-    return this.resultsEmitter.addListener(fn);
   }
 
   unlistenHistory() {
@@ -175,12 +166,13 @@ export class SearchManager {
   _search() {
     this.state = this.accessors.getState();
     let query = this.buildQuery();
+    console.log('search query', query.getJSON(), this.query.getJSON());
     if(this.query && isEqual(query.getJSON(), this.query.getJSON())) {
       return;
     }
     this.query = query;
     this.loading = true;
-    this.emitter.trigger();
+    this.searching$$.next(this.loading);
     let queryObject = this.queryProcessor(this.query.getJSON());
     this.currentSearchRequest && this.currentSearchRequest.deactivate();
     this.currentSearchRequest = new SearchRequest(
@@ -194,7 +186,7 @@ export class SearchManager {
     this.error = null;
     this.accessors.setResults(results);
     this.onResponseChange();
-    this.resultsEmitter.trigger(this.results);
+    this.results$$.next(this.getHits());
   }
 
   compareResults(previousResults: any, results: any) {
@@ -252,8 +244,8 @@ export class SearchManager {
 
   onResponseChange() {
     this.loading = false;
+    this.searching$$.next(this.loading);
     this.initialLoading = false;
-    this.emitter.trigger();
   }
 
 }

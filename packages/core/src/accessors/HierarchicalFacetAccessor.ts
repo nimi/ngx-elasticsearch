@@ -20,10 +20,11 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor<LevelState> {
   options: any;
   uuids: Array<String>;
 
-  constructor(key: any, options:HierarchicalFacetAccessorOptions) {
+  constructor(key: any, options: HierarchicalFacetAccessorOptions) {
     super(key);
     this.options = options;
     this.computeUuids();
+    console.log(this.uuids);
   }
 
   computeUuids() {
@@ -49,6 +50,7 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor<LevelState> {
   }
 
   buildSharedQuery(query: any) {
+    console.log(query, this.options.fields);
 
     each(this.options.fields, (field: string, i: number) => {
       var filters = this.state.getLevel(i);
@@ -56,14 +58,17 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor<LevelState> {
       var isLeaf = !this.state.levelHasFilters(i+1);
       var filterTerms = map(filters, TermQuery.bind(null, field));
 
-      if(filterTerms.length > 0){
+      console.log(field, filterTerms, isLeaf, this.state.getLevel(0), this.state.getLevel(1));
+
+      if (filterTerms.length > 0) {
         query = query.addFilter(
           this.uuids[i],
           (filterTerms.length  > 1 ) ?
-          BoolShould(filterTerms) : filterTerms[0])
-        };
+            BoolShould(filterTerms) : filterTerms[0]
+        );
+      };
 
-      if(isLeaf){
+      if (isLeaf) {
         var selectedFilters = map(filters, (filter)=> {
           return {
             id:this.options.id,
@@ -75,6 +80,7 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor<LevelState> {
           }
         });
         query = query.addSelectedFilters(selectedFilters);
+        console.log('adding selected filters', query, selectedFilters, filters);
       }
 
     });

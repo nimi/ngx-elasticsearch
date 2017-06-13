@@ -6,7 +6,10 @@ export class State<T> {
   }
 
   create(value: T | null) {
-    return new (<any>this.constructor)(value);
+    const item = new (<any>this.constructor)(value);
+    console.log(item, value);
+    item.value = value;
+    return item;
   }
 
   setValue(value: T) {

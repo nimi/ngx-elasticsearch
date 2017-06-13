@@ -62,7 +62,7 @@ var NgxElasticsearchComponent = (function () {
 NgxElasticsearchComponent = __decorate([
     core_1.Component({
         selector: 'ngx-search-component',
-        template: 'test'
+        template: ''
     }),
     __metadata("design:paramtypes", [SearchManagerService_1.NgxSearchManagerService])
 ], NgxElasticsearchComponent);

@@ -16,11 +16,12 @@ export * from './transport';
 export * from './SearchManagerService';
 export * from './SearchComponent';
 
+export * from './utils';
+
 let config = { url: '', options: {} };
 export let searchManagerFactory = () => {
   const searchManager = new SearchManager(config.url, config.options);
   const service = new NgxSearchManagerService();
-  console.log(config);
   service.initialize(searchManager);
   return service;
 };

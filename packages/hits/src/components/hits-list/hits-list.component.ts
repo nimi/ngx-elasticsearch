@@ -1,17 +1,20 @@
-import { Component, OnInit, Input, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ContentChild, TemplateRef, ViewChild } from '@angular/core';
 import {
   NgxElasticsearchComponent,
   NgxSearchManagerService,
   QueryAccessor,
-  PageSizeAccessor
+  PageSizeAccessor,
+  block
 } from '@ngx-elasticsearch/core';
+
+const selector = 'hits';
 
 @Component({
   selector: 'ngx-hits-list',
   template: `
-    <div class="ngx-hits-list">
-      <div *ngFor="let hit of hits">
-        <ng-container *ngTemplateOutlet="itemTemplate || defaultItem; context: { $implicit: hit }"></ng-container>
+    <div [attr.class]="listClassName">
+      <div [attr.class]="itemClassName" *ngFor="let hit of hits">
+        <ng-content *ngTemplateOutlet="itemTemplate || defaultItem; context: { $implicit: hit }"></ng-content>
       </div>
     </div>
     <ng-template #defaultItem let-hit>
@@ -26,11 +29,18 @@ export class NgxHitsListComponent extends NgxElasticsearchComponent {
    * @type {number}
    */
   @Input() hitsPerPage: number = 10;
-  @Input() itemTemplate: TemplateRef;
+  @Input() listType: 'list' | 'grid' = 'list';
+
+  @Input()
+  @ContentChild(NgxHitsListComponent, { read: TemplateRef })
+  itemTemplate: TemplateRef<any>;
 
   accessor: any;
   service: NgxSearchManagerService;
   hits: any[];
+
+  public listClassName: any;
+  public itemClassName: any;
 
   constructor(service: NgxSearchManagerService) {
     super(service);
@@ -39,10 +49,16 @@ export class NgxHitsListComponent extends NgxElasticsearchComponent {
 
   ngOnInit() {
     super.ngOnInit();
-    this.service.searchManager.emitter.addListener(() => {
-      this.hits = this.service.searchManager.getHits();
-    });
-    // this.hits = this.service.manager.getHits();
+    this.listClassName = block(`${selector}-${this.listType}`);
+    this.itemClassName = block(`${selector}-${this.listType}-hit`).mix(this.listClassName('item'));
+  }
+
+  ngAfterViewInit() {
+    this.service.results$
+      .subscribe((results) => {
+        this.hits = results;
+        console.log('hits', results);
+      });
   }
 
   defineAccessor() {

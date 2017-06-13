@@ -23,11 +23,11 @@ __export(require("./state"));
 __export(require("./transport"));
 __export(require("./SearchManagerService"));
 __export(require("./SearchComponent"));
+__export(require("./utils"));
 var config = { url: '', options: {} };
 exports.searchManagerFactory = function () {
     var searchManager = new SearchManager_1.SearchManager(config.url, config.options);
     var service = new SearchManagerService_1.NgxSearchManagerService();
-    console.log(config);
     service.initialize(searchManager);
     return service;
 };

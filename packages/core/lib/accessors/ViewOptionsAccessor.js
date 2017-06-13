@@ -42,7 +42,7 @@ var ViewOptionsAccessor = (function (_super) {
         //this won't fire search as query didn't change, but it will serialize url
         //might need better way
         this.searchManager.performSearch(false, false);
-        this.searchManager.emitter.trigger();
+        this.searchManager.searching$$.next(false);
     };
     return ViewOptionsAccessor;
 }(StatefulAccessor_1.StatefulAccessor));

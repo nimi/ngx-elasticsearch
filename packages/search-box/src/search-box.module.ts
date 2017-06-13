@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxElasticsearchModule } from '@ngx-elasticsearch/core';
 
@@ -11,6 +12,7 @@ export * from './components/search-box/search-box.component';
     NgxSearchBoxComponent
   ],
   imports: [
+    CommonModule,
     FormsModule
   ],
   exports: [

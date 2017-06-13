@@ -3,22 +3,24 @@ import {isArray, take, size, without, indexOf} from "lodash";
 import { update } from '../utils/immutability-helper';
 
 export class LevelState extends State<Array<any>> {
-  value: Array<any> = [];
+  value: Array<any>;
 
   getValue() {
-    return this.value;
+    return this.value || [];
   }
 
   add(level: number, val: any) {
     var ob = this.getValue();
     if (!isArray(ob[level])) {
       ob = update(ob, {
-        [level]:{$set:[]}
+        [level]: { $set: [] }
       });
     }
     ob = update(ob, {
-      [level]:{$push:[val]}
+      [level]: { $push: [val] }
     });
+
+    console.log('add', ob, level, val);
     return this.create(ob);
   }
 
@@ -32,7 +34,7 @@ export class LevelState extends State<Array<any>> {
 
   remove(level: number, val: any) {
     return this.create(update(this.getValue(), {
-      [level]:{$set:without(this.getValue()[level], val)}
+      [level]: { $set:without(this.getValue()[level], val) }
     }));
   }
 
@@ -45,6 +47,7 @@ export class LevelState extends State<Array<any>> {
   }
 
   getLevel(level: number): Array<string> {
+    console.log('getting level', this.getValue(), this, level);
     return this.getValue()[level] || [];
   }
 
@@ -61,7 +64,7 @@ export class LevelState extends State<Array<any>> {
   }
 
   toggleLevel(level: number, key: any): LevelState{
-
+    console.log('level state', this, level, key, this.contains(level, key), this.isLeafLevel(level));
     if (this.contains(level, key)) {
       if (this.isLeafLevel(level)) {
         return this.clear(level);

@@ -46,6 +46,7 @@ export class Accessor {
 
   getAggregations(path: any[], defaultValue: any) {
     const results = this.getResults();
+    console.log(results);
     const getPath = compact(['aggregations', ...path]);
     return get(results, getPath, defaultValue);
   }

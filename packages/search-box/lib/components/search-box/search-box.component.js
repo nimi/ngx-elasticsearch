@@ -15,6 +15,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var core_2 = require("@ngx-elasticsearch/core");
+var selector = 'search-box';
 var NgxSearchBoxComponent = (function (_super) {
     __extends(NgxSearchBoxComponent, _super);
     function NgxSearchBoxComponent(service) {
@@ -40,7 +41,7 @@ var NgxSearchBoxComponent = (function (_super) {
          * Placeholder for the input box
          * @type {string}
          */
-        _this.placeholder = '';
+        _this.placeholder = 'Search';
         /**
          * When searchOnChange={false} Configure behavior of the SearchBox when
          * the user blur's out of the field. Defaults to search
@@ -57,14 +58,19 @@ var NgxSearchBoxComponent = (function (_super) {
          * @type {string}
          */
         _this.id = 'q';
+        _this.className = core_2.block(selector);
+        _this.spinnerClassName = core_2.block('spinning-loader');
         _this.service = service;
+        console.log(Object.assign({}, service), service.initialized);
         return _this;
     }
     NgxSearchBoxComponent.prototype.ngOnInit = function () {
-        var _this = this;
         _super.prototype.ngOnInit.call(this);
-        this.service.searchManager.emitter.addListener(function () {
-            console.log('results found!', _this.getResults());
+    };
+    NgxSearchBoxComponent.prototype.ngAfterViewInit = function () {
+        this.service.searching$
+            .subscribe(function (isSearching) {
+            console.log('searching', isSearching);
         });
     };
     NgxSearchBoxComponent.prototype.defineAccessor = function () {
@@ -149,7 +155,7 @@ __decorate([
 NgxSearchBoxComponent = __decorate([
     core_1.Component({
         selector: 'ngx-search-box',
-        template: "\n    <div class=\"esx-searchbox\">\n      <form (submit)=\"handleSubmit(search.value)\">\n        <label [for]=\"'searchbox'\">Search</label>\n        <input\n          #search\n          (focus)=\"handleFocus($event)\"\n          (blur)=\"handleBlur($event)\"\n          (input)=\"handleChange(search.value)\"\n          [attr.id]=\"'searchbox'\"\n          [attr.type]=\"'text'\"\n          [placeholder]=\"placeholder\"\n        />\n        <button type=\"submit\">Search Now!</button>\n      </form>\n    </div>\n  ",
+        template: "\n    <div [attr.class]=\"className\">\n      <form (submit)=\"handleSubmit(search.value)\">\n        <div [attr.class]=\"className('icon')\"></div>\n        <label [attr.for]=\"'searchbox'\"></label>\n        <input\n          #search\n          [attr.class]=\"className('text')\"\n          (focus)=\"handleFocus($event)\"\n          (blur)=\"handleBlur($event)\"\n          (input)=\"handleChange(search.value)\"\n          [attr.id]=\"'searchbox'\"\n          [attr.type]=\"'text'\"\n          [attr.placeholder]=\"placeholder\"\n        />\n        <input\n          [attr.class]=\"className('action')\"\n          type=\"submit\"\n        />\n        <div \n          class=\"{{ className('loader') + ' ' + spinnerClassName }}\"\n          [ngClass]=\"{ 'is-hidden': true }\"\n        ></div>\n      </form>\n    </div>\n  ",
     }),
     __metadata("design:paramtypes", [typeof (_a = typeof core_2.NgxSearchManagerService !== "undefined" && core_2.NgxSearchManagerService) === "function" && _a || Object])
 ], NgxSearchBoxComponent);

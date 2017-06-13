@@ -1510,6 +1510,11 @@ body {
   min-width: 600px
 }
 
+ngx-es-side-bar {
+  display: block;
+  flex: 0 0 246px;
+}
+
 .ngx-es-layout__filters {
   background: #fff;
   padding: 15px;

@@ -1,26 +1,38 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {
   NgxElasticsearchComponent,
   NgxSearchManagerService,
-  QueryAccessor
+  QueryAccessor,
+  block
 } from '@ngx-elasticsearch/core';
+
+const selector = 'search-box';
 
 @Component({
   selector: 'ngx-search-box',
   template: `
-    <div class="esx-searchbox">
+    <div [attr.class]="className">
       <form (submit)="handleSubmit(search.value)">
-        <label [for]="'searchbox'">Search</label>
+        <div [attr.class]="className('icon')"></div>
+        <label [attr.for]="'searchbox'"></label>
         <input
           #search
+          [attr.class]="className('text')"
           (focus)="handleFocus($event)"
           (blur)="handleBlur($event)"
           (input)="handleChange(search.value)"
           [attr.id]="'searchbox'"
           [attr.type]="'text'"
-          [placeholder]="placeholder"
+          [attr.placeholder]="placeholder"
         />
-        <button type="submit">Search Now!</button>
+        <input
+          [attr.class]="className('action')"
+          type="submit"
+        />
+        <div 
+          class="{{ className('loader') + ' ' + spinnerClassName }}"
+          [ngClass]="{ 'is-hidden': true }"
+        ></div>
       </form>
     </div>
   `,
@@ -57,7 +69,7 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
    * Placeholder for the input box
    * @type {string}
    */
-  @Input() placeholder: string = '';
+  @Input() placeholder: string = 'Search';
   /**
    * An array of elasticsearch fields to search within. Can specify boosting on particular fields.
    * Will search _all by default. Will only be used if searchOnChange is true.
@@ -85,8 +97,12 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
    */
   @Input() id: string = 'q';
 
-  accessor: any;
-  service: NgxSearchManagerService;
+  public className: any = block(selector);
+  public spinnerClassName: any = block('spinning-loader');
+
+  public accessor: any;
+
+  private service: NgxSearchManagerService;
 
 
   constructor(service: NgxSearchManagerService) {
@@ -96,9 +112,13 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
 
   ngOnInit() {
     super.ngOnInit();
-    this.service.searchManager.emitter.addListener(() => {
-      console.log('results found!', this.getResults());
-    });
+  }
+
+  ngAfterViewInit() {
+    this.service.searching$
+      .subscribe((isSearching) => {
+        console.log('searching', isSearching);
+      });
   }
 
   defineAccessor() {
@@ -139,7 +159,6 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
   }
 
   searchQuery(query: string) {
-    let shouldResetOtherState = false;
     this.accessor.setQueryString(query);
     this.service.searchManager.performSearch(true);
   }

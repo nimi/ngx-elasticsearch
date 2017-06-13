@@ -9,6 +9,7 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 var core_1 = require("@angular/core");
+var common_1 = require("@angular/common");
 var forms_1 = require("@angular/forms");
 var search_box_component_1 = require("./components/search-box/search-box.component");
 __export(require("./components/search-box/search-box.component"));
@@ -23,6 +24,7 @@ NgxSearchBoxModule = __decorate([
             search_box_component_1.NgxSearchBoxComponent
         ],
         imports: [
+            common_1.CommonModule,
             forms_1.FormsModule
         ],
         exports: [
