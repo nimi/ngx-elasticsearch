@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 import {
   NgxElasticsearchComponent,
   NgxSearchManagerService,
@@ -64,16 +65,22 @@ export class NgxHierarchicalMenuFilterComponent extends NgxElasticsearchComponen
   protected manager: SearchManager;
   protected accessor: Accessor;
 
+  private resultsSub: Subscription;
+
   constructor(private service: NgxSearchManagerService) {
     super(service);
   }
 
   ngOnInit() {
     super.ngOnInit();
-    this.service.results$
+    this.resultsSub = this.service.results$
       .subscribe(result => {
         this.options = this.getOptions();
       });
+  }
+
+  ngOnDestroy() {
+    this.resultsSub.unsubscribe();
   }
 
   defineAccessor() {
@@ -92,7 +99,6 @@ export class NgxHierarchicalMenuFilterComponent extends NgxElasticsearchComponen
 
   getOptions(level: number = 0) {
     const options = this.accessor.getBuckets(level);
-    console.log(options);
     return options.map(o => {
       const selected = this.accessor.resultsState.contains(level, o.key);
 

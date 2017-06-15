@@ -61,13 +61,11 @@ export class NgxRangeFilterComponent extends NgxElasticsearchComponent implement
   	} else {
     	this.accessor.state = this.accessor.state.setValue({min, max})
   	}
-		// this.forceUpdate();
   }
 
   private updateAndSearch(newValues) {
     this.update(newValues);
 		this.manager.performSearch();
-    console.log('new values', newValues, 'update and search')
   }
 
   public handleChange({values}) {

@@ -35,13 +35,13 @@ export * from './hierarchical-menu-filter';
   exports: [
     CheckboxFilterComponent,
     HierarchicalRefinementFilterComponent,
-    NgxSelectedFiltersComponent,
     ResetFilterComponent,
     NumericMenuFilterComponent,
     DynamicRangeFilterComponent,
-    NgxRangeFilterComponent,
     FacetFilterComponent,
     TagFilterComponent,
+    NgxRangeFilterComponent,
+    NgxSelectedFiltersComponent,
     NgxHierarchicalMenuFilterComponent
   ]
 })
