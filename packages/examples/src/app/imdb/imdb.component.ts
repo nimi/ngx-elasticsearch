@@ -12,9 +12,9 @@ import { Component, OnDestroy } from '@angular/core';
         <ngx-es-side-bar>
           Filters
           <ngx-es-hierarchical-menu-filter
-            [fields]="['teamnick.keyword']"
-            [title]="'Team'"
-            [id]="'team'"
+            [fields]="['teamnick.keyword', 'p1name.keyword']"
+            [title]="'Categories'"
+            [id]="'categories'"
           >
           </ngx-es-hierarchical-menu-filter>
         </ngx-es-side-bar>

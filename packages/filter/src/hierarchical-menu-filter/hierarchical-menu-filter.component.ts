@@ -25,6 +25,15 @@ const selector = 'hierarchical-menu-list';
               <div [attr.class]="option.className('text')">{{ option.key }}</div>
               <div [attr.class]="option.className('count')">{{ option.count }}</div>
             </div>
+            <div *ngFor="let c of option.children">
+              <div
+                (click)="addFilter(c, 1)" 
+                [attr.class]="c.className"
+              >
+                <div [attr.class]="option.className('text')" [style.marginLeft.px]="10">{{ c.key }}</div>
+                <div [attr.class]="option.className('count')">{{ c.count }}</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -50,6 +59,7 @@ export class NgxHierarchicalMenuFilterComponent extends NgxElasticsearchComponen
   public className: any = block(selector);
   public optionClassName: any = block('hierarchical-menu-option')
   public options: any[] = [];
+  public secondaryOptions: any[] = [];
 
   protected manager: SearchManager;
   protected accessor: Accessor;
@@ -63,7 +73,6 @@ export class NgxHierarchicalMenuFilterComponent extends NgxElasticsearchComponen
     this.service.results$
       .subscribe(result => {
         this.options = this.getOptions();
-        console.log(this.getSecondaryOptions());
       });
   }
 
@@ -75,30 +84,24 @@ export class NgxHierarchicalMenuFilterComponent extends NgxElasticsearchComponen
   }
 
   addFilter(option: any, level: any = 0) {
-    const st = { ...this.accessor.state };
-    // this.accessor.state =
-      // this.accessor.state.toggleLevel(level, option.key);
-    console.log('adding filter', option, level, option.key, st, this.accessor.state);
+    this.accessor.state =
+      this.accessor.state.toggleLevel(level, option.key);
     this.service.manager.performSearch();
   }
 
   getOptions(level: number = 0) {
     const options = this.accessor.getBuckets(level);
     return options.map(o => {
+      const selected = this.accessor.resultsState.contains(level, o.key);
       return {
         key: o.key,
         count: o.doc_count,
-        className: this.optionClassName,
+        className: selected ? this.optionClassName.mix('is-selected') : this.optionClassName,
+        children: selected
+          ? this.getOptions(1)
+          : []
       }
     });
-  }
-
-  getSecondaryOptions() {
-    console.log(this.accessor.resultsState);
-    if (this.accessor.resultsState.contains(0, 'team')) {
-      console.log(this.accessor.resultsState);
-    }
-    return;
   }
 
 }
