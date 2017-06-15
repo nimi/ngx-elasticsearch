@@ -57,7 +57,7 @@ export function update(value: any, spec: any) {
   }
 
   Object.keys(spec)
-    .filter((k) => !ALL_COMMANDS_SET.has(k))
+    .filter(k => !ALL_COMMANDS_SET.has(k))
     .forEach((k) => nextValue[k] = update(value[k], spec[k]));
 
   return nextValue;

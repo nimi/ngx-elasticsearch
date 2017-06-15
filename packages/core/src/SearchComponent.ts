@@ -9,9 +9,10 @@ import { SearchManager } from './SearchManager';
   template: ''
 })
 export class NgxElasticsearchComponent implements OnDestroy {
-  private accessor: Accessor | void;
-  private manager: SearchManager;
-  unmounted: boolean = false;
+  protected accessor: Accessor | void;
+  protected manager: SearchManager;
+  
+  private unmounted: boolean = false;
 
   constructor(public service: NgxSearchManagerService) {
     this.manager = service.searchManager;

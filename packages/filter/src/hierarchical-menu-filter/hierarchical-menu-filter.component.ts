@@ -19,7 +19,7 @@ const selector = 'hierarchical-menu-list';
         <div [attr.class]="className('hierarchical-options')">
           <div *ngFor="let option of options">
             <div
-              (click)="addFilter(option)" 
+              (click)="addFilter($event, option)" 
               [attr.class]="option.className"
             >
               <div [attr.class]="option.className('text')">{{ option.key }}</div>
@@ -27,7 +27,7 @@ const selector = 'hierarchical-menu-list';
             </div>
             <div *ngFor="let c of option.children">
               <div
-                (click)="addFilter(c, 1)" 
+                (click)="addFilter($event, c, 1)" 
                 [attr.class]="c.className"
               >
                 <div [attr.class]="option.className('text')" [style.marginLeft.px]="10">{{ c.key }}</div>
@@ -83,7 +83,8 @@ export class NgxHierarchicalMenuFilterComponent extends NgxElasticsearchComponen
     });
   }
 
-  addFilter(option: any, level: any = 0) {
+  addFilter(event: any, option: any, level: any = 0) {
+    event.stopPropagation();
     this.accessor.state =
       this.accessor.state.toggleLevel(level, option.key);
     this.service.manager.performSearch();
@@ -91,14 +92,16 @@ export class NgxHierarchicalMenuFilterComponent extends NgxElasticsearchComponen
 
   getOptions(level: number = 0) {
     const options = this.accessor.getBuckets(level);
+    console.log(options);
     return options.map(o => {
       const selected = this.accessor.resultsState.contains(level, o.key);
+
       return {
         key: o.key,
         count: o.doc_count,
         className: selected ? this.optionClassName.mix('is-selected') : this.optionClassName,
         children: selected
-          ? this.getOptions(1)
+          ? this.getOptions(level + 1)
           : []
       }
     });

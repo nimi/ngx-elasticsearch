@@ -23,9 +23,10 @@ const componentExamples = () => provideExamples(examples);
 import { NgxElasticsearchModule } from '@ngx-elasticsearch/core';
 import { ImdbModule } from './imdb/imdb.module';
 
-const url = "http://localhost:9200/";
+const url = "http://localhost:9500/";
 const options = {
   useHistory: false,
+  searchOnLoad: true,
   headers: {
     'Content-Type': 'application/json'
   }

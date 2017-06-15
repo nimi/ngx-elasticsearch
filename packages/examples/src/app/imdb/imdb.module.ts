@@ -9,13 +9,6 @@ import { NgxFilterModule } from '@ngx-elasticsearch/filter';
 import { ImdbComponent } from './imdb.component';
 import { HitsListItemComponent } from './hits-list-item/hits-list-item.component';
 
-const url = "/api/movies";
-const options = {
-  useHistory: false,
-  headers: {
-    'Content-Type': 'application/json'
-  }
-};
 export const components = [
   NgxSearchBoxComponent,
   NgxHitsListComponent,

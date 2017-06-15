@@ -22,7 +22,7 @@ export interface SearchManagerOptions {
 export class SearchManager {
   private registrationCompleted: Promise<any>;
   host: string;
-  completeRegistration: Function;
+  completeRegistration: Function = () => void 0;
   state: any;
   translateFunction: Function;
   currentSearchRequest: SearchRequest;
@@ -45,8 +45,9 @@ export class SearchManager {
     this.options = defaults(options, {
       useHistory: true,
       httpHeaders: {},
-      searchOnLoad: true
+      searchOnLoad: true,
     });
+
     this.host = host;
 
     this.transport = this.options.transport || new HttpESTransport(host, {
@@ -61,7 +62,6 @@ export class SearchManager {
 		});
     this.translateFunction = constant(undefined);
     this.queryProcessor = identity;
-    // this.primarySearcher = this.createSearcher()
     this.query = new ImmutableQuery();
   }
 
@@ -127,6 +127,7 @@ export class SearchManager {
     if(this.options.searchOnLoad) {
       this.registrationCompleted.then(()=> {
         this._search();
+        console.log('registration completed, searching', this);
       });
     }
   }

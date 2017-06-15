@@ -7,7 +7,6 @@ export class State<T> {
 
   create(value: T | null) {
     const item = new (<any>this.constructor)(value);
-    console.log(item, value);
     item.value = value;
     return item;
   }

@@ -75,7 +75,7 @@ html, body, example-layout, md-sidenav-container, .my-content {
   display: none
 }
 
-.rc-slider {
+/*.rc-slider {
   position: relative;
   height: 14px;
   padding: 5px 0;
@@ -266,7 +266,7 @@ html, body, example-layout, md-sidenav-container, .my-content {
 .rc-slider-tooltip-zoom-down-leave {
   -webkit-animation-timing-function: cubic-bezier(.755,.05,.855,.06);
   animation-timing-function: cubic-bezier(.755,.05,.855,.06)
-}
+}*/
 
 @-webkit-keyframes rcSliderTooltipZoomDownIn {
   0% {
@@ -1813,40 +1813,67 @@ ngx-es-side-bar {
   line-height: 16px
 }
 
-.list-app .ngx-es-layout__body {
-  flex-flow: row wrap
+
+/* Range Slider */
+
+.ngx-es-range, .ngx-es-range * {
+    box-sizing: border-box;
 }
 
-.list-app .ngx-es-layout__results {
-  flex: 1 100%
+.ngx-es-range {
+    position: relative;
+    text-align: left;
+    position: relative;
+    text-align: left;
+    background: #838688;
+    border: none;
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) inset;
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) inset;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) inset;
+    border: 1px solid #D5D5D5;
+    background: #ffffff;
+    color: #222222;
+    font-family: "Roboto", "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 1em;
 }
 
-.list-app .ngx-es-layout__filters {
-  flex: 1 100%;
-  margin: 15px 15px 20px;
-  box-shadow: none;
-  background: transparent;
-  padding: 0;
-  margin: 7px 7px 0
+.ngx-es-range-horizontal {
+    height: .8em;
 }
 
-.list-app .ngx-es-layout__filters-row {
+.ngx-es-corner-all {
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.ngx-es-range-horizontal .ngx-es-range-handle {
+    top: -.25em;
+    margin-left: -.6em;
+}
+
+.ngx-es-range .ngx-es-range-handle {
+    position: absolute;
+    width: 1.2em;
+    height: 1.2em;
+    cursor: default;
+    touch-action: none;
+    z-index: 2;
+    width: 18px !important;
+    height: 18px !important;
+    cursor: default;
+    background: red;
+    outline: none;
+    border-radius: 50%;
+    border: none;
+}
+
+.ngx-es-range-horizontal .ngx-es-range-handle {
+    top: -2px !important;
+    margin-left: -.6em;
+}
+
+.ngx-es-range-min-max {
   display: flex;
-  flex-flow: row wrap
-}
-
-.list-app .ngx-es-layout__filters-row .ngx-es-panel {
-  flex: 1 30%;
-  margin: 8px;
-  padding: 8px;
-  box-shadow: 0 1px 3px 0 rgba(0,0,0,.08);
-  background: #fff
-}
-
-.list-app .ngx-es-layout__filters-row .ngx-es-panel.filter--select,.list-app .ngx-es-layout__filters-row .ngx-es-panel.filter--tag-cloud {
-  flex: 1 20%
-}
-
-.list-app .ngx-es-layout__filters-row .ngx-es-panel.filter--tabs,.list-app .ngx-es-layout__filters-row .ngx-es-panel.filter--toggle {
-  flex: 3 70%
+  justify-content: space-between;
 }

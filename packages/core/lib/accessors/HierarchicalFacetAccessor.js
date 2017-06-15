@@ -21,7 +21,6 @@ var HierarchicalFacetAccessor = (function (_super) {
         _this.state = new state_1.LevelState();
         _this.options = options;
         _this.computeUuids();
-        console.log(_this.uuids);
         return _this;
     }
     HierarchicalFacetAccessor.prototype.computeUuids = function () {
@@ -44,13 +43,11 @@ var HierarchicalFacetAccessor = (function (_super) {
     };
     HierarchicalFacetAccessor.prototype.buildSharedQuery = function (query) {
         var _this = this;
-        console.log(query, this.options.fields);
         lodash_1.each(this.options.fields, function (field, i) {
             var filters = _this.state.getLevel(i);
             var parentFilter = _this.state.getLevel(i - 1);
             var isLeaf = !_this.state.levelHasFilters(i + 1);
             var filterTerms = lodash_1.map(filters, _1.TermQuery.bind(null, field));
-            console.log(field, filterTerms, isLeaf, _this.state.getLevel(0), _this.state.getLevel(1));
             if (filterTerms.length > 0) {
                 query = query.addFilter(_this.uuids[i], (filterTerms.length > 1) ?
                     _1.BoolShould(filterTerms) : filterTerms[0]);
@@ -68,7 +65,6 @@ var HierarchicalFacetAccessor = (function (_super) {
                     };
                 });
                 query = query.addSelectedFilters(selectedFilters);
-                console.log('adding selected filters', query, selectedFilters, filters);
             }
         });
         return query;

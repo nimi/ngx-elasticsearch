@@ -10,27 +10,33 @@ export class NgxSearchManagerService {
   public get searchManager() { return this.manager; };
   protected initialized: boolean = false;
 
-  initialize(manager: SearchManager) {
+  public initialize(manager: SearchManager) {
     if (!this.manager && manager) {
       this.manager = manager;
       this.initialized = true;
       this.setObservables(this.manager);
+      this.register();
+      console.log('initializing!');
     }
   }
 
-  register() {
+  public register() {
     if (this.manager) {
+      console.log('registering!');
       this.manager.setupListeners();
       this.manager.completeRegistration();
     }
   }
 
-  destroy() {
+  public destroy() {
     if (this.manager) {
       this.manager.unlistenHistory();
       this.initialized = false;
-      delete this.manager;
     }
+  }
+
+  public search(replaceState: boolean = false, notifyState: boolean = true) {
+    this.manager.performSearch(replaceState, notifyState);
   }
 
   private setObservables(manager: SearchManager) {
@@ -49,10 +55,8 @@ export class NgxSearchManagerService {
     );
     this.results$ = Observable.create(
       (observer) => {
-        console.log(manager, manager.results$$);
         const listener = manager.results$$
           .subscribe(val => {
-            console.log(val);
             try { observer.next(val); }
             catch (err) { observer.error(err); }
           });

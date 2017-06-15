@@ -10,13 +10,21 @@ import { Component, OnDestroy } from '@angular/core';
       </ngx-es-top-bar>
       <ngx-es-layout-body>
         <ngx-es-side-bar>
-          Filters
           <ngx-es-hierarchical-menu-filter
             [fields]="['teamnick.keyword', 'p1name.keyword']"
             [title]="'Categories'"
             [id]="'categories'"
           >
           </ngx-es-hierarchical-menu-filter>
+          <ngx-es-range-filter
+            [min]="0"
+            [max]="100"
+            [field]="'xcoord'"
+            [id]="'xcoord'"
+            [title]="'X Coordinate'"
+            [showHistogram]="false"
+          >
+          </ngx-es-range-filter>
         </ngx-es-side-bar>
         <ngx-es-layout-results>
           <ngx-es-action-bar>

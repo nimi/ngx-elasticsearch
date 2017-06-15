@@ -31,7 +31,7 @@ export class StatefulAccessor<T extends State<any>> extends Accessor {
       : {};
   }
 
-  setSearchManager(search: SearchManager){
+  setSearchManager(search: SearchManager) {
     super.setSearchManager(search);
     this.setResultsState();
   }

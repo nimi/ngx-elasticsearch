@@ -20,7 +20,6 @@ export class LevelState extends State<Array<any>> {
       [level]: { $push: [val] }
     });
 
-    console.log('add', ob, level, val);
     return this.create(ob);
   }
 
@@ -47,7 +46,6 @@ export class LevelState extends State<Array<any>> {
   }
 
   getLevel(level: number): Array<string> {
-    console.log('getting level', this.getValue(), this, level);
     return this.getValue()[level] || [];
   }
 
@@ -64,7 +62,6 @@ export class LevelState extends State<Array<any>> {
   }
 
   toggleLevel(level: number, key: any): LevelState{
-    console.log('level state', this, level, key, this.contains(level, key), this.isLeafLevel(level));
     if (this.contains(level, key)) {
       if (this.isLeafLevel(level)) {
         return this.clear(level);

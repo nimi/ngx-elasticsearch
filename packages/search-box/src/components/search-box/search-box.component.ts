@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Subscription } from 'rxjs';
 import {
   NgxElasticsearchComponent,
   NgxSearchManagerService,
@@ -96,6 +97,22 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
    * @type {string}
    */
   @Input() id: string = 'q';
+  /**
+   * Minimum character length for search action
+   * @type {number}
+   */
+  @Input() minLength: number = 0;
+
+  /**
+   * Default search string on empty input
+   * @type {number}
+   */
+  @Input() defaultOnEmpty: string = '*';
+
+  /**
+   * Output for searching state
+   */
+  @Output() onSearching: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   public className: any = block(selector);
   public spinnerClassName: any = block('spinning-loader');
@@ -103,6 +120,7 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
   public accessor: any;
 
   private service: NgxSearchManagerService;
+  private onSearchingSub: Subscription;
 
 
   constructor(service: NgxSearchManagerService) {
@@ -115,10 +133,14 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
   }
 
   ngAfterViewInit() {
-    this.service.searching$
+    this.onSearchingSub =  this.service.searching$
       .subscribe((isSearching) => {
-        console.log('searching', isSearching);
+        this.onSearching.emit(isSearching);
       });
+  }
+
+  ngOnDestroy() {
+    this.onSearchingSub.unsubscribe();
   }
 
   defineAccessor() {
@@ -133,6 +155,7 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
       queryOptions: Object.assign({}, queryOptions),
       queryBuilder,
       onQueryStateChange: () => {
+        console.log('query state changed!');
         // if (!this.unmounted && this.state.input){
         //   this.setState({input: undefined})
         // }
@@ -141,8 +164,13 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
   }
 
   handleChange(value: string) {
-    if (this.searchOnChange && value.length > 3) {
-      this.searchQuery(value);
+    if (this.searchOnChange) {
+      if (value.length > this.minLength) {
+        this.searchQuery(value);
+      }
+      else {
+        this.searchQuery(this.defaultOnEmpty);
+      }
     }
   }
 

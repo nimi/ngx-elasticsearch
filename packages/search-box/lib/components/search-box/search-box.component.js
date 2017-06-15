@@ -58,20 +58,37 @@ var NgxSearchBoxComponent = (function (_super) {
          * @type {string}
          */
         _this.id = 'q';
+        /**
+         * Minimum character length for search action
+         * @type {number}
+         */
+        _this.minLength = 0;
+        /**
+         * Default search string on empty input
+         * @type {number}
+         */
+        _this.defaultOnEmpty = '*';
+        /**
+         * Output for searching state
+         */
+        _this.onSearching = new core_1.EventEmitter();
         _this.className = core_2.block(selector);
         _this.spinnerClassName = core_2.block('spinning-loader');
         _this.service = service;
-        console.log(Object.assign({}, service), service.initialized);
         return _this;
     }
     NgxSearchBoxComponent.prototype.ngOnInit = function () {
         _super.prototype.ngOnInit.call(this);
     };
     NgxSearchBoxComponent.prototype.ngAfterViewInit = function () {
-        this.service.searching$
+        var _this = this;
+        this.onSearchingSub = this.service.searching$
             .subscribe(function (isSearching) {
-            console.log('searching', isSearching);
+            _this.onSearching.emit(isSearching);
         });
+    };
+    NgxSearchBoxComponent.prototype.ngOnDestroy = function () {
+        this.onSearchingSub.unsubscribe();
     };
     NgxSearchBoxComponent.prototype.defineAccessor = function () {
         var _a = this, id = _a.id, prefixQueryFields = _a.prefixQueryFields, queryFields = _a.queryFields, queryBuilder = _a.queryBuilder, queryOptions = _a.queryOptions, prefixQueryOptions = _a.prefixQueryOptions;
@@ -82,6 +99,7 @@ var NgxSearchBoxComponent = (function (_super) {
             queryOptions: Object.assign({}, queryOptions),
             queryBuilder: queryBuilder,
             onQueryStateChange: function () {
+                console.log('query state changed!');
                 // if (!this.unmounted && this.state.input){
                 //   this.setState({input: undefined})
                 // }
@@ -89,8 +107,13 @@ var NgxSearchBoxComponent = (function (_super) {
         });
     };
     NgxSearchBoxComponent.prototype.handleChange = function (value) {
-        if (this.searchOnChange && value.length > 3) {
-            this.searchQuery(value);
+        if (this.searchOnChange) {
+            if (value.length > this.minLength) {
+                this.searchQuery(value);
+            }
+            else {
+                this.searchQuery(this.defaultOnEmpty);
+            }
         }
     };
     NgxSearchBoxComponent.prototype.handleSubmit = function (value) {
@@ -102,7 +125,6 @@ var NgxSearchBoxComponent = (function (_super) {
     NgxSearchBoxComponent.prototype.getValue = function () {
     };
     NgxSearchBoxComponent.prototype.searchQuery = function (query) {
-        var shouldResetOtherState = false;
         this.accessor.setQueryString(query);
         this.service.searchManager.performSearch(true);
     };
@@ -152,6 +174,18 @@ __decorate([
     core_1.Input(),
     __metadata("design:type", String)
 ], NgxSearchBoxComponent.prototype, "id", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], NgxSearchBoxComponent.prototype, "minLength", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], NgxSearchBoxComponent.prototype, "defaultOnEmpty", void 0);
+__decorate([
+    core_1.Output(),
+    __metadata("design:type", core_1.EventEmitter)
+], NgxSearchBoxComponent.prototype, "onSearching", void 0);
 NgxSearchBoxComponent = __decorate([
     core_1.Component({
         selector: 'ngx-search-box',

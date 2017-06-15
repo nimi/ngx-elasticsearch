@@ -23,10 +23,13 @@ var NgxSearchManagerService = (function () {
             this.manager = manager;
             this.initialized = true;
             this.setObservables(this.manager);
+            this.register();
+            console.log('initializing!');
         }
     };
     NgxSearchManagerService.prototype.register = function () {
         if (this.manager) {
+            console.log('registering!');
             this.manager.setupListeners();
             this.manager.completeRegistration();
         }
@@ -35,8 +38,12 @@ var NgxSearchManagerService = (function () {
         if (this.manager) {
             this.manager.unlistenHistory();
             this.initialized = false;
-            delete this.manager;
         }
+    };
+    NgxSearchManagerService.prototype.search = function (replaceState, notifyState) {
+        if (replaceState === void 0) { replaceState = false; }
+        if (notifyState === void 0) { notifyState = true; }
+        this.manager.performSearch(replaceState, notifyState);
     };
     NgxSearchManagerService.prototype.setObservables = function (manager) {
         this.searching$ = Observable_1.Observable.create(function (observer) {
@@ -54,10 +61,8 @@ var NgxSearchManagerService = (function () {
             };
         });
         this.results$ = Observable_1.Observable.create(function (observer) {
-            console.log(manager, manager.results$$);
             var listener = manager.results$$
                 .subscribe(function (val) {
-                console.log(val);
                 try {
                     observer.next(val);
                 }

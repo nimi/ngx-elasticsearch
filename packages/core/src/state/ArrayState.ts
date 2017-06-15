@@ -2,6 +2,7 @@ import {State} from './State';
 import {indexOf, without} from 'lodash';
 
 export class ArrayState extends State<Array<string|number>> {
+  
   getValue() {
     return this.value || [];
   }

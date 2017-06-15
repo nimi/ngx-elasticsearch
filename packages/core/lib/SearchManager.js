@@ -12,12 +12,13 @@ var SearchManager = (function () {
     function SearchManager(host, options) {
         if (options === void 0) { options = {}; }
         var _this = this;
+        this.completeRegistration = function () { return void 0; };
         this.searching$$ = new Subject_1.Subject();
         this.results$$ = new Subject_1.Subject();
         this.options = lodash_1.defaults(options, {
             useHistory: true,
             httpHeaders: {},
-            searchOnLoad: true
+            searchOnLoad: true,
         });
         this.host = host;
         this.transport = this.options.transport || new transport_1.HttpESTransport(host, {
@@ -32,7 +33,6 @@ var SearchManager = (function () {
         });
         this.translateFunction = lodash_1.constant(undefined);
         this.queryProcessor = lodash_1.identity;
-        // this.primarySearcher = this.createSearcher()
         this.query = new query_1.ImmutableQuery();
     }
     SearchManager.prototype.setupListeners = function () {
@@ -90,6 +90,7 @@ var SearchManager = (function () {
         if (this.options.searchOnLoad) {
             this.registrationCompleted.then(function () {
                 _this._search();
+                console.log('registration completed, searching', _this);
             });
         }
     };

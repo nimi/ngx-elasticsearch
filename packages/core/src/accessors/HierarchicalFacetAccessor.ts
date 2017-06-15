@@ -24,7 +24,6 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor<LevelState> {
     super(key);
     this.options = options;
     this.computeUuids();
-    console.log(this.uuids);
   }
 
   computeUuids() {
@@ -50,15 +49,11 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor<LevelState> {
   }
 
   buildSharedQuery(query: any) {
-    console.log(query, this.options.fields);
-
     each(this.options.fields, (field: string, i: number) => {
       var filters = this.state.getLevel(i);
       var parentFilter = this.state.getLevel(i-1);
       var isLeaf = !this.state.levelHasFilters(i+1);
       var filterTerms = map(filters, TermQuery.bind(null, field));
-
-      console.log(field, filterTerms, isLeaf, this.state.getLevel(0), this.state.getLevel(1));
 
       if (filterTerms.length > 0) {
         query = query.addFilter(
@@ -80,7 +75,6 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor<LevelState> {
           }
         });
         query = query.addSelectedFilters(selectedFilters);
-        console.log('adding selected filters', query, selectedFilters, filters);
       }
 
     });
