@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NgxSelectedFiltersComponent } from './selected-filters.component';
+import { FilterGroupItemComponent } from './filter-group-item.component';
 
-describe('SelectedFiltersComponent', () => {
-  let component: NgxSelectedFiltersComponent;
-  let fixture: ComponentFixture<NgxSelectedFiltersComponent>;
+describe('FilterGroupItemComponent', () => {
+  let component: FilterGroupItemComponent;
+  let fixture: ComponentFixture<FilterGroupItemComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NgxSelectedFiltersComponent ]
+      declarations: [ FilterGroupItemComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NgxSelectedFiltersComponent);
+    fixture = TestBed.createComponent(FilterGroupItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

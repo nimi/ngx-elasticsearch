@@ -4,7 +4,7 @@ import { NgxElasticsearchModule } from '@ngx-elasticsearch/core';
 import { NgxRangeModule } from '@ngx-elasticsearch/range';
 import { CheckboxFilterComponent } from './checkbox-filter';
 import { HierarchicalRefinementFilterComponent } from './hierarchical-refinement-filter';
-import { SelectedFiltersComponent } from './selected-filters/selected-filters.component';
+import { NgxSelectedFiltersComponent } from './selected-filters/selected-filters.component';
 import { ResetFilterComponent } from './reset-filter/reset-filter.component';
 import { NumericMenuFilterComponent } from './numeric-menu-filter/numeric-menu-filter.component';
 import { DynamicRangeFilterComponent } from './dynamic-range-filter/dynamic-range-filter.component';
@@ -19,7 +19,7 @@ export * from './hierarchical-menu-filter';
   declarations: [
     CheckboxFilterComponent,
     HierarchicalRefinementFilterComponent,
-    SelectedFiltersComponent,
+    NgxSelectedFiltersComponent,
     ResetFilterComponent,
     NumericMenuFilterComponent,
     DynamicRangeFilterComponent,
@@ -35,7 +35,7 @@ export * from './hierarchical-menu-filter';
   exports: [
     CheckboxFilterComponent,
     HierarchicalRefinementFilterComponent,
-    SelectedFiltersComponent,
+    NgxSelectedFiltersComponent,
     ResetFilterComponent,
     NumericMenuFilterComponent,
     DynamicRangeFilterComponent,

@@ -32,7 +32,9 @@ import { Component, OnDestroy } from '@angular/core';
               Action Row 1
             </ngx-es-action-bar-row>
             <ngx-es-action-bar-row>
-              Action Row 2
+              <ngx-es-selected-filters
+                (onFilterChange)="handleFilterChange($event)"
+              ></ngx-es-selected-filters>
             </ngx-es-action-bar-row>
           </ngx-es-action-bar>
           <ngx-hits-list 
@@ -54,5 +56,9 @@ import { Component, OnDestroy } from '@angular/core';
 export class ImdbComponent implements OnDestroy {
 
   ngOnDestroy() {}
+
+  handleFilterChange(filters: any[]) {
+    console.log('filty', filters);
+  }
 
 }

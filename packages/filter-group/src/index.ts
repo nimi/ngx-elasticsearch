@@ -1,1 +1,1 @@
-export * from './hits.module';
+export * from './filter-group';
