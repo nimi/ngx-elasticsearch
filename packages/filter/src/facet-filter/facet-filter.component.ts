@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/take';
 import {
@@ -18,6 +18,7 @@ const selector = 'refinement-list';
     <ngx-es-checkbox-item-list
       (onItemSelect)="handleFacetSelect($event)"
       [items]="items"
+      [showCount]="ture"
     >
     </ngx-es-checkbox-item-list>
   `,
@@ -53,6 +54,8 @@ export class NgxFacetFilterComponent extends NgxElasticsearchComponent implement
   @Input() showMore: boolean = true;
 
   @Input() collapsable: boolean = false;
+
+  @Output() onFacetSelect: EventEmitter<any> = new EventEmitter();
 
   public className: any = block(selector);
   public optionClassName: any = block(`${selector}-option`)
@@ -135,7 +138,7 @@ export class NgxFacetFilterComponent extends NgxElasticsearchComponent implement
   }
 
   public handleFacetSelect(key: string) {
-    this.multiSelect ?  this.toggleFilter(key) : null;
+    this.multiSelect ? this.toggleFilter(key) : this.setFilters([key]);
   }
 
 }
