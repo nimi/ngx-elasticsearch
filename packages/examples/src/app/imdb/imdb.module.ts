@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { NgxElasticsearchModule } from '@ngx-elasticsearch/core';
 import { NgxHitsModule, NgxHitsListComponent, NgxHitsListItemComponent } from '@ngx-elasticsearch/hits';
 import { NgxSearchBoxModule, NgxSearchBoxComponent } from '@ngx-elasticsearch/search-box';
 import { NgxLayoutModule } from '@ngx-elasticsearch/layout';
 import { NgxFilterModule } from '@ngx-elasticsearch/filter';
+import { NgxSortingSelectorModule } from '@ngx-elasticsearch/sorting-selector';
 import { ImdbComponent } from './imdb.component';
 import { HitsListItemComponent } from './hits-list-item/hits-list-item.component';
+
 
 export const components = [
   NgxSearchBoxComponent,
@@ -20,7 +21,8 @@ export const components = [
     NgxSearchBoxModule,
     NgxHitsModule,
     NgxLayoutModule,
-    NgxFilterModule
+    NgxFilterModule,
+    NgxSortingSelectorModule
   ],
   declarations: [ ImdbComponent, HitsListItemComponent ],
   exports: [ ImdbComponent ]

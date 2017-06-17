@@ -1,5 +1,5 @@
 {
-  "name": "@ngx-elasticsearch/page-size",
+  "name": "@ngx-elasticsearch/page-size-selector",
   "version": "0.1.0",
   "license": "MIT",
   "main": "lib/index.js",

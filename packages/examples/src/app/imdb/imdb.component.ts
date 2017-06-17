@@ -37,12 +37,13 @@ import { Component, OnDestroy } from '@angular/core';
         <ngx-es-layout-results>
           <ngx-es-action-bar>
             <ngx-es-action-bar-row>
-              Action Row 1
+              <ngx-es-sorting-selector
+                [options]="sortingSelectorOptions"
+              >
+              </ngx-es-sorting-selector>
             </ngx-es-action-bar-row>
             <ngx-es-action-bar-row>
-              <ngx-es-selected-filters
-                (onFilterChange)="handleFilterChange($event)"
-              ></ngx-es-selected-filters>
+              <ngx-es-selected-filters></ngx-es-selected-filters>
             </ngx-es-action-bar-row>
           </ngx-es-action-bar>
           <ngx-hits-list 
@@ -63,10 +64,12 @@ import { Component, OnDestroy } from '@angular/core';
 })
 export class ImdbComponent implements OnDestroy {
 
-  ngOnDestroy() {}
+  public sortingSelectorOptions: any[] = [
+    {label:"Relevance", field:"_score", order:"desc",defaultOption:true},
+    {label:"Newest", field:"timestamp", order:"desc"},
+    {label:"Oldest", field:"timestamp", order:"asc"}
+  ];
 
-  handleFilterChange(filters: any[]) {
-    console.log('filty', filters);
-  }
+  ngOnDestroy() {}
 
 }

@@ -46,29 +46,32 @@ export class NgxSelectComponent implements OnInit {
 
   ngOnInit() {
     this.options = this.setOptions(this.items);
+    console.log(this.options, this.items);
   }
 
-  public onChange(e){
+  public onChange(e) {
     const { setItems } = this;
     const key = e.target.value
-    setItems([key])
+    setItems([key]);
+    this.onItemSelect.emit(key);
   }
 
-  public getSelectedValue(){
+  public getSelectedValue() {
     const { selectedItems = [] } = this;
-    if (selectedItems.length == 0) return null
-    return selectedItems[0]
+    if (selectedItems.length == 0) return null;
+    return selectedItems[0];
   }
 
   private setOptions(items: any[]) {
     return items.map(i => {
-      const label = i.title || i.key || i.key;
+      const label = i.title || i.label || i.key;
+      console.log('options!', label, i);
       return {
         label: this.showCount && i.doc_count
           ? `${label} ${this.countFormatter(i.doc_count)}`
           : label,
         value: i.key,
-        disabled: i.disabled
+        disabled: Boolean(i.disabled)
       }
     });
   }
