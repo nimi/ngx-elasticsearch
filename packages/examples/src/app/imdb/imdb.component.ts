@@ -25,6 +25,14 @@ import { Component, OnDestroy } from '@angular/core';
             [showHistogram]="false"
           >
           </ngx-es-range-filter>
+          <ngx-es-facet-filter
+            [id]="'type'"
+            [title]="'Type'"
+            [field]="'type.keyword'"
+            [operator]="'OR'"
+            [size]="10"
+          >
+          </ngx-es-facet-filter>
         </ngx-es-side-bar>
         <ngx-es-layout-results>
           <ngx-es-action-bar>
