@@ -27,6 +27,7 @@ export const template = `
       [active]="isActive(item)"
       [showCount]="showCount"
       [showCheckbox]="showCheckbox"
+      [className]="itemClassName"
     ></ngx-es-item>
   </ng-template>
 `;
@@ -63,9 +64,13 @@ export class NgxItemListComponent {
 
   @Output() onItemSelect: EventEmitter<any> = new EventEmitter();
 
-  public toggleFunc: Function = this.multiSelect ? this.toggleItem : key => this.setItems([key])
+  public toggleFunc: Function = this.multiSelect ? this.toggleItem : key => this.setItems([key]);
 
   public className: any = block(selector);
+
+  public itemClassName: string;
+
+  public selectedKey: string;
 
   constructor() { }
 
@@ -81,6 +86,7 @@ export class NgxItemListComponent {
 
   public handleItemSelect(key: string) {
     this.onItemSelect.emit(key);
+    this.selectedKey = key;
   }
 
 }

@@ -17,6 +17,7 @@ const selector = 'refinement-list';
   template: `
     <ngx-es-checkbox-item-list
       (onItemSelect)="handleFacetSelect($event)"
+      [selectedItems]="selectedItems"
       [items]="items"
       [showCount]="ture"
     >
@@ -61,6 +62,7 @@ export class NgxFacetFilterComponent extends NgxElasticsearchComponent implement
   public optionClassName: any = block(`${selector}-option`)
   public items: any[] = [];
   public multiSelect: boolean = true;
+  public selectedItems: string[] = [];
 
   protected manager: SearchManager;
   protected accessor: Accessor;
@@ -138,7 +140,12 @@ export class NgxFacetFilterComponent extends NgxElasticsearchComponent implement
   }
 
   public handleFacetSelect(key: string) {
-    this.multiSelect ? this.toggleFilter(key) : this.setFilters([key]);
+    if (this.multiSelect) {
+      this.toggleFilter(key);
+    } else {
+      this.setFilters([key]);
+    }
+    this.selectedItems = this.getSelectedItems();
   }
 
 }

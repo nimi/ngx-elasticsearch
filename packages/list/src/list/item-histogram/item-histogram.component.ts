@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
   `,
   styles: []
 })
-export class ItemHistogramComponent implements OnInit {
+export class NgxItemHistogramComponent implements OnInit {
 
   constructor() { }
 

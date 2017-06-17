@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxItemListComponent } from './item-list/item-list.component';
-import { TagCloudComponent } from './tag-cloud/tag-cloud.component';
-import { SelectComponent } from './select/select.component';
+import { NgxTagCloudComponent } from './tag-cloud/tag-cloud.component';
+import { NgxSelectComponent } from './select/select.component';
 import { NgxItemComponent } from './item/item.component';
-import { ItemHistogramComponent } from './item-histogram/item-histogram.component';
+import { NgxItemHistogramComponent } from './item-histogram/item-histogram.component';
 import { NgxCheckboxItemListComponent } from './checkbox-item-list/checkbox-item-list.component';
-import { ToggleComponent } from './toggle/toggle.component';
-import { TabsComponent } from './tabs/tabs.component';
+import { NgxToggleComponent } from './toggle/toggle.component';
+import { NgxTabsComponent } from './tabs/tabs.component';
 
 @NgModule({
   imports: [
@@ -15,9 +15,13 @@ import { TabsComponent } from './tabs/tabs.component';
   ],
   declarations: [
     NgxItemListComponent, NgxItemComponent, NgxCheckboxItemListComponent,
-    TagCloudComponent, SelectComponent, ItemHistogramComponent,
-    ToggleComponent, TabsComponent
+    NgxTagCloudComponent, NgxSelectComponent, NgxItemHistogramComponent,
+    NgxToggleComponent, NgxTabsComponent
   ],
-  exports: [NgxItemListComponent, NgxItemComponent, NgxCheckboxItemListComponent]
+  exports: [
+    NgxItemListComponent, NgxItemComponent, NgxCheckboxItemListComponent,
+    NgxTagCloudComponent, NgxSelectComponent, NgxItemHistogramComponent,
+    NgxToggleComponent, NgxTabsComponent
+  ]
 })
 export class NgxListModule { }

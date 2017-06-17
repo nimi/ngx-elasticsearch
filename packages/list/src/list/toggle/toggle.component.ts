@@ -1,19 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { block } from '@ngx-elasticsearch/core';
+
+import { NgxItemListComponent, template } from '../item-list';
+
+const selector = 'toggle';
 
 @Component({
   selector: 'ngx-es-toggle',
-  template: `
-    <p>
-      toggle Works!
-    </p>
-  `,
-  styles: []
+  template,
 })
-export class ToggleComponent implements OnInit {
+export class NgxToggleComponent extends NgxItemListComponent {
 
-  constructor() { }
+  @Input() showCount: boolean = false;
 
-  ngOnInit() {
-  }
+  public className: any = block(selector);
+
+  public itemClassName: any = block(`${selector}-option`);
 
 }

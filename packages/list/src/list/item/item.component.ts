@@ -7,9 +7,21 @@ const selector = 'item-list-option';
 @Component({
   selector: 'ngx-es-item',
   template: `
-    <div [attr.class]="className + ' ' +  listItemClassName">
-      <input *ngIf="showCheckbox" type="checkbox" [attr.class]="className('checkbox')" />
-      <div [attr.class]="className('text')">{{ label }}</div>
+    <div
+      [ngClass]="{'is-active': active}"
+      class="{{ className + ' ' +  listItemClassName }}"
+    >
+      <input
+        *ngIf="showCheckbox"
+        type="checkbox"
+        [attr.class]="className('checkbox')"
+        [checked]="active"
+      />
+      <div
+        [attr.class]="className('text')"
+      >
+        {{ label }}
+      </div>
       <div *ngIf="showCount" [attr.class]="className('count')">{{ count }}</div>
     </div>
   `,
