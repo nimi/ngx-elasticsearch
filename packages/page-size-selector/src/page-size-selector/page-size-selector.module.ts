@@ -1,10 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgxListModule } from '@ngx-elasticsearch/list';
+
+import { NgxPageSizeSelectorComponent } from './page-size-selector.component';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    NgxListModule
   ],
-  declarations: []
+  declarations: [ NgxPageSizeSelectorComponent ],
+  exports: [ NgxPageSizeSelectorComponent ]
 })
-export class PageSizeSelectorModule { }
+export class NgxPageSizeSelectorModule { }

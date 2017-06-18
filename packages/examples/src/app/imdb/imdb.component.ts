@@ -41,6 +41,10 @@ import { Component, OnDestroy } from '@angular/core';
                 [options]="sortingSelectorOptions"
               >
               </ngx-es-sorting-selector>
+              <ngx-es-page-size-selector
+                [options]="[10, 25, 50]"
+              >
+              </ngx-es-page-size-selector>
             </ngx-es-action-bar-row>
             <ngx-es-action-bar-row>
               <ngx-es-selected-filters></ngx-es-selected-filters>
