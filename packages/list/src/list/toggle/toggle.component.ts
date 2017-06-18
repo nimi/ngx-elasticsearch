@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { block } from '@ngx-elasticsearch/core';
 
 import { NgxItemListComponent, template } from '../item-list';
@@ -13,8 +13,13 @@ export class NgxToggleComponent extends NgxItemListComponent {
 
   @Input() showCount: boolean = false;
 
-  public className: any = block(selector);
+  @Output() onItemSelect: EventEmitter<any> = new EventEmitter();
 
-  public itemClassName: any = block(`${selector}-option`);
+  public itemClassName: any;
+
+  ngOnInit() {
+    this.className = block(selector);
+    this.itemClassName = block(`${selector}-option`);
+  }
 
 }

@@ -27,7 +27,7 @@ const selector = 'item-list-option';
   `,
   styles: []
 })
-export class NgxItemComponent implements OnInit {
+export class NgxItemComponent {
   @Input() active: boolean = false;
 
   @Input() label: string;
@@ -47,11 +47,7 @@ export class NgxItemComponent implements OnInit {
   @Input() showCount: boolean = false;
 
   public className: any = block(selector);
+
   public listItemClassName: any = block('item-list')('item');
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 
 }

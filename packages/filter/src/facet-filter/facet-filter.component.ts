@@ -19,7 +19,7 @@ const selector = 'refinement-list';
       (onItemSelect)="handleFacetSelect($event)"
       [selectedItems]="selectedItems"
       [items]="items"
-      [showCount]="ture"
+      [showCount]="true"
     >
     </ngx-es-checkbox-item-list>
   `,

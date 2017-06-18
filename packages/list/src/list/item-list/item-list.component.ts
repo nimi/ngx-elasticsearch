@@ -10,11 +10,12 @@ const selector = 'item-list';
 
 export const template = `
   <div [attr.class]="className">
-    <div 
+    <span 
       *ngFor="let item of items"
+      [attr.class]="itemClassName"
     >
       <ng-content *ngTemplateOutlet="defaultItem; context: { $implicit: item }"></ng-content>
-    </div>
+    </span>
   </div>
   <ng-template #defaultItem let-item>
     <ngx-es-item
@@ -27,7 +28,6 @@ export const template = `
       [active]="isActive(item)"
       [showCount]="showCount"
       [showCheckbox]="showCheckbox"
-      [className]="itemClassName"
     ></ngx-es-item>
   </ng-template>
 `;

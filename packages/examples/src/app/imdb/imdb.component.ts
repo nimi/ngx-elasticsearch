@@ -56,6 +56,7 @@ import { Component, OnDestroy } from '@angular/core';
               </example-hits-list-item>
             </ng-template>
           </ngx-hits-list>
+          <ngx-es-pagination [showNumbers]="true"></ngx-es-pagination>
         </ngx-es-layout-results>
       </ngx-es-layout-body>
     </ngx-es-layout>
