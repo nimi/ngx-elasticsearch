@@ -60,6 +60,7 @@ import { Component, OnDestroy } from '@angular/core';
               </example-hits-list-item>
             </ng-template>
           </ngx-hits-list>
+          <ngx-es-no-hits [suggestionsField]="'p1name'"></ngx-es-no-hits>
           <ngx-es-pagination [showNumbers]="true"></ngx-es-pagination>
         </ngx-es-layout-results>
       </ngx-es-layout-body>

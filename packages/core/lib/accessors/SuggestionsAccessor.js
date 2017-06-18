@@ -24,6 +24,7 @@ var SuggestionsAccessor = (function (_super) {
     };
     SuggestionsAccessor.prototype.buildOwnQuery = function (query) {
         var queryText = query.getQueryString();
+        console.log('suggestionz', queryText);
         if (queryText.length > 3) {
             return query.setSuggestions({
                 text: queryText,

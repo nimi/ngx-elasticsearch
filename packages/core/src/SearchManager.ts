@@ -160,14 +160,13 @@ export class SearchManager {
     this.performSearch();
   }
 
-  search(replaceState: boolean = false){
+  search(replaceState: boolean = false) {
     this.performSearch(replaceState);
   }
 
   _search() {
     this.state = this.accessors.getState();
     let query = this.buildQuery();
-    console.log('search query', query.getJSON(), this.query.getJSON());
     if(this.query && isEqual(query.getJSON(), this.query.getJSON())) {
       return;
     }

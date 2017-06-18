@@ -1,0 +1,1 @@
+export * from './no-hits.component';

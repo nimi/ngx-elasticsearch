@@ -13,6 +13,7 @@ export class SuggestionsAccessor extends Accessor {
 
   buildOwnQuery(query: any) {
     let queryText = query.getQueryString();
+    console.log('suggestionz', queryText);
     if (queryText.length > 3) {
       return query.setSuggestions({
         text:queryText,

@@ -24,12 +24,10 @@ var NgxSearchManagerService = (function () {
             this.initialized = true;
             this.setObservables(this.manager);
             this.register();
-            console.log('initializing!');
         }
     };
     NgxSearchManagerService.prototype.register = function () {
         if (this.manager) {
-            console.log('registering!');
             this.manager.setupListeners();
             this.manager.completeRegistration();
         }

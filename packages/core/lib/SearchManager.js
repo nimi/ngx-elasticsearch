@@ -128,7 +128,6 @@ var SearchManager = (function () {
     SearchManager.prototype._search = function () {
         this.state = this.accessors.getState();
         var query = this.buildQuery();
-        console.log('search query', query.getJSON(), this.query.getJSON());
         if (this.query && lodash_1.isEqual(query.getJSON(), this.query.getJSON())) {
             return;
         }

@@ -94,7 +94,7 @@ export class NgxHierarchicalMenuFilterComponent extends NgxElasticsearchComponen
     event.stopPropagation();
     this.accessor.state =
       this.accessor.state.toggleLevel(level, option.key);
-    this.service.manager.performSearch();
+    this.service.search();
   }
 
   getOptions(level: number = 0) {

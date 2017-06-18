@@ -2,23 +2,23 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxElasticsearchModule } from '@ngx-elasticsearch/core';
 
-import { NgxHitsListComponent } from './components/hits-list/hits-list.component';
-import { NgxHitsListItemComponent } from './components/hits-list-item/hits-list-item.component';
+import { NgxHitsListComponent, NgxHitsListItemComponent, NgxNoHitsComponent } from './hits';
 
-export * from './components/hits-list/hits-list.component';
-export * from './components/hits-list-item/hits-list-item.component';
+export * from './hits';
 
 @NgModule({
   declarations: [
     NgxHitsListComponent,
-    NgxHitsListItemComponent
+    NgxHitsListItemComponent,
+    NgxNoHitsComponent
   ],
   imports: [
     CommonModule
   ],
   exports: [
     NgxHitsListComponent,
-    NgxHitsListItemComponent
+    NgxHitsListItemComponent,
+    NgxNoHitsComponent
   ]
 })
 export class NgxHitsModule { }

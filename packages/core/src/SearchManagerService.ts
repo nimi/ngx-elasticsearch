@@ -16,13 +16,11 @@ export class NgxSearchManagerService {
       this.initialized = true;
       this.setObservables(this.manager);
       this.register();
-      console.log('initializing!');
     }
   }
 
   public register() {
     if (this.manager) {
-      console.log('registering!');
       this.manager.setupListeners();
       this.manager.completeRegistration();
     }

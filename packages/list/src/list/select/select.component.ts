@@ -65,7 +65,6 @@ export class NgxSelectComponent implements OnInit {
   private setOptions(items: any[]) {
     return items.map(i => {
       const label = i.title || i.label || i.key;
-      console.log('options!', label, i);
       return {
         label: this.showCount && i.doc_count
           ? `${label} ${this.countFormatter(i.doc_count)}`

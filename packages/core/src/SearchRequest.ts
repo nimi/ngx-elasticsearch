@@ -12,9 +12,7 @@ export class SearchRequest {
   ){ }
 
   run() {
-    console.log('runnnnn');
     return this.transport.search(this.query)
-      .then((q) => { console.log('SEARCH RESULTS', q); return q; })
       .then(this.setResults.bind(this))
       .catch(this.setError.bind(this));
   }

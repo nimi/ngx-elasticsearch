@@ -53,9 +53,6 @@ export class NgxSelectedFiltersComponent extends NgxElasticsearchComponent imple
 
   ngOnInit() {
     super.ngOnInit();
-    if (!this.itemTemplate) {
-      this.itemTemplate = this.defaultItem;
-    }
     this.resultsSub = this.service.results$
       .subscribe(result => {
         const prevFilterItems = [ ...(this.filterItems || []) ];
@@ -90,13 +87,14 @@ export class NgxSelectedFiltersComponent extends NgxElasticsearchComponent imple
       this.onFilterChange.emit(currFilters);
       return;
     }
+
     const currFilterValues = currFilters.map(({value}) => value);
-    for (let pf of prevFilters) {
-      if (!currFilterValues.contains(pf.value)) {
+    prevFilters.forEach((pf, i) => {
+      if (currFilterValues.indexOf(pf.value) === -1) {
         this.onFilterChange.emit(currFilters);
         return;
       }
-    }
+    });
   }
 
 }

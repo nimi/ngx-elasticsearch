@@ -5,7 +5,6 @@ import { NgxListModule } from '@ngx-elasticsearch/list';
 import { NgxPaginationComponent } from './pagination/pagination.component';
 import { PaginationSelectComponent } from './pagination-select/pagination-select.component';
 
-
 @NgModule({
   imports: [
     CommonModule,

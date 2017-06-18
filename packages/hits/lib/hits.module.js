@@ -10,10 +10,8 @@ function __export(m) {
 }
 var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
-var hits_list_component_1 = require("./components/hits-list/hits-list.component");
-var hits_list_item_component_1 = require("./components/hits-list-item/hits-list-item.component");
-__export(require("./components/hits-list/hits-list.component"));
-__export(require("./components/hits-list-item/hits-list-item.component"));
+var hits_1 = require("./hits");
+__export(require("./hits"));
 var NgxHitsModule = (function () {
     function NgxHitsModule() {
     }
@@ -22,15 +20,17 @@ var NgxHitsModule = (function () {
 NgxHitsModule = __decorate([
     core_1.NgModule({
         declarations: [
-            hits_list_component_1.NgxHitsListComponent,
-            hits_list_item_component_1.NgxHitsListItemComponent
+            hits_1.NgxHitsListComponent,
+            hits_1.NgxHitsListItemComponent,
+            hits_1.NgxNoHitsComponent
         ],
         imports: [
             common_1.CommonModule
         ],
         exports: [
-            hits_list_component_1.NgxHitsListComponent,
-            hits_list_item_component_1.NgxHitsListItemComponent
+            hits_1.NgxHitsListComponent,
+            hits_1.NgxHitsListItemComponent,
+            hits_1.NgxNoHitsComponent
         ]
     })
 ], NgxHitsModule);
