@@ -11,8 +11,8 @@ function __export(m) {
 var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
 var forms_1 = require("@angular/forms");
-var search_box_component_1 = require("./components/search-box/search-box.component");
-__export(require("./components/search-box/search-box.component"));
+var search_box_component_1 = require("./search-box/search-box.component");
+__export(require("./search-box/search-box.component"));
 var NgxSearchBoxModule = (function () {
     function NgxSearchBoxModule() {
     }

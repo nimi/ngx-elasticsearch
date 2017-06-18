@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxElasticsearchModule } from '@ngx-elasticsearch/core';
 
-import { NgxSearchBoxComponent } from './components/search-box/search-box.component';
+import { NgxSearchBoxComponent } from './search-box/search-box.component';
 
-export * from './components/search-box/search-box.component';
+export * from './search-box/search-box.component';
 
 @NgModule({
   declarations: [

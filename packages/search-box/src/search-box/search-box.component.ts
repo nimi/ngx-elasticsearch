@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import {
   NgxElasticsearchComponent,
@@ -39,6 +39,7 @@ const selector = 'search-box';
   `,
 })
 export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
+  @ViewChild('search') searchInput: ElementRef;
   /**
    * Updates search results as you type. Will be false by default.
    * use with prefixQueryFields to get a better search as you type behaviour.
@@ -107,7 +108,7 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
    * Default search string on empty input
    * @type {number}
    */
-  @Input() defaultOnEmpty: string = '*';
+  @Input() defaultOnEmpty: string;
 
   /**
    * Output for searching state
@@ -122,7 +123,6 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
   private service: NgxSearchManagerService;
   private onSearchingSub: Subscription;
 
-
   constructor(service: NgxSearchManagerService) {
     super(service);
     this.service = service;
@@ -133,9 +133,13 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
   }
 
   ngAfterViewInit() {
+    const inputEl = this.searchInput.nativeElement;
     this.onSearchingSub =  this.service.searching$
       .subscribe((isSearching) => {
         this.onSearching.emit(isSearching);
+        if (isSearching) {
+          this.setInputValue();
+        }
       });
   }
 
@@ -168,8 +172,11 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
       if (value.length > this.minLength) {
         this.searchQuery(value);
       }
-      else {
+      else if (this.defaultOnEmpty) {
         this.searchQuery(this.defaultOnEmpty);
+      }
+      else {
+        this.searchQuery(null);
       }
     }
   }
@@ -183,12 +190,31 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
 
   handleFocus(event: any) {}
 
-  getValue() {
+  /**
+   * @desc This method sets input element value to
+   * this current state of the query accessor. This occurs in cases when
+   * the query is being reset outside of the component
+   */
+  private setInputValue() {
+    const inputEl = this.searchInput.nativeElement;
+    const inputValue = inputEl.value;
+    const queryStringState = this.getQueryStringState();
+    if (inputValue && inputValue !== queryStringState) {
+      inputEl.value = queryStringState;
+    }
   }
 
-  searchQuery(query: string) {
+  private getQueryStringState() {
+    return this.getAccessorValue();
+  }
+
+  private getAccessorValue(){
+    return this.accessor.state.getValue();
+  }
+
+  private searchQuery(query: string) {
     this.accessor.setQueryString(query);
-    this.service.searchManager.performSearch(true);
+    this.service.search(true);
   }
 
 }
