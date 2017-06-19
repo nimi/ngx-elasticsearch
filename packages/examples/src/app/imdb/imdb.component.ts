@@ -1,4 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
+import { TermQuery, BoolShould } from '@ngx-elasticsearch/core';
 
 @Component({
   selector: 'example-imdb',
@@ -44,6 +45,13 @@ import { Component, OnDestroy } from '@angular/core';
             ]"
           >
           </ngx-es-numeric-refinement-list-filter>
+          <ngx-es-checkbox-filter
+            [id]="'tom'"
+            [title]="'Events with...'"
+            [label]="'Players named Tom Wilson'"
+            [filter]="checkboxFilterQuery"
+          >
+          </ngx-es-checkbox-filter>
         </ngx-es-side-bar>
         <ngx-es-layout-results>
           <ngx-es-action-bar>
@@ -88,6 +96,11 @@ export class ImdbComponent implements OnDestroy {
     {label:"Newest", field:"timestamp", order:"desc"},
     {label:"Oldest", field:"timestamp", order:"asc"}
   ];
+
+  public checkboxFilterQuery: BoolShould = BoolShould([
+    new TermQuery('p1name.keyword', 'Tom Wilson'),
+    new TermQuery('p2name.keyword', 'Tom Wilson')
+  ]);
 
   ngOnDestroy() {}
 

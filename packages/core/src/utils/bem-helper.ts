@@ -1,7 +1,23 @@
 const IS_PREFIX = 'is-';
 const HAS_PREFIX = 'has-';
 
-const defaultSettings = {
+
+export interface BemSettings {
+  ns: string;
+  el: string;
+  mod: string;
+  modValue: string;
+  classMap: any;
+}
+
+export interface BemContext {
+  name: string;
+  mods?: string[];
+  mixes?: string[];
+  states?: any;
+}
+
+const defaultSettings: BemSettings = {
   ns: 'ngx-es-',
   el: '__',
   mod: '_',
@@ -20,7 +36,7 @@ const settings = defaultSettings;
  block('block').mix(block('another')); "block another"
  block('one').mix(['two', 'three']); "one two three"
  */
-function normalizeMixes(mixes: any[] = []) {
+function normalizeMixes(mixes: any[] = []): string[] {
   return mixes
     .map((mix) => {
       if (typeof mix === 'function') {
@@ -39,9 +55,9 @@ function normalizeMixes(mixes: any[] = []) {
  * Returns final set of classes
  * @return {String}
  */
-function toString(settings, context) {
-  let {name, mods, mixes, states} = context,
-    classes = [name];
+function toString(settings: BemSettings, context: BemContext): string {
+  let { name, mods, mixes, states } = context;
+  let classes = [ name ];
 
   // Add list of modifiers
   if (mods) {
@@ -81,7 +97,6 @@ function toString(settings, context) {
   }
 
   // Add mixes
-  // Don't do it before adding namespace! @see https://github.com/albburtsev/bem-cn/issues/32
   if (mixes) {
     classes = classes.concat(
       normalizeMixes(mixes)
@@ -103,7 +118,7 @@ function toString(settings, context) {
  * @param {*} mixes
  * @return {Function}
  */
-function mix(settings, context, ...mixes) {
+function mix(settings: BemSettings, context: BemContext, ...mixes: any[]): Function {
   // Copy context object for new selector generator
   let copied = { ...context };
 
@@ -121,7 +136,7 @@ function mix(settings, context, ...mixes) {
  * @param {Object} states
  * @return {Function}
  */
-function state(settings, context, prefix, ...states) {
+function state(settings: BemSettings, context: BemContext, prefix: string, ...states: any[]): Function {
   // Copy context object for new selector generator
   let copied = { ...context },
     copiedState = { ...(copied.states || {}) };
@@ -148,8 +163,8 @@ function state(settings, context, prefix, ...states) {
  * @param {Array} [context.mixes] List of external classes
  * @return {Function}
  */
-function selector(settings, context) {
-  const inner: any = (...args) => {
+function selector(settings: BemSettings, context: BemContext): Function {
+  const InnerSelector: any = (...args: any[]) => {
     // Call without arguments, time to return class names as a string
     if (!args.length) {
       return toString(settings, context);
@@ -174,17 +189,14 @@ function selector(settings, context) {
     return selector(settings, copied);
   };
 
-  inner.mix = mix.bind(null, settings, context);
-  inner.has = state.bind(null, settings, context, HAS_PREFIX);
-  inner.state = inner.is = state.bind(null, settings, context, IS_PREFIX);
-  inner.toString = inner.valueOf = toString.bind(null, settings, context);
-  inner.split = (...args) =>
-    String.prototype.split.apply(
-      toString(settings, context),
-      args
-    );
-
-  return inner;
+  return Object.assign(InnerSelector, {
+    mix: mix.bind(null, settings, context),
+    has: state.bind(null, settings, context, HAS_PREFIX),
+    state: state.bind(null, settings, context, IS_PREFIX),
+    toString: toString.bind(null, settings, context),
+    valueOf: toString.bind(null, settings, context),
+    split: (...args) => String.prototype.split.apply(toString(settings, context), args)
+  });
 }
 
 /**
@@ -192,13 +204,11 @@ function selector(settings, context) {
  * @param {String} name
  * @return {Function} Selector generator
  */
-export function block(name) {
+export function block(name: string) {
   if (typeof name !== 'string') {
-    throw new Error(`Name not provided`);
+    throw new Error(`Block name must be provide as string`);
   }
 
-  name = name.trim();
-
   // It is easy to define default settings here
-  return selector(settings, {name});
+  return selector(settings, { name: name.trim() });
 }

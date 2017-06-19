@@ -15,7 +15,6 @@ export class HitsListItemComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.hit);
   }
 
 }

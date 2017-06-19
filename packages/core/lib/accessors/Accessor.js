@@ -35,7 +35,6 @@ var Accessor = (function () {
     };
     Accessor.prototype.getAggregations = function (path, defaultValue) {
         var results = this.getResults();
-        console.log(results);
         var getPath = lodash_1.compact(['aggregations'].concat(path));
         return lodash_1.get(results, getPath, defaultValue);
     };
