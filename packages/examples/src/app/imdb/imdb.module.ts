@@ -8,6 +8,7 @@ import { NgxFilterModule } from '@ngx-elasticsearch/filter';
 import { NgxSortingSelectorModule } from '@ngx-elasticsearch/sorting-selector';
 import { NgxPageSizeSelectorModule } from '@ngx-elasticsearch/page-size-selector';
 import { NgxPaginationModule } from '@ngx-elasticsearch/pagination';
+import { NgxHitsStatsModule } from '@ngx-elasticsearch/hits-stats';
 import { ImdbComponent } from './imdb.component';
 import { HitsListItemComponent } from './hits-list-item/hits-list-item.component';
 
@@ -26,7 +27,8 @@ export const components = [
     NgxFilterModule,
     NgxSortingSelectorModule,
     NgxPaginationModule,
-    NgxPageSizeSelectorModule
+    NgxPageSizeSelectorModule,
+    NgxHitsStatsModule
   ],
   declarations: [ ImdbComponent, HitsListItemComponent ],
   exports: [ ImdbComponent ]

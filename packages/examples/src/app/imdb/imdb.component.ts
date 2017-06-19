@@ -37,6 +37,7 @@ import { Component, OnDestroy } from '@angular/core';
         <ngx-es-layout-results>
           <ngx-es-action-bar>
             <ngx-es-action-bar-row>
+              <ngx-es-hits-stats></ngx-es-hits-stats>
               <ngx-es-sorting-selector
                 [options]="sortingSelectorOptions"
               >

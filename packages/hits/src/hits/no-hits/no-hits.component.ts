@@ -137,6 +137,10 @@ export class NgxNoHitsComponent extends NgxElasticsearchComponent implements OnI
       });
   }
 
+  ngOnDestroy() {
+    this.resultsSub.unsubscribe();
+  }
+
   private getSuggestion() {
 		return this.suggestionsAccessor && this.suggestionsAccessor.getSuggestion();
 	}
