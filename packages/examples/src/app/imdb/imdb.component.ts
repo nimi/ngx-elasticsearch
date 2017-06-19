@@ -49,6 +49,7 @@ import { Component, OnDestroy } from '@angular/core';
             </ngx-es-action-bar-row>
             <ngx-es-action-bar-row>
               <ngx-es-selected-filters></ngx-es-selected-filters>
+              <ngx-es-reset-filter></ngx-es-reset-filter>
             </ngx-es-action-bar-row>
           </ngx-es-action-bar>
           <ngx-hits-list 

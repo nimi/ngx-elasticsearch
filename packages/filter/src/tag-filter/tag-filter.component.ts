@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
   `,
   styles: []
 })
-export class TagFilterComponent implements OnInit {
+export class NgxTagFilterComponent implements OnInit {
 
   constructor() { }
 

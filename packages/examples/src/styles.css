@@ -1641,6 +1641,7 @@ ngx-es-side-bar {
   display: none
 }
 
+ngx-es-hits-stats,
 .ngx-es-hits-stats {
   align-self: flex-start;
   flex: 1
