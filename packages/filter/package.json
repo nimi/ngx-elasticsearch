@@ -26,6 +26,7 @@
     "@ngx-elasticsearch/range": "0.1.0",
     "@ngx-elasticsearch/filter-group": "0.1.0",
     "@ngx-elasticsearch/list": "0.1.0",
+    "@ngx-elasticsearch/layout": "0.1.0",
     "history": "^4.6.1",
     "isomorphic-fetch": "^2.2.1"
   },

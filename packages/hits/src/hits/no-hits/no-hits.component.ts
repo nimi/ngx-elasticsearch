@@ -36,13 +36,13 @@ const selector = 'no-hits';
             *ngIf="item.suggestion"
             (click)="setQueryString(item.suggestion)"
             [attr.class]="className('step-action')">
-            {{ item.didYouMeanLabel + ' ' + item.suggestion }} 
+            {{ item.didYouMeanLabel }} 
           </div>
           <div 
             *ngIf="!item.suggestion && item.filtersCount > 0"
             (click)="resetFilters()"
             [attr.class]="className('step-action')">
-            {{ item.resetFiltersLabel + ' ' + item.query }} 
+            {{ item.resetFiltersLabel }} 
           </div>
         </div>
       </div>
@@ -70,12 +70,12 @@ export class NgxNoHitsComponent extends NgxElasticsearchComponent implements OnI
   @ViewChild('defaultTemplate') defaultTemplate: TemplateRef<any>;
 
   @Input() translations: any = {
-		noResultsFoundLabel: "No results found for {query}.",
-		noResultsDdYouMeanLabel: "No results found for {query}. Did you mean {suggestion}?",
-		searchForSuggestionLabel: "Search for {suggestion} instead",
-		searchWithoutFiltersLabel: "Search for {query} without filters",
-		errorLabel: "We're sorry, an issue occurred when fetching your results. Please try again.",
-		resetLabel: "Reset Search"
+		noResultsFoundLabel: (query) => `No results found for ${query}.`,
+		noResultsDidYouMeanLabel: (query, sugg) => `No results found for ${query}. Did you mean ${sugg}?`,
+		searchForSuggestionLabel: (sugg) => `Search for ${sugg} instead`,
+		searchWithoutFiltersLabel: (query) => `Search for ${query} without filters`,
+		errorLabel: () => `We're sorry, an issue occurred when fetching your results. Please try again.`,
+		resetLabel: () => `Reset Search`
 	}
 
   @Input() suggestionsField: string;
@@ -127,9 +127,9 @@ export class NgxNoHitsComponent extends NgxElasticsearchComponent implements OnI
         this.hasError = false;
         this.hasSuggestion = true;
         this.item = {
-          noResultsLabel: 'No Results',
-          didYouMeanLabel: 'Did you mean?',
-          resetFiltersLabel: 'Reset Filters label',
+          noResultsLabel: this.messages.noResultsFoundLabel(query),
+          didYouMeanLabel: this.messages.noResultsDidYouMeanLabel(query, suggestion),
+          resetFiltersLabel: this.messages.resetLabel(),
           suggestion,
           query,
           filtersCount: this.getFilterCount()

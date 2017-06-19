@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 import {
   NgxElasticsearchComponent,
   NgxSearchManagerService,
@@ -11,16 +12,19 @@ import {
 @Component({
   selector: 'ngx-es-range-filter',
   template: `
-    <p>
-      range-filter Works!
-      <ngx-es-range
-        (onChange)="handleChange($event)"
-        (onSlideEnd)="handleSlideEnd($event)"
-        [range]="true"
-        [min]="0" 
-        [max]="100">
-      </ngx-es-range>
-    </p>
+    <div *ngIf="hasResults">
+      <ngx-es-panel
+        [title]="title"
+      >
+        <ngx-es-range
+          (onChange)="handleChange($event)"
+          (onSlideEnd)="handleSlideEnd($event)"
+          [range]="true"
+          [min]="0" 
+          [max]="100">
+        </ngx-es-range>
+      </ngx-es-panel>
+    </div>
   `,
   styles: []
 })
@@ -41,11 +45,27 @@ export class NgxRangeFilterComponent extends NgxElasticsearchComponent implement
 
   @Input() showHistogram: boolean = true;
 
+  public hasResults: boolean = true;
+
   protected manager: SearchManager;
   protected accessor: Accessor;
 
+  private resultsSub: Subscription;
+
+  constructor(private service: NgxSearchManagerService) {
+    super(service);
+  }
+
   ngOnInit() {
     super.ngOnInit();
+    this.resultsSub = this.service.results$
+      .subscribe(results => {
+        this.hasResults = Boolean(results && results.length);
+      });
+  }
+
+  ngOnDestroy() {
+    this.resultsSub.unsubscribe();
   }
 
   defineAccessor() {

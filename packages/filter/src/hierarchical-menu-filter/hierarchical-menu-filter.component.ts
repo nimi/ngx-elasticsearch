@@ -14,7 +14,9 @@ const selector = 'hierarchical-menu-list';
 @Component({
   selector: 'ngx-es-hierarchical-menu-filter',
   template: `
-    <div [attr.class]="className">
+    <div 
+      *ngIf="options && options.length"
+      [attr.class]="className">
       <div [attr.class]="className('header')">{{ title }}</div>
       <div [attr.class]="className('root')">
         <div [attr.class]="className('hierarchical-options')">
@@ -74,7 +76,7 @@ export class NgxHierarchicalMenuFilterComponent extends NgxElasticsearchComponen
   ngOnInit() {
     super.ngOnInit();
     this.resultsSub = this.service.results$
-      .subscribe(result => {
+      .subscribe(results => {
         this.options = this.getOptions();
       });
   }

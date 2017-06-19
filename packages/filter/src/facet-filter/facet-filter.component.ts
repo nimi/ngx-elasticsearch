@@ -15,13 +15,17 @@ const selector = 'refinement-list';
 @Component({
   selector: 'ngx-es-facet-filter',
   template: `
-    <ngx-es-checkbox-item-list
-      (onItemSelect)="handleFacetSelect($event)"
-      [selectedItems]="selectedItems"
-      [items]="items"
-      [showCount]="true"
+    <ngx-es-panel
+      [title]="title"
     >
-    </ngx-es-checkbox-item-list>
+      <ngx-es-checkbox-item-list
+        (onItemSelect)="handleFacetSelect($event)"
+        [selectedItems]="selectedItems"
+        [items]="items"
+        [showCount]="true"
+      >
+      </ngx-es-checkbox-item-list>
+    </ngx-es-panel>
   `,
   styles: []
 })
@@ -76,7 +80,6 @@ export class NgxFacetFilterComponent extends NgxElasticsearchComponent implement
   ngOnInit() {
     super.ngOnInit();
     this.resultsSub = this.service.results$
-      .take(1)
       .subscribe(result => {
         this.items = this.getItems();
       });

@@ -1484,6 +1484,11 @@ body {
   box-sizing: inherit
 }
 
+ngx-es-layout-results {
+  display: block;
+  width: 100%;
+}
+
 .ngx-es-layout {
   box-sizing: border-box;
   background: #f4f4f4;
