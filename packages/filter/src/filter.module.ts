@@ -9,7 +9,7 @@ import { CheckboxFilterComponent } from './checkbox-filter';
 import { HierarchicalRefinementFilterComponent } from './hierarchical-refinement-filter';
 import { NgxSelectedFiltersComponent } from './selected-filters/selected-filters.component';
 import { NgxResetFilterComponent } from './reset-filter/reset-filter.component';
-import { NumericMenuFilterComponent } from './numeric-menu-filter/numeric-menu-filter.component';
+import { NgxNumericRefinementListComponent } from './numeric-refinement-list-filter';
 import { DynamicRangeFilterComponent } from './dynamic-range-filter/dynamic-range-filter.component';
 import { NgxRangeFilterComponent } from './range-filter/range-filter.component';
 import { NgxFacetFilterComponent } from './facet-filter/facet-filter.component';
@@ -28,7 +28,7 @@ export * from './hierarchical-menu-filter';
   declarations: [
     CheckboxFilterComponent,
     HierarchicalRefinementFilterComponent,
-    NumericMenuFilterComponent,
+    NgxNumericRefinementListComponent,
     DynamicRangeFilterComponent,
     NgxSelectedFiltersComponent,
     NgxResetFilterComponent,
@@ -40,8 +40,8 @@ export * from './hierarchical-menu-filter';
   exports: [
     CheckboxFilterComponent,
     HierarchicalRefinementFilterComponent,
-    NumericMenuFilterComponent,
     DynamicRangeFilterComponent,
+    NgxNumericRefinementListComponent,
     NgxSelectedFiltersComponent,
     NgxResetFilterComponent,
     NgxRangeFilterComponent,

@@ -33,6 +33,17 @@ import { Component, OnDestroy } from '@angular/core';
             [size]="10"
           >
           </ngx-es-facet-filter>
+          <ngx-es-numeric-refinement-list-filter
+            [id]="'period'"
+            [title]="'Period'"
+            [field]="'period'"
+            [options]="[
+              { title: 'All' },
+              { title: 'Before Third Period', from: 0, to: 2 },
+              { title: 'Third Period', from: 3, to: 4 }
+            ]"
+          >
+          </ngx-es-numeric-refinement-list-filter>
         </ngx-es-side-bar>
         <ngx-es-layout-results>
           <ngx-es-action-bar>
