@@ -5,9 +5,9 @@ import { AccessorManager } from './AccessorManager';
 import { ESTransport, HttpESTransport } from './transport';
 import { SearchRequest } from './SearchRequest';
 
-import { defaults, constant, map, isEqual, get, after, identity } from 'lodash';
+import { defaults, constant, map, isEqual, get, after } from 'lodash';
 
-const qs = require('qs');
+import { stringify as stringifyQueryString } from 'qs';
 
 export interface SearchManagerOptions {
   useHistory?: boolean;
@@ -20,54 +20,81 @@ export interface SearchManagerOptions {
 }
 
 export class SearchManager {
-  private registrationCompleted: Promise<any>;
-  host: string;
-  completeRegistration: Function = () => void 0;
-  state: any;
-  translateFunction: Function;
-  currentSearchRequest: SearchRequest;
-  history: any;
-  _unlistenHistory: Function;
-  options: SearchManagerOptions;
-  transport: ESTransport;
-  accessors: AccessorManager;
-  queryProcessor: Function;
-  query: ImmutableQuery;
-  loading: boolean;
-  initialLoading: boolean;
-  error: any;
-  results: any;
+  
+  // Elasticsearch host url
+  public host: string;
 
+  // Function assigned to resolve function of completed registration promise
+  public completeRegistration: Function = () => void 0;
+
+  // Accessor state
+  public state: any;
+
+  // Function to use for translation strings
+  public translateFunction: Function = constant(undefined);
+
+  // Search Request instance
+  public currentSearchRequest: SearchRequest;
+
+  // Optional history instance
+  public history: any;
+
+  // Configuration for the search manager
+  public options: SearchManagerOptions;
+
+  // Communication module for a ES Communication (i.e HTTP)
+  public transport: ESTransport;
+
+  // Accessors are used to manage state and produce a fragment of an ElasticSearch query
+  public accessors: AccessorManager = new AccessorManager();
+
+  // Stateful processor for searches, defaults to identity
+  public queryProcessor: Function = x => x;
+
+  // Immutable query object
+  public query: ImmutableQuery = new ImmutableQuery();
+
+  // Query loading state 
+  public loading: boolean;
+
+  // Initial loading state
+  public initialLoading: boolean;
+
+  // Error state
+  public error: any;
+
+  // Results state
+  public results: any;
+
+  // Subjects for handling/emitting searching and results state
   public searching$$: Subject<any> = new Subject<any>();
   public results$$: Subject<any> = new Subject<any>();
 
+  // Private
+  private _unlistenHistory: Function = x => x;
+  private registrationCompleted: Promise<any> = new Promise((resolve) => {
+    this.completeRegistration = resolve;
+  });
+
   constructor(host: string, options: SearchManagerOptions = {}){
+    this.host = host;
     this.options = defaults(options, {
       useHistory: true,
       httpHeaders: {},
       searchOnLoad: true,
     });
-
-    this.host = host;
-
     this.transport = this.options.transport || new HttpESTransport(host, {
       headers: this.options.httpHeaders,
       basicAuth: this.options.basicAuth,
       searchUrlPath: this.options.searchUrlPath || '_search',
       timeout:  this.options.timeout
     });
-    this.accessors = new AccessorManager();
-		this.registrationCompleted = new Promise((resolve) => {
-			this.completeRegistration = resolve;
-		});
-    this.translateFunction = constant(undefined);
-    this.queryProcessor = identity;
-    this.query = new ImmutableQuery();
   }
 
   setupListeners() {
     this.initialLoading = true;
     if(this.options.useHistory) {
+      // TODO: Add history logic
       // this.unlistenHistory();
       // this.history = createHistoryInstance();
       // this.listenToHistory();
@@ -106,10 +133,11 @@ export class SearchManager {
   }
 
   unlistenHistory() {
-    if (this.options.useHistory && this._unlistenHistory) {
+    if (this.options.useHistory) {
       this._unlistenHistory()
     }
   }
+
   listenToHistory() {
     let callsBeforeListen = (this.options.searchOnLoad) ? 1: 2;
 
@@ -120,14 +148,13 @@ export class SearchManager {
           .then(() => this.searchFromUrlQuery(location.query))
           .catch((e) => console.error(e.stack));
       }
-    }))
+    }));
   }
 
   runInitialSearch(){
     if(this.options.searchOnLoad) {
       this.registrationCompleted.then(()=> {
         this._search();
-        console.log('registration completed, searching', this);
       });
     }
   }
@@ -151,7 +178,7 @@ export class SearchManager {
 
   buildSearchUrl(extraParams: any = {}) {
     const params = defaults(extraParams, this.state || this.accessors.getState());
-    const queryString = qs.stringify(params, { encode: true });
+    const queryString = stringifyQueryString(params, { encode: true });
     return window.location.pathname + '?' + queryString;
   }
 
@@ -175,8 +202,7 @@ export class SearchManager {
     this.searching$$.next(this.loading);
     let queryObject = this.queryProcessor(this.query.getJSON());
     this.currentSearchRequest && this.currentSearchRequest.deactivate();
-    this.currentSearchRequest = new SearchRequest(
-      this.transport, queryObject, this);
+    this.currentSearchRequest = new SearchRequest(this.transport, queryObject, this);
     this.currentSearchRequest.run();
   }
 

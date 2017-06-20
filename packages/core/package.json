@@ -13,15 +13,11 @@
     "url": "https://github.com/nimi/ngx-elasticsearch/packages/core"
   },
   "peerDependencies": {
-    "@angular/animations": ">=4.0.0-beta <5.0.0",
-    "@angular/common": ">=4.0.0-beta <5.0.0",
-    "@angular/compiler": ">=4.0.0-beta <5.0.0",
-    "@angular/core": ">=4.0.0-beta <5.0.0",
-    "@angular/forms": ">=4.0.0-beta <5.0.0",
-    "@angular/http": ">=4.0.0-beta <5.0.0",
-    "@angular/platform-browser": ">=4.0.0-beta <5.0.0",
-    "@angular/platform-browser-dynamic": ">=4.0.0-beta <5.0.0",
-    "@angular/router": ">=4.0.0-beta <5.0.0",
+    "@angular/common": ">=4.0.0 <5.0.0",
+    "@angular/compiler": ">=4.0.0 <5.0.0",
+    "@angular/core": ">=4.0.0 <5.0.0",
+    "@angular/forms": ">=4.0.0 <5.0.0",
+    "@angular/http": ">=4.0.0 <5.0.0",
     "zone.js": "^0.8.4",
     "rxjs": "^5.2.0",
     "core-js": "^2.4.0"
@@ -29,7 +25,7 @@
   "dependencies": {
     "@types/history": "^3.2.1",
     "@types/lodash": "^4.14.55",
-    "history": "^4.6.1",
+    "history": "^4.6.3",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.4",
     "qs": "^6.4.0",
@@ -37,19 +33,10 @@
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
-    "@angular/cli": "^1.0.0-rc.2",
-    "@angular/animations": ">=4.0.0-beta <5.0.0",
-    "@angular/common": ">=4.0.0-beta <5.0.0",
-    "@angular/compiler": ">=4.0.0-beta <5.0.0",
-    "@angular/core": ">=4.0.0-beta <5.0.0",
-    "@angular/forms": ">=4.0.0-beta <5.0.0",
-    "@angular/http": ">=4.0.0-beta <5.0.0",
-    "@angular/platform-browser": ">=4.0.0-beta <5.0.0",
-    "@angular/platform-browser-dynamic": ">=4.0.0-beta <5.0.0",
-    "@angular/router": ">=4.0.0-beta <5.0.0",
-    "zone.js": "^0.8.4",
+    "@types/qs": "^6.2.31",
+    "core-js": "^2.4.0",
     "rxjs": "^5.2.0",
-    "core-js": "^2.4.0"
+    "zone.js": "^0.8.4"
   },
   "author": "Nicholas Mitchell",
   "license": "MIT"

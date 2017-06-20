@@ -7,37 +7,46 @@ var AccessorManager_1 = require("./AccessorManager");
 var transport_1 = require("./transport");
 var SearchRequest_1 = require("./SearchRequest");
 var lodash_1 = require("lodash");
-var qs = require('qs');
+var qs_1 = require("qs");
 var SearchManager = (function () {
     function SearchManager(host, options) {
         if (options === void 0) { options = {}; }
         var _this = this;
+        // Function assigned to resolve function of completed registration promise
         this.completeRegistration = function () { return void 0; };
+        // Function to use for translation strings
+        this.translateFunction = lodash_1.constant(undefined);
+        // Accessors are used to manage state and produce a fragment of an ElasticSearch query
+        this.accessors = new AccessorManager_1.AccessorManager();
+        // Stateful processor for searches, defaults to identity
+        this.queryProcessor = function (x) { return x; };
+        // Immutable query object
+        this.query = new query_1.ImmutableQuery();
+        // Subjects for handling/emitting searching and results state
         this.searching$$ = new Subject_1.Subject();
         this.results$$ = new Subject_1.Subject();
+        // Private
+        this._unlistenHistory = function (x) { return x; };
+        this.registrationCompleted = new Promise(function (resolve) {
+            _this.completeRegistration = resolve;
+        });
+        this.host = host;
         this.options = lodash_1.defaults(options, {
             useHistory: true,
             httpHeaders: {},
             searchOnLoad: true,
         });
-        this.host = host;
         this.transport = this.options.transport || new transport_1.HttpESTransport(host, {
             headers: this.options.httpHeaders,
             basicAuth: this.options.basicAuth,
             searchUrlPath: this.options.searchUrlPath || '_search',
             timeout: this.options.timeout
         });
-        this.accessors = new AccessorManager_1.AccessorManager();
-        this.registrationCompleted = new Promise(function (resolve) {
-            _this.completeRegistration = resolve;
-        });
-        this.translateFunction = lodash_1.constant(undefined);
-        this.queryProcessor = lodash_1.identity;
-        this.query = new query_1.ImmutableQuery();
     }
     SearchManager.prototype.setupListeners = function () {
         this.initialLoading = true;
         if (this.options.useHistory) {
+            // TODO: Add history logic
             // this.unlistenHistory();
             // this.history = createHistoryInstance();
             // this.listenToHistory();
@@ -69,7 +78,7 @@ var SearchManager = (function () {
         this.accessors.resetState();
     };
     SearchManager.prototype.unlistenHistory = function () {
-        if (this.options.useHistory && this._unlistenHistory) {
+        if (this.options.useHistory) {
             this._unlistenHistory();
         }
     };
@@ -90,7 +99,6 @@ var SearchManager = (function () {
         if (this.options.searchOnLoad) {
             this.registrationCompleted.then(function () {
                 _this._search();
-                console.log('registration completed, searching', _this);
             });
         }
     };
@@ -114,7 +122,7 @@ var SearchManager = (function () {
     SearchManager.prototype.buildSearchUrl = function (extraParams) {
         if (extraParams === void 0) { extraParams = {}; }
         var params = lodash_1.defaults(extraParams, this.state || this.accessors.getState());
-        var queryString = qs.stringify(params, { encode: true });
+        var queryString = qs_1.stringify(params, { encode: true });
         return window.location.pathname + '?' + queryString;
     };
     SearchManager.prototype.reloadSearch = function () {

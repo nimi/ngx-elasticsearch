@@ -1,6 +1,6 @@
-import { ESTransport } from "./transport"
-import { ImmutableQuery } from "./query"
-import { SearchManager } from "./SearchManager";
+import { ESTransport } from './transport'
+import { ImmutableQuery } from './query'
+import { SearchManager } from './SearchManager';
 
 export class SearchRequest {
   active: boolean = true;
@@ -22,15 +22,13 @@ export class SearchRequest {
   }
 
   setResults(results: any) {
-    console.log('RESULTOS', results);
+    console.log('RESULTS', results);
     if(this.active){
       this.searchManager.setResults(results);
     }
   }
 
   setError(error: any) {
-    console.log('ERRRRROOOOOORRRRR', error);
-
     if(this.active){
       this.searchManager.setError(error);
     }

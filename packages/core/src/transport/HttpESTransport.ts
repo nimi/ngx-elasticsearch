@@ -10,9 +10,23 @@ export interface ESTransportOptions {
 }
 
 export class HttpESTransport implements ESTransport {
-  static timeout: number = 5000;
-  http: any;
-  options: ESTransportOptions;
+  public static timeout: number = 5000;
+
+  private static parseCredentials(options: ESTransportOptions): any {
+    let credentials = {};
+    if (options.basicAuth !== undefined) {
+      const parsed = options.basicAuth.split(':');
+      const auth = { username: parsed[0], password: parsed[1] };
+      credentials['auth'] = auth;
+    }
+    if (options.withCredentials !== undefined) {
+      credentials['withCredentials'] = options.withCredentials;
+    }
+    return credentials;
+  }
+
+  public http: any = new HttpClient();
+  public options: ESTransportOptions;
 
   constructor(public host: string, options: ESTransportOptions = {}){
     this.options = {
@@ -29,9 +43,8 @@ export class HttpESTransport implements ESTransport {
       headers: this.options.headers,
       ...credentials
     };
-    this.http = new HttpClient();
-    this.http.configure((c: any) => {
-      c
+    this.http.configure((conf: any) => {
+      conf
         .withBaseUrl(config.baseURL)
         .withDefaults({
           credentials: 'omit',
@@ -39,31 +52,17 @@ export class HttpESTransport implements ESTransport {
           headers: {
           }
         })
-    })
+    });
   }
 
   search(query: Object): Promise<any> {
-    console.log(query, this.http, this.options);
     return this.http
       .post(this.options.searchUrlPath, query, this.options)
-      .then(this.getData)
+      .then(this.getData);
   }
 
   getData(response: any){
     const json = response.json();
     return json;
-  }
-
-  private static parseCredentials(options: ESTransportOptions): any {
-    let credentials = {};
-    if (options.basicAuth !== undefined) {
-      const parsed = options.basicAuth.split(':');
-      const auth = { username: parsed[0], password: parsed[1] };
-      credentials['auth'] = auth;
-    }
-    if (options.withCredentials !== undefined) {
-      credentials['withCredentials'] = options.withCredentials;
-    }
-    return credentials;
   }
 }

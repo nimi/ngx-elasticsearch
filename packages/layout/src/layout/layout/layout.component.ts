@@ -23,10 +23,6 @@ export class NgxSearchLayoutComponent implements OnInit {
   public containerModifier: string = 'l';
   public className: any = block(selector);
 
-  constructor() {
-    console.log(this);
-  }
-
   ngOnInit() {
   }
 

@@ -13,12 +13,12 @@ var HttpESTransport = (function () {
     function HttpESTransport(host, options) {
         if (options === void 0) { options = {}; }
         this.host = host;
+        this.http = new http_1.HttpClient();
         this.options = __assign({ headers: {}, searchUrlPath: '/_search', timeout: HttpESTransport.timeout }, options);
         var credentials = HttpESTransport.parseCredentials(this.options);
         var config = __assign({ baseURL: this.host, timeout: this.options.timeout, headers: this.options.headers }, credentials);
-        this.http = new http_1.HttpClient();
-        this.http.configure(function (c) {
-            c
+        this.http.configure(function (conf) {
+            conf
                 .withBaseUrl(config.baseURL)
                 .withDefaults({
                 credentials: 'omit',
@@ -27,16 +27,6 @@ var HttpESTransport = (function () {
             });
         });
     }
-    HttpESTransport.prototype.search = function (query) {
-        console.log(query, this.http, this.options);
-        return this.http
-            .post(this.options.searchUrlPath, query, this.options)
-            .then(this.getData);
-    };
-    HttpESTransport.prototype.getData = function (response) {
-        var json = response.json();
-        return json;
-    };
     HttpESTransport.parseCredentials = function (options) {
         var credentials = {};
         if (options.basicAuth !== undefined) {
@@ -48,6 +38,15 @@ var HttpESTransport = (function () {
             credentials['withCredentials'] = options.withCredentials;
         }
         return credentials;
+    };
+    HttpESTransport.prototype.search = function (query) {
+        return this.http
+            .post(this.options.searchUrlPath, query, this.options)
+            .then(this.getData);
+    };
+    HttpESTransport.prototype.getData = function (response) {
+        var json = response.json();
+        return json;
     };
     return HttpESTransport;
 }());

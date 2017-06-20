@@ -15,7 +15,7 @@ var NgxElasticsearchComponent = (function () {
     function NgxElasticsearchComponent(service) {
         this.service = service;
         this.unmounted = false;
-        this.manager = service.searchManager;
+        this.manager = service.manager;
     }
     NgxElasticsearchComponent.prototype.ngOnInit = function () {
         this.accessor = this.defineAccessor();

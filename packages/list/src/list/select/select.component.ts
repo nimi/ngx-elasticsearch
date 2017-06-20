@@ -46,7 +46,6 @@ export class NgxSelectComponent implements OnInit {
 
   ngOnInit() {
     this.options = this.setOptions(this.items);
-    console.log(this.options, this.items);
   }
 
   public onChange(e) {

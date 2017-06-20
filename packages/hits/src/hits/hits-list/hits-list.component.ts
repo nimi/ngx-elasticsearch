@@ -57,7 +57,6 @@ export class NgxHitsListComponent extends NgxElasticsearchComponent {
     this.service.results$
       .subscribe((results) => {
         this.hits = results;
-        console.log('hits', results);
       });
   }
 

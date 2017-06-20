@@ -15,8 +15,9 @@ export class NgxElasticsearchComponent implements OnDestroy {
   private unmounted: boolean = false;
 
   constructor(public service: NgxSearchManagerService) {
-    this.manager = service.searchManager;
+    this.manager = service.manager;
   }
+  
 
   ngOnInit() {
     this.accessor = this.defineAccessor();

@@ -16,13 +16,12 @@ var SearchRequest = (function () {
         this.active = false;
     };
     SearchRequest.prototype.setResults = function (results) {
-        console.log('RESULTOS', results);
+        console.log('RESULTS', results);
         if (this.active) {
             this.searchManager.setResults(results);
         }
     };
     SearchRequest.prototype.setError = function (error) {
-        console.log('ERRRRROOOOOORRRRR', error);
         if (this.active) {
             this.searchManager.setError(error);
         }
