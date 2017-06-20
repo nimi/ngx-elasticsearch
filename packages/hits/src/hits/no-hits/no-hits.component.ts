@@ -113,6 +113,8 @@ export class NgxNoHitsComponent extends NgxElasticsearchComponent implements OnI
     this.resultsSub = this.service.results$
       .subscribe(results => {
         if ((this.hasHits() || this.isInitialLoading() || this.isLoading()) && !this.getError()) {
+          this.hasError = false;
+          this.hasSuggestion = false;
           return;
         }
 

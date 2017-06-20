@@ -8,12 +8,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var Observable_1 = require("rxjs/Observable");
+/**
+ * @name NgxSearchManagerService
+ * @description
+ *
+ * This is the core service for powering all elastic components
+ *
+ */
 var NgxSearchManagerService = (function () {
     function NgxSearchManagerService() {
         // Search manager initialization flag
         this.initialized = false;
     }
     Object.defineProperty(NgxSearchManagerService.prototype, "manager", {
+        /**
+         * @name searching$
+         * @type {Observable}
+         * @description Searching state
+         */
         // Getter/setter for search manager instance
         get: function () { return this.searchManager; },
         set: function (manager) { this.searchManager = manager; },
@@ -22,6 +34,8 @@ var NgxSearchManagerService = (function () {
     });
     ;
     /**
+     * @name intialize
+     * @description
      * Initializes the service with a manager instance, registers
      * listeners and observables
      * @param {SearchManager} manager
@@ -35,15 +49,8 @@ var NgxSearchManagerService = (function () {
         }
     };
     /**
-     * Registers search manager instance
-     */
-    NgxSearchManagerService.prototype.register = function () {
-        if (this.manager) {
-            this.manager.setupListeners();
-            this.manager.completeRegistration();
-        }
-    };
-    /**
+     * @name destroy
+     * @description
      * Destroys the search manager instance and unsets initialized state
      */
     NgxSearchManagerService.prototype.destroy = function () {
@@ -53,6 +60,8 @@ var NgxSearchManagerService = (function () {
         }
     };
     /**
+     * @name search
+     * @description
      * Kick of a search on the search manager
      * @param {Boolean} replaceState
      * @param {Boolean} notifyState
@@ -63,6 +72,8 @@ var NgxSearchManagerService = (function () {
         this.manager.performSearch(replaceState, notifyState);
     };
     /**
+     * @name setObservables
+     * @description
      * Setup Observables for searching and results state
      * @param {SearchManager} manager
      * @private
@@ -96,6 +107,17 @@ var NgxSearchManagerService = (function () {
                 listener.unsubscribe();
             };
         });
+    };
+    /**
+     * @name register
+     * @description
+     * Registers search manager instance
+     */
+    NgxSearchManagerService.prototype.register = function () {
+        if (this.manager) {
+            this.manager.setupListeners();
+            this.manager.completeRegistration();
+        }
     };
     return NgxSearchManagerService;
 }());

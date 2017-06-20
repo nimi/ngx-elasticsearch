@@ -321,13 +321,7 @@ function applyInterceptors(input, interceptors, successName, errorName) {
         .reduce(function (chain, interceptor) {
         var successHandler = interceptor[successName];
         var errorHandler = interceptor[errorName];
-        return chain.then(successHandler && (function (value) { return successHandler.call.apply(successHandler, [interceptor, value].concat(interceptorArgs)); }) || identity, errorHandler && (function (reason) { return errorHandler.call.apply(errorHandler, [interceptor, reason].concat(interceptorArgs)); }) || thrower);
+        return chain.then(successHandler && (function (value) { return successHandler.call.apply(successHandler, [interceptor, value].concat(interceptorArgs)); }) || (function (x) { return x; }), errorHandler && (function (reason) { return errorHandler.call.apply(errorHandler, [interceptor, reason].concat(interceptorArgs)); }) || (function (x) { throw x; }));
     }, Promise.resolve(input));
-}
-function identity(x) {
-    return x;
-}
-function thrower(x) {
-    throw x;
 }
 //# sourceMappingURL=http.js.map

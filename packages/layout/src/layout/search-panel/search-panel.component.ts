@@ -6,7 +6,10 @@ const selector = 'panel';
 @Component({
   selector: 'ngx-es-panel',
   template: `
-      <div [attr.class]="className">
+      <div
+        [ngClass]="{ 'is-disabled': disabled }"
+        class="{{ className }}"
+      >
         <div
           (click)="toggleCollaped()"
           [ngClass]="{
@@ -34,6 +37,8 @@ export class NgxSearchPanelComponent implements OnInit {
   @Input() collapsable: boolean = false;
 
   @Input() collapsed: boolean = false;
+
+  @Input() disabled: boolean = false;
 
   public className: any = block(selector);
 

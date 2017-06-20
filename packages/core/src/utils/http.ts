@@ -448,16 +448,8 @@ function applyInterceptors(
       let errorHandler = interceptor[errorName];
 
       return chain.then(
-        successHandler && ((value: any) => successHandler.call(interceptor, value, ...interceptorArgs)) || identity,
-        errorHandler && ((reason: any) => errorHandler.call(interceptor, reason, ...interceptorArgs)) || thrower
+        successHandler && ((value: any) => successHandler.call(interceptor, value, ...interceptorArgs)) || (x => x),
+        errorHandler && ((reason: any) => errorHandler.call(interceptor, reason, ...interceptorArgs)) || (x => { throw x })
       );
     }, Promise.resolve(input));
-}
-
-function identity(x: any) {
-  return x;
-}
-
-function thrower(x: any) {
-  throw x;
 }

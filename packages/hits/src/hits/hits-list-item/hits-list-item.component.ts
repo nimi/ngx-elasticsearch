@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'ngx-hits-list-item',
+  selector: 'ngx-es-hits-list-item',
   template: `
     <pre>{{ item | json }}</pre>
   `,

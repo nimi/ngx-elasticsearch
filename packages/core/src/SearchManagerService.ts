@@ -2,19 +2,40 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { SearchManager } from './SearchManager';
 
+/**
+ * @name NgxSearchManagerService
+ * @description
+ *
+ * This is the core service for powering all elastic components
+ * 
+ */
 @Injectable()
 export class NgxSearchManagerService {
 
-  // Observable for searching state
+  /**
+   * @name searching$
+   * @type {Observable}
+   * @description Searching state
+   */
   public searching$: Observable<any>;
 
-  // Observable for elasticsearch results
+  /**
+   * @name results$
+   * @type {Observable}
+   * @description Search results state
+   */
   public results$: Observable<any>;
 
+  /**
+   * @name searching$
+   * @type {Observable}
+   * @description Searching state
+   */
   // Getter/setter for search manager instance
   public get manager() { return this.searchManager; };
   public set manager(manager: SearchManager) { this.searchManager = manager }
 
+  
   // Search manager initialization flag
   protected initialized: boolean = false;
 
@@ -22,6 +43,8 @@ export class NgxSearchManagerService {
   private searchManager: SearchManager;
 
   /**
+   * @name intialize
+   * @description
    * Initializes the service with a manager instance, registers
    * listeners and observables
    * @param {SearchManager} manager
@@ -36,16 +59,8 @@ export class NgxSearchManagerService {
   }
 
   /**
-   * Registers search manager instance
-   */
-  public register() {
-    if (this.manager) {
-      this.manager.setupListeners();
-      this.manager.completeRegistration();
-    }
-  }
-
-  /**
+   * @name destroy
+   * @description
    * Destroys the search manager instance and unsets initialized state
    */
   public destroy() {
@@ -56,6 +71,8 @@ export class NgxSearchManagerService {
   }
 
   /**
+   * @name search
+   * @description
    * Kick of a search on the search manager
    * @param {Boolean} replaceState
    * @param {Boolean} notifyState 
@@ -65,6 +82,8 @@ export class NgxSearchManagerService {
   }
 
   /**
+   * @name setObservables
+   * @description
    * Setup Observables for searching and results state 
    * @param {SearchManager} manager
    * @private
@@ -96,5 +115,17 @@ export class NgxSearchManagerService {
         }
       }
     );
+  }
+
+  /**
+   * @name register
+   * @description
+   * Registers search manager instance
+   */
+  private register() {
+    if (this.manager) {
+      this.manager.setupListeners();
+      this.manager.completeRegistration();
+    }
   }
 }

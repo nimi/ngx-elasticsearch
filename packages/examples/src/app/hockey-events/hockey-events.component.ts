@@ -7,7 +7,7 @@ import { TermQuery, BoolShould } from '@ngx-elasticsearch/core';
     <ngx-es-layout>
       <ngx-es-top-bar>
         <div class="my-logo">Ngx Elasticsearch Demo</div> 
-        <ngx-search-box [queryFields]="['desc^5']"></ngx-search-box>
+        <ngx-es-search-box [queryFields]="['desc^5']"></ngx-es-search-box>
       </ngx-es-top-bar>
       <ngx-es-layout-body>
         <ngx-es-side-bar>
@@ -59,6 +59,15 @@ import { TermQuery, BoolShould } from '@ngx-elasticsearch/core';
             [filter]="checkboxFilterQuery"
           >
           </ngx-es-checkbox-filter>
+          <ngx-es-input-filter
+            [id]="'teamnick_opposing'"
+            [title]="'Opposing Team'"
+            [placeholder]="'Search teams'"
+            [searchOnChange]="true"
+            [prefixQueryFields]="['teamnick_opposing']"
+            [queryFields]="['teamnick_opposing']"
+          >
+          </ngx-es-input-filter>
         </ngx-es-side-bar>
         <ngx-es-layout-results>
           <ngx-es-action-bar>
@@ -78,7 +87,7 @@ import { TermQuery, BoolShould } from '@ngx-elasticsearch/core';
               <ngx-es-reset-filter></ngx-es-reset-filter>
             </ngx-es-action-bar-row>
           </ngx-es-action-bar>
-          <ngx-hits-list 
+          <ngx-es-hits-list 
             [listType]="'grid'"
             [itemTemplate]="item">
             <ng-template #item let-hit>
@@ -87,7 +96,7 @@ import { TermQuery, BoolShould } from '@ngx-elasticsearch/core';
               >
               </example-hits-list-item>
             </ng-template>
-          </ngx-hits-list>
+          </ngx-es-hits-list>
           <ngx-es-no-hits [suggestionsField]="'p1name'"></ngx-es-no-hits>
           <ngx-es-pagination [showNumbers]="true"></ngx-es-pagination>
         </ngx-es-layout-results>

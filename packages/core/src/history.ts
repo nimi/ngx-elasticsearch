@@ -1,4 +1,4 @@
-import { createHistory, useQueries } from 'history';
+import { createBrowserHistory } from 'history';
 import { stringify, parse } from 'qs';
 
 export const encodeObjUrl = (obj: any) => {
@@ -9,10 +9,6 @@ export const decodeObjString = (str: string) => {
   return parse(str);
 };
 
-
 export const createHistoryInstance = () => {
-  return useQueries(createHistory)({
-    stringifyQuery: (ob: any) => encodeObjUrl(ob),
-    parseQueryString: (str: string) => decodeObjString(str)
-  });
+  return createBrowserHistory();
 };

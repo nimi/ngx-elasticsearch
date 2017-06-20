@@ -6,8 +6,9 @@ import { NgxListModule } from '@ngx-elasticsearch/list';
 import { NgxLayoutModule } from '@ngx-elasticsearch/layout';
 
 import { NgxCheckboxFilterComponent } from './checkbox-filter';
-import { HierarchicalRefinementFilterComponent } from './hierarchical-refinement-filter';
+import { NgxHierarchicalRefinementFilterComponent } from './hierarchical-refinement-filter';
 import { NgxSelectedFiltersComponent } from './selected-filters/selected-filters.component';
+import { NgxInputFilterComponent } from './input-filter';
 import { NgxResetFilterComponent } from './reset-filter/reset-filter.component';
 import { NgxNumericRefinementListComponent } from './numeric-refinement-list-filter';
 import { NgxDynamicRangeFilterComponent } from './dynamic-range-filter/dynamic-range-filter.component';
@@ -26,7 +27,8 @@ export * from './hierarchical-menu-filter';
     NgxLayoutModule
   ],
   declarations: [
-    HierarchicalRefinementFilterComponent,
+    NgxInputFilterComponent,
+    NgxHierarchicalRefinementFilterComponent,
     NgxDynamicRangeFilterComponent,
     NgxCheckboxFilterComponent,
     NgxNumericRefinementListComponent,
@@ -38,7 +40,8 @@ export * from './hierarchical-menu-filter';
     NgxHierarchicalMenuFilterComponent
   ],
   exports: [
-    HierarchicalRefinementFilterComponent,
+    NgxInputFilterComponent,
+    NgxHierarchicalRefinementFilterComponent,
     NgxDynamicRangeFilterComponent,
     NgxCheckboxFilterComponent,
     NgxNumericRefinementListComponent,

@@ -11,11 +11,22 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var State_1 = require("./State");
+/**
+ * @name ValueState
+ * @description
+ *
+ * Wrapper for primitive number or string values
+ */
 var ValueState = (function (_super) {
     __extends(ValueState, _super);
     function ValueState() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    /**
+     * Toggle internal value state, if match is provided,
+     * clear the value, otherwise set a new value
+     * @param value
+     */
     ValueState.prototype.toggle = function (value) {
         if (this.is(value)) {
             return this.clear();
@@ -24,6 +35,10 @@ var ValueState = (function (_super) {
             return this.setValue(value);
         }
     };
+    /**
+     * Check if the arg value matches the internal state
+     * @param value
+     */
     ValueState.prototype.is = function (value) {
         return this.value === value;
     };

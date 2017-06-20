@@ -10,7 +10,7 @@ import {
 const selector = 'hits';
 
 @Component({
-  selector: 'ngx-hits-list',
+  selector: 'ngx-es-hits-list',
   template: `
     <div [attr.class]="listClassName">
       <div [attr.class]="itemClassName" *ngFor="let hit of hits">
@@ -18,7 +18,7 @@ const selector = 'hits';
       </div>
     </div>
     <ng-template #defaultItem let-hit>
-      <ngx-hits-list-item [item]="hit"></ngx-hits-list-item>
+      <ngx-es-hits-list-item [item]="hit"></ngx-es-hits-list-item>
     </ng-template>
   `,
 })

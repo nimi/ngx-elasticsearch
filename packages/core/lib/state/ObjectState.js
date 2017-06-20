@@ -12,14 +12,26 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var State_1 = require("./State");
 var lodash_1 = require("lodash");
+/**
+ * @name ObjectState
+ * @description
+ *
+ * State wrapper for simple object type values
+ */
 var ObjectState = (function (_super) {
     __extends(ObjectState, _super);
     function ObjectState() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    /**
+     * Get the state vale or return an empty object
+     */
     ObjectState.prototype.getValue = function () {
         return this.value || {};
     };
+    /**
+     * Checks for an empty value state
+     */
     ObjectState.prototype.hasValue = function () {
         return !lodash_1.isEmpty(this.value);
     };

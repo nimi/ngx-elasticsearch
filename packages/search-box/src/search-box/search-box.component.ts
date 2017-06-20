@@ -10,7 +10,7 @@ import {
 const selector = 'search-box';
 
 @Component({
-  selector: 'ngx-search-box',
+  selector: 'ngx-es-search-box',
   template: `
     <div [attr.class]="className">
       <form (submit)="handleSubmit(search.value)">
@@ -157,13 +157,7 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
       prefixQueryOptions: Object.assign({}, prefixQueryOptions),
       queryFields: queryFields,
       queryOptions: Object.assign({}, queryOptions),
-      queryBuilder,
-      onQueryStateChange: () => {
-        console.log('query state changed!');
-        // if (!this.unmounted && this.state.input){
-        //   this.setState({input: undefined})
-        // }
-      }
+      queryBuilder
     })
   }
 
