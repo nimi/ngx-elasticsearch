@@ -20,8 +20,8 @@ import {
           (onChange)="handleChange($event)"
           (onSlideEnd)="handleSlideEnd($event)"
           [range]="true"
-          [min]="0" 
-          [max]="100">
+          [min]="min" 
+          [max]="max">
         </ngx-es-range>
       </ngx-es-panel>
     </div>
@@ -85,7 +85,7 @@ export class NgxRangeFilterComponent extends NgxElasticsearchComponent implement
 
   private updateAndSearch(newValues) {
     this.update(newValues);
-		this.manager.performSearch();
+		this.service.search();
   }
 
   public handleChange({values}) {

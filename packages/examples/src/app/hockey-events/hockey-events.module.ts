@@ -9,7 +9,7 @@ import { NgxSortingSelectorModule } from '@ngx-elasticsearch/sorting-selector';
 import { NgxPageSizeSelectorModule } from '@ngx-elasticsearch/page-size-selector';
 import { NgxPaginationModule } from '@ngx-elasticsearch/pagination';
 import { NgxHitsStatsModule } from '@ngx-elasticsearch/hits-stats';
-import { ImdbComponent } from './imdb.component';
+import { HockeyEventsComponent } from './hockey-events.component';
 import { HitsListItemComponent } from './hits-list-item/hits-list-item.component';
 
 
@@ -30,7 +30,7 @@ export const components = [
     NgxPageSizeSelectorModule,
     NgxHitsStatsModule
   ],
-  declarations: [ ImdbComponent, HitsListItemComponent ],
-  exports: [ ImdbComponent ]
+  declarations: [ HockeyEventsComponent, HitsListItemComponent ],
+  exports: [ HockeyEventsComponent ]
 })
-export class ImdbModule { }
+export class HockeyEventsModule { }

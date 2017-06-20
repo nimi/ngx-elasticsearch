@@ -20,7 +20,7 @@ export class ViewOptionsAccessor extends StatefulAccessor<ValueState> {
 
   setView(key: string) {
     let view = find(this.options, { key });
-    if(view) {
+    if (view) {
       if(view.defaultOption){
         this.state = this.state.clear();
       } else {

@@ -26,6 +26,13 @@ import { TermQuery, BoolShould } from '@ngx-elasticsearch/core';
             [showHistogram]="false"
           >
           </ngx-es-range-filter>
+          <ngx-es-dynamic-range-filter
+            [field]="'ycoord'"
+            [id]="'ycoord'"
+            [title]="'Y Coordinate'"
+            [showHistogram]="false"
+          >
+          </ngx-es-dynamic-range-filter>
           <ngx-es-facet-filter
             [id]="'type'"
             [title]="'Type'"
@@ -40,8 +47,8 @@ import { TermQuery, BoolShould } from '@ngx-elasticsearch/core';
             [field]="'period'"
             [options]="[
               { title: 'All' },
-              { title: 'Before Third Period', from: 0, to: 2 },
-              { title: 'Third Period', from: 3, to: 4 }
+              { title: 'Up to Third Period', from: 0, to: 3 },
+              { title: 'After Third Period', from: 4, to: 6 }
             ]"
           >
           </ngx-es-numeric-refinement-list-filter>
@@ -89,7 +96,7 @@ import { TermQuery, BoolShould } from '@ngx-elasticsearch/core';
     
   `
 })
-export class ImdbComponent implements OnDestroy {
+export class HockeyEventsComponent {
 
   public sortingSelectorOptions: any[] = [
     {label:"Relevance", field:"_score", order:"desc",defaultOption:true},
@@ -101,7 +108,4 @@ export class ImdbComponent implements OnDestroy {
     new TermQuery('p1name.keyword', 'Tom Wilson'),
     new TermQuery('p2name.keyword', 'Tom Wilson')
   ]);
-
-  ngOnDestroy() {}
-
 }

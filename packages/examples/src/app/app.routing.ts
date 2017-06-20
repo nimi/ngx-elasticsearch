@@ -1,6 +1,6 @@
 import { ModuleWithProviders } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ImdbComponent } from './imdb/imdb.component';
+import { HockeyEventsComponent } from './hockey-events/hockey-events.component';
 
 const routes: Routes = [
   // {
@@ -10,12 +10,12 @@ const routes: Routes = [
   // },
   {
     path: '',
-    redirectTo: '/imdb',
+    redirectTo: '/hockey-events',
     pathMatch: 'full'
   },
   {
-    path: 'imdb',
-    component: ImdbComponent
+    path: 'hockey-events',
+    component: HockeyEventsComponent
   }
 ];
 
