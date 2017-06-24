@@ -7,10 +7,20 @@ import { update } from '../utils/immutability-helper';
 
 export type SourceFilterType = string | Array<string> | boolean;
 
+/**
+ * @name ImmutableQuery
+ * @description
+ *
+ * This class is responsible for building, storing and accessing
+ * query objects. It manages the query object as the class name implies
+ * by making updates via immutable transactions
+ * 
+ */
 export class ImmutableQuery {
-  index: any;
-  query: any;
 
+  /**
+   * Default state of the index of none is provided
+   */
   static defaultIndex: any = {
     queryString: '',
     filtersMap: {},
@@ -20,6 +30,18 @@ export class ImmutableQuery {
     _source: null,
     size: 10
   };
+  
+  /**
+   * @name query
+   * @description Publicly accessible query object
+   */
+  public query: any;
+
+  /**
+   * @name index
+   * @description Internal state of the index 
+   */
+  private index: any;
 
   constructor(index: any = ImmutableQuery.defaultIndex) {
     this.index = index;
@@ -27,23 +49,23 @@ export class ImmutableQuery {
   }
 
   buildQuery() {
-    let query: any = {};
+    const q: any = {};
     if(this.index.queries.length > 0) {
-      query.query = BoolMust(this.index.queries)
+      q.query = BoolMust(this.index.queries)
     }
     if (this.index.filters.length > 0) {
-      query.post_filter = BoolMust(this.index.filters);
+      q.post_filter = BoolMust(this.index.filters);
     }
-    query.aggs = this.index.aggs;
-    query.size = this.index.size;
-    query.from = this.index.from;
-    query.sort = this.index.sort;
-    query.highlight = this.index.highlight;
-    query.suggest = this.index.suggest;
+    q.aggs = this.index.aggs;
+    q.size = this.index.size;
+    q.from = this.index.from;
+    q.sort = this.index.sort;
+    q.highlight = this.index.highlight;
+    q.suggest = this.index.suggest;
     if (this.index._source) {
-      query._source = this.index._source;
+      q._source = this.index._source;
     }
-    this.query = omitBy(query, isUndefined);
+    this.query = omitBy(q, isUndefined);
   }
 
   hasFilters() {
@@ -56,7 +78,7 @@ export class ImmutableQuery {
   }
 
   addQuery(query: any) {
-    if(!query){
+    if (!query) {
       return this;
     }
     return this.update({
@@ -69,7 +91,7 @@ export class ImmutableQuery {
   }
 
   getQueryString() {
-    return this.index.queryString
+    return this.index.queryString;
   }
 
   addSelectedFilter(selectedFilter: SelectedFilter | any){
@@ -111,7 +133,7 @@ export class ImmutableQuery {
     return BoolMust(filters);
   }
   getFiltersWithKeys(keys: any[]) {
-    return this._getFilters(keys, pick)
+    return this._getFilters(keys, pick);
   }
 
   getFiltersWithoutKeys(keys: any) {
@@ -167,14 +189,14 @@ export class ImmutableQuery {
   update(updateDef: any) {
     return new ImmutableQuery(
       update(this.index, updateDef)
-    )
+    );
   }
 
   getJSON() {
-    return this.query
+    return this.query;
   }
 
   printJSON(){
-    console.log(JSON.stringify(this.getJSON(), null, 2))
+    console.log(JSON.stringify(this.getJSON(), null, 2));
   }
 }

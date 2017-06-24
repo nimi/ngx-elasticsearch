@@ -8,6 +8,14 @@ var transport_1 = require("./transport");
 var SearchRequest_1 = require("./SearchRequest");
 var lodash_1 = require("lodash");
 var qs_1 = require("qs");
+/**
+ * @name SearchManager
+ * @description
+ *
+ * The search manager orchestrates query state, agg state, elastic search connections
+ * and all other requests to elastic search APIs
+ *
+ */
 var SearchManager = (function () {
     function SearchManager(host, options) {
         if (options === void 0) { options = {}; }

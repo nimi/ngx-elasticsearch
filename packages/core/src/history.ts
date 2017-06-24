@@ -1,4 +1,4 @@
-import { createBrowserHistory } from 'history';
+import { createBrowserHistory } from 'history/createBrowserHistory';
 import { stringify, parse } from 'qs';
 
 export const encodeObjUrl = (obj: any) => {

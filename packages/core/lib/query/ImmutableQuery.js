@@ -4,6 +4,15 @@ var query_dsl_1 = require("./query_dsl");
 var utils_1 = require("../utils");
 var lodash_1 = require("lodash");
 var immutability_helper_1 = require("../utils/immutability-helper");
+/**
+ * @name ImmutableQuery
+ * @description
+ *
+ * This class is responsible for building, storing and accessing
+ * query objects. It manages the query object as the class name implies
+ * by making updates via immutable transactions
+ *
+ */
 var ImmutableQuery = (function () {
     function ImmutableQuery(index) {
         if (index === void 0) { index = ImmutableQuery.defaultIndex; }
@@ -11,23 +20,23 @@ var ImmutableQuery = (function () {
         this.buildQuery();
     }
     ImmutableQuery.prototype.buildQuery = function () {
-        var query = {};
+        var q = {};
         if (this.index.queries.length > 0) {
-            query.query = query_dsl_1.BoolMust(this.index.queries);
+            q.query = query_dsl_1.BoolMust(this.index.queries);
         }
         if (this.index.filters.length > 0) {
-            query.post_filter = query_dsl_1.BoolMust(this.index.filters);
+            q.post_filter = query_dsl_1.BoolMust(this.index.filters);
         }
-        query.aggs = this.index.aggs;
-        query.size = this.index.size;
-        query.from = this.index.from;
-        query.sort = this.index.sort;
-        query.highlight = this.index.highlight;
-        query.suggest = this.index.suggest;
+        q.aggs = this.index.aggs;
+        q.size = this.index.size;
+        q.from = this.index.from;
+        q.sort = this.index.sort;
+        q.highlight = this.index.highlight;
+        q.suggest = this.index.suggest;
         if (this.index._source) {
-            query._source = this.index._source;
+            q._source = this.index._source;
         }
-        this.query = lodash_1.omitBy(query, lodash_1.isUndefined);
+        this.query = lodash_1.omitBy(q, lodash_1.isUndefined);
     };
     ImmutableQuery.prototype.hasFilters = function () {
         return this.index.filters.length > 0;
@@ -137,6 +146,9 @@ var ImmutableQuery = (function () {
     };
     return ImmutableQuery;
 }());
+/**
+ * Default state of the index of none is provided
+ */
 ImmutableQuery.defaultIndex = {
     queryString: '',
     filtersMap: {},

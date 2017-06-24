@@ -56,7 +56,7 @@ export class NgxSelectedFiltersComponent extends NgxElasticsearchComponent imple
     this.resultsSub = this.service.results$
       .subscribe(result => {
         const prevFilterItems = [ ...(this.filterItems || []) ];
-        this.filterItems = this.getFilters() || [];
+        this.filterItems = [ ...(this.getFilters() || []) ];
         this.emitFilterChanges(prevFilterItems, this.filterItems);
       });
   }
@@ -65,8 +65,8 @@ export class NgxSelectedFiltersComponent extends NgxElasticsearchComponent imple
     this.resultsSub.unsubscribe();
   }
 
-  getFilters():Array<any> {
-		return this.getQuery().getSelectedFilters()
+  getFilters(): any[] {
+		return this.getQuery().getSelectedFilters();
 	}
 
 	hasFilters():boolean {
@@ -88,13 +88,13 @@ export class NgxSelectedFiltersComponent extends NgxElasticsearchComponent imple
       return;
     }
 
-    const currFilterValues = currFilters.map(({value}) => value);
-    prevFilters.forEach((pf, i) => {
-      if (currFilterValues.indexOf(pf.value) === -1) {
-        this.onFilterChange.emit(currFilters);
-        return;
-      }
-    });
+    const currValues = currFilters.map(({value}) => value);
+    const prevValues = currFilters.map(({value}) => value);
+    const newFilter = currValues.filter(v => prevValues.includes(v));
+
+    if (newFilter && newFilter.length) {
+      this.onFilterChange.emit(currFilters);
+    }
   }
 
 }

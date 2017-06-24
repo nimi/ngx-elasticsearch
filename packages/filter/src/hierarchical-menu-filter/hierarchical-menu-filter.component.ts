@@ -28,13 +28,15 @@ const selector = 'hierarchical-menu-list';
               <div [attr.class]="option.className('text')">{{ option.key }}</div>
               <div [attr.class]="option.className('count')">{{ option.count }}</div>
             </div>
-            <div *ngFor="let c of option.children">
-              <div
-                (click)="addFilter($event, c, 1)" 
-                [attr.class]="c.className"
-              >
-                <div [attr.class]="option.className('text')" [style.marginLeft.px]="10">{{ c.key }}</div>
-                <div [attr.class]="option.className('count')">{{ c.count }}</div>
+            <div *ngIf="option.selected">
+              <div *ngFor="let c of option.children" >
+                <div
+                  (click)="addFilter($event, c, 1)" 
+                  [attr.class]="c.className"
+                >
+                  <div [attr.class]="option.className('text')" [style.marginLeft.px]="10">{{ c.key }}</div>
+                  <div [attr.class]="option.className('count')">{{ c.count }}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -96,11 +98,12 @@ export class NgxHierarchicalMenuFilterComponent extends NgxElasticsearchComponen
     event.stopPropagation();
     this.accessor.state =
       this.accessor.state.toggleLevel(level, option.key);
+    console.log('addFilter', level, option.key, this.accessor.state);
     this.service.search();
   }
 
   getOptions(level: number = 0) {
-    const options = this.accessor.getBuckets(level);
+    const options = [ ...(this.accessor.getBuckets(level) || []) ];
     return options.map(o => {
       const selected = this.accessor.resultsState.contains(level, o.key);
 
@@ -108,6 +111,7 @@ export class NgxHierarchicalMenuFilterComponent extends NgxElasticsearchComponen
         key: o.key,
         count: o.doc_count,
         className: selected ? this.optionClassName.mix('is-selected') : this.optionClassName,
+        selected,
         children: selected
           ? this.getOptions(level + 1)
           : []

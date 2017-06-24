@@ -10,6 +10,10 @@ import { SearchManager } from './SearchManager';
  * with a set of immutability helpers.
  */
 export class SearchRequest {
+  /**
+   * @name active
+   * @description active state of the request
+   */
   active: boolean = true;
 
   constructor(

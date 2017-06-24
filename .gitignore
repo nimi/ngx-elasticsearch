@@ -14,5 +14,6 @@ node_modules
 
 # Misc
 npm-debug.log
+lerna-debug.log
 .DS_Store
 ignore/

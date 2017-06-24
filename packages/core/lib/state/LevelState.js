@@ -17,7 +17,7 @@ var immutability_helper_1 = require("../utils/immutability-helper");
  * @name LevelState
  * @description
  *
- * State wrapper tree structures, trees are mutated
+ * State wrapper flattened-tree structures, Levels are mutated
  * with a set of immutability helpers.
  */
 var LevelState = (function (_super) {

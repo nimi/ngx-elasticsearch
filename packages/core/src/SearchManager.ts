@@ -19,6 +19,14 @@ export interface SearchManagerOptions {
   timeout?: number;
 }
 
+/**
+ * @name SearchManager
+ * @description
+ *
+ * The search manager orchestrates query state, agg state, elastic search connections
+ * and all other requests to elastic search APIs
+ * 
+ */
 export class SearchManager {
   
   // Elasticsearch host url

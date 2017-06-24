@@ -11,7 +11,7 @@ const selector = 'panel';
         class="{{ className }}"
       >
         <div
-          (click)="toggleCollaped()"
+          (click)="toggleCollapsed()"
           [ngClass]="{
             'is-collapsable': collapsable,
             'is-collapsed': collapsed

@@ -6,7 +6,7 @@ import { update } from '../utils/immutability-helper';
  * @name LevelState
  * @description
  * 
- * State wrapper tree structures, trees are mutated
+ * State wrapper flattened-tree structures, Levels are mutated
  * with a set of immutability helpers.
  */
 export class LevelState extends State<Array<any>> {

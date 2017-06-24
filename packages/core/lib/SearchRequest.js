@@ -12,6 +12,10 @@ var SearchRequest = (function () {
         this.transport = transport;
         this.query = query;
         this.searchManager = searchManager;
+        /**
+         * @name active
+         * @description active state of the request
+         */
         this.active = true;
     }
     /**

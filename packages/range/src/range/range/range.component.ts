@@ -113,13 +113,20 @@ export class NgxRangeComponent implements OnDestroy, AfterViewInit, ControlValue
   }
 
   ngOnChanges(changes) {
-    if (changes.min || changes.max) {
+    if (changes.min && changes.max) {
       if (
         (changes.min.currentValue !== changes.min.previousValue) ||
         (changes.max.currentValue !== changes.max.previousValue)
       ) {
         this.setInputValues(changes.min.currentValue, changes.max.currentValue);
       }
+      return;
+    }
+    if (changes.min && (changes.min.currentValue !== changes.min.previousValue)) {
+      this.setInputValues(changes.min.currentValue, this.max);
+    }
+    if (changes.max && (changes.max.currentValue !== changes.max.previousValue)) {
+      this.setInputValues(this.min, changes.max.currentValue);
     }
   }
 
