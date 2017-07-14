@@ -15,9 +15,7 @@ var AnonymousAccessor = (function (_super) {
     __extends(AnonymousAccessor, _super);
     function AnonymousAccessor(buildSharedQuery) {
         var _this = _super.call(this) || this;
-        if (buildSharedQuery) {
-            _this.buildSharedQuery = buildSharedQuery;
-        }
+        _this.buildSharedQuery = buildSharedQuery ? buildSharedQuery : _this.buildSharedQuery;
         return _this;
     }
     return AnonymousAccessor;

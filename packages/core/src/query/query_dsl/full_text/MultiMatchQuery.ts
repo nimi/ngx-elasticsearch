@@ -7,7 +7,13 @@ export interface MultiMatchOptions {
   analyzer?: string
 }
 
-export function MultiMatchQuery(query: any, options: MultiMatchOptions){
-  if (!query) { return; }
-  return { multi_match: { query, ...(options || {}) } };
-}
+/**
+ * @name MultiMatchQuery
+ * @description
+ *
+ * The multi_match query builds on the match query to allow multi-field queries
+ * See: https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html
+ * 
+ */
+export const MultiMatchQuery = (query: any, options: MultiMatchOptions) =>
+  query ? ({ multi_match: { query, ...(options || {}) } }) : void 0;

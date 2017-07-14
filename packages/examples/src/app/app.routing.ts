@@ -3,11 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { HockeyEventsComponent } from './hockey-events/hockey-events.component';
 
 const routes: Routes = [
-  // {
-  //   path: '',
-  //   redirectTo: '/components',
-  //   pathMatch: 'full'
-  // },
   {
     path: '',
     redirectTo: '/hockey-events',

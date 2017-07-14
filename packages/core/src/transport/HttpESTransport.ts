@@ -12,23 +12,22 @@ export interface ESTransportOptions {
 export class HttpESTransport implements ESTransport {
   public static timeout: number = 5000;
 
-  private static parseCredentials(options: ESTransportOptions): any {
-    let credentials = {};
-    if (options.basicAuth !== undefined) {
-      const parsed = options.basicAuth.split(':');
+  private static parseCredentials({ basicAuth, withCredentials }: ESTransportOptions): any {
+    let credentials: any = {};
+    if (basicAuth !== undefined) {
+      const parsed = basicAuth.split(':');
       const auth = { username: parsed[0], password: parsed[1] };
-      credentials['auth'] = auth;
+      Object.assign(credentials, { auth });
     }
-    if (options.withCredentials !== undefined) {
-      credentials['withCredentials'] = options.withCredentials;
+    if (withCredentials !== undefined) {
+      Object.assign(credentials, { withCredentials })
     }
     return credentials;
   }
 
-  public http: any = new HttpClient();
-  public options: ESTransportOptions;
+  public http: HttpClient = new HttpClient();
 
-  constructor(public host: string, options: ESTransportOptions = {}){
+  constructor(public host: string, public options: ESTransportOptions = {}){
     this.options = {
       headers: {},
       searchUrlPath: '/_search',
@@ -43,7 +42,7 @@ export class HttpESTransport implements ESTransport {
       headers: this.options.headers,
       ...credentials
     };
-    this.http.configure((conf: any) => {
+    this.http.configure((conf: any) =>
       conf
         .withBaseUrl(config.baseURL)
         .withDefaults({
@@ -51,8 +50,7 @@ export class HttpESTransport implements ESTransport {
           mode: 'cors',
           headers: {
           }
-        })
-    });
+        }));
   }
 
   search(query: Object): Promise<any> {
@@ -62,7 +60,6 @@ export class HttpESTransport implements ESTransport {
   }
 
   getData(response: any){
-    const json = response.json();
-    return json;
+    return response.json();
   }
 }

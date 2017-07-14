@@ -7,10 +7,13 @@ export interface MatchQueryOptions {
   max_expansions?: number
 }
 
-export function MatchQuery(field: string, query: any, options: MatchQueryOptions = {}) {
-  if (!query || !field) { return; }
-
-  return {
-    match:{ [field]: { query, ...options } }
-  };
-}
+/**
+ * @name MatchQuery
+ * @description
+ *
+ * Match queries accept text/numerics/dates, analyzes them, and constructs a query
+ * See: https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html
+ * 
+ */
+export const MatchQuery = (field: string, query: any, options: MatchQueryOptions) =>
+  query && field ? ({ match:{ [field]: { query, ...options } } }) : void 0;

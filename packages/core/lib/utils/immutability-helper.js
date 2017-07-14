@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var hasOwnProperty = {}.hasOwnProperty;
+/**
+ * Create a shallow copy of either an object or array
+ * @param x
+ */
 function shallowCopy(x) {
     if (Array.isArray(x)) {
         return x.concat();
@@ -28,7 +32,11 @@ var ALL_COMMANDS_SET = new Set([
     COMMAND_APPLY
 ]);
 /**
+ * @name update
+ *
  * Returns a updated shallow copy of an object without mutating the original.
+ * @param value
+ * @param spec
  */
 function update(value, spec) {
     if (hasOwnProperty.call(spec, COMMAND_SET)) {

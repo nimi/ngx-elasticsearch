@@ -1,11 +1,11 @@
-import { FieldContext } from './FieldContext';
+import { FieldContext, FieldOptions } from './FieldContext';
 import { NestedBucket, NestedQuery } from '../query_dsl';
 import { get } from 'lodash';
 
-export class NestedFieldContext extends FieldContext {
+export class NestedFieldContext implements FieldContext {
+  public fieldOptions: FieldOptions;
 
-  constructor(fieldOptions: any) {
-    super(fieldOptions);
+  constructor(fieldOptions: FieldOptions) {
     if (!get(this.fieldOptions, 'options.path')) {
       throw new Error('fieldOptions type:nested requires options.path');
     }
@@ -14,6 +14,7 @@ export class NestedFieldContext extends FieldContext {
   getAggregationPath(){
     return 'inner';
   }
+
 
   wrapAggregations(...aggregations: any[]) {
     return [
@@ -24,6 +25,7 @@ export class NestedFieldContext extends FieldContext {
       )
     ];
   }
+  
   wrapFilter(filter: any) {
     return NestedQuery(
       this.fieldOptions.options.path,

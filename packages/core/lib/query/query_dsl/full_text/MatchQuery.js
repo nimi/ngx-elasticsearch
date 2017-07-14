@@ -8,15 +8,16 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-function MatchQuery(field, query, options) {
-    if (options === void 0) { options = {}; }
-    if (!query || !field) {
-        return;
-    }
-    return {
-        match: (_a = {}, _a[field] = __assign({ query: query }, options), _a)
-    };
+/**
+ * @name MatchQuery
+ * @description
+ *
+ * Match queries accept text/numerics/dates, analyzes them, and constructs a query
+ * See: https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html
+ *
+ */
+exports.MatchQuery = function (field, query, options) {
+    return query && field ? ({ match: (_a = {}, _a[field] = __assign({ query: query }, options), _a) }) : void 0;
     var _a;
-}
-exports.MatchQuery = MatchQuery;
+};
 //# sourceMappingURL=MatchQuery.js.map

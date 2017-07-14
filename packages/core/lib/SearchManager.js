@@ -63,33 +63,74 @@ var SearchManager = (function () {
             this.runInitialSearch();
         }
     };
+    /**
+     * @name addAccessor
+     * @description Add an accessor to accessor manager state
+     * @param accessor
+     */
     SearchManager.prototype.addAccessor = function (accessor) {
         accessor.setSearchManager(this);
         return this.accessors.add(accessor);
     };
+    /**
+     * @name removeAccessor
+     * @description Remove an accessor from the accessor manager
+     * @param accessor
+     */
     SearchManager.prototype.removeAccessor = function (accessor) {
         this.accessors.remove(accessor);
     };
+    /**
+     * @name addDefaultQuery
+     * @description Setup a default query
+     * @param fn
+     */
     SearchManager.prototype.addDefaultQuery = function (fn) {
         return this.addAccessor(new accessors_1.AnonymousAccessor(fn));
     };
+    /**
+     * @name setQueryProcessor
+     * @description Set a query processor
+     * @param fn
+     */
     SearchManager.prototype.setQueryProcessor = function (fn) {
         this.queryProcessor = fn;
     };
+    /**
+     * @name translate
+     * @description Run translate function
+     * @param key
+     */
     SearchManager.prototype.translate = function (key) {
         return this.translateFunction(key);
     };
+    /**
+     * @name buildQuery
+     * @description Build a query from accessor state
+     */
     SearchManager.prototype.buildQuery = function () {
         return this.accessors.buildQuery();
     };
+    /**
+     * @name resetState
+     * @description Reset accessor state
+     */
     SearchManager.prototype.resetState = function () {
         this.accessors.resetState();
     };
+    /**
+     * @name unlistenHistory
+     * @description unsubscribe from history listener
+     */
     SearchManager.prototype.unlistenHistory = function () {
         if (this.options.useHistory) {
             this._unlistenHistory();
         }
     };
+    /**
+     * @name listenToHistory
+     * @description listener for history events
+     */
     SearchManager.prototype.listenToHistory = function () {
         var _this = this;
         var callsBeforeListen = (this.options.searchOnLoad) ? 1 : 2;
@@ -102,6 +143,10 @@ var SearchManager = (function () {
             }
         }));
     };
+    /**
+     * @name runInitialSearch
+     * @description Run a search if search on load is enabled
+     */
     SearchManager.prototype.runInitialSearch = function () {
         var _this = this;
         if (this.options.searchOnLoad) {
@@ -110,10 +155,21 @@ var SearchManager = (function () {
             });
         }
     };
+    /**
+     * @name searchFromUrlQuery
+     * @description Run a search from a url query
+     * @param query
+     */
     SearchManager.prototype.searchFromUrlQuery = function (query) {
         this.accessors.setState(query);
         this._search();
     };
+    /**
+     * @name performSearch
+     * @description
+     * @param replaceState
+     * @param notifyState
+     */
     SearchManager.prototype.performSearch = function (replaceState, notifyState) {
         if (replaceState === void 0) { replaceState = false; }
         if (notifyState === void 0) { notifyState = true; }
@@ -127,20 +183,40 @@ var SearchManager = (function () {
             historyMethod({ pathname: window.location.pathname, query: this.state });
         }
     };
+    /**
+     * @name buildSearchUrl
+     * @description Build a search URL from the query string state
+     * @param extraParams
+     */
     SearchManager.prototype.buildSearchUrl = function (extraParams) {
         if (extraParams === void 0) { extraParams = {}; }
         var params = lodash_1.defaults(extraParams, this.state || this.accessors.getState());
         var queryString = qs_1.stringify(params, { encode: true });
         return window.location.pathname + '?' + queryString;
     };
+    /**
+     * @name reloadSearch
+     * @description reload the initial search
+     */
     SearchManager.prototype.reloadSearch = function () {
         delete this.query;
         this.performSearch();
     };
+    /**
+     * @name search
+     * @description Public search method
+     * @param replaceState
+     */
     SearchManager.prototype.search = function (replaceState) {
         if (replaceState === void 0) { replaceState = false; }
         this.performSearch(replaceState);
     };
+    /**
+     * @name _search
+     * @description Internal search method
+     * @param
+     * @private
+     */
     SearchManager.prototype._search = function () {
         this.state = this.accessors.getState();
         var query = this.buildQuery();
@@ -155,6 +231,11 @@ var SearchManager = (function () {
         this.currentSearchRequest = new SearchRequest_1.SearchRequest(this.transport, queryObject, this);
         this.currentSearchRequest.run();
     };
+    /**
+     * @name setResults
+     * @description Set results into internal state and update response
+     * @param results
+     */
     SearchManager.prototype.setResults = function (results) {
         this.compareResults(this.results, results);
         this.results = results;
@@ -163,6 +244,12 @@ var SearchManager = (function () {
         this.onResponseChange();
         this.results$$.next(this.getHits());
     };
+    /**
+     * @name compareResults
+     * @description Check if the previous results are different from the current
+     * @param previousResults
+     * @param results
+     */
     SearchManager.prototype.compareResults = function (previousResults, results) {
         var ids = lodash_1.map(lodash_1.get(results, ['hits', 'hits'], []), '_id').join(',');
         var previousIds = lodash_1.get(previousResults, ['hits', 'ids'], '');
@@ -171,39 +258,88 @@ var SearchManager = (function () {
             results.hits.hasChanged = !(ids && ids === previousIds);
         }
     };
+    /**
+     * @name addAccess
+     * @description Get hits from results
+     */
     SearchManager.prototype.getHits = function () {
         return lodash_1.get(this.results, ['hits', 'hits'], []);
     };
+    /**
+     * @name getHitsCount
+     * @description Read hit count from results
+     */
     SearchManager.prototype.getHitsCount = function () {
         return lodash_1.get(this.results, ['hits', 'total'], 0);
     };
+    /**
+     * @name getTime
+     * @description Read time off of results
+     */
     SearchManager.prototype.getTime = function () {
         return lodash_1.get(this.results, 'took', 0);
     };
+    /**
+     * @name getSuggestions
+     * @description Read suggestions off of results
+     */
     SearchManager.prototype.getSuggestions = function () {
         return lodash_1.get(this.results, ['suggest', 'suggestions'], {});
     };
+    /**
+     * @name getQueryAccessor
+     * @description Return the query accessor from accessor manager
+     */
     SearchManager.prototype.getQueryAccessor = function () {
         return this.accessors.queryAccessor;
     };
+    /**
+     * @name getAccessorsByType
+     * @description get all accessors of the same type
+     * @param type
+     */
     SearchManager.prototype.getAccessorsByType = function (type) {
         return this.accessors.getAccessorsByType(type);
     };
+    /**
+     * @name getAccessorByType
+     * @description Get the accessor from the accessor manager by type
+     * @param type
+     */
     SearchManager.prototype.getAccessorByType = function (type) {
         return this.accessors.getAccessorByType(type);
     };
+    /**
+     * @name hasHits
+     * @description Check if hits were returned from search
+     */
     SearchManager.prototype.hasHits = function () {
-        return this.getHitsCount() > 0;
+        return this.getHitsCount() !== 0;
     };
+    /**
+     * @name hasHitsChanged
+     * @description Read if hits have changed from response
+     */
     SearchManager.prototype.hasHitsChanged = function () {
         return lodash_1.get(this.results, ['hits', 'hasChanged'], true);
     };
+    /**
+     * @name setError
+     * @description
+     *
+     * Set an error into interal state update response with empty value
+     * @param error
+     */
     SearchManager.prototype.setError = function (error) {
         this.error = error;
         this.results = null;
         this.accessors.setResults(null);
         this.onResponseChange();
     };
+    /**
+     * @name onResponseChange
+     * @description Handler for new search responses
+     */
     SearchManager.prototype.onResponseChange = function () {
         this.loading = false;
         this.searching$$.next(this.loading);

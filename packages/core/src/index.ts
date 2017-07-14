@@ -18,13 +18,15 @@ export * from './SearchComponent';
 
 export * from './utils';
 
-let config = { url: '', options: {} };
-export let searchManagerFactory = () => {
-  const searchManager = new SearchManager(config.url, config.options);
-  const service = new NgxSearchManagerService();
-  service.initialize(searchManager);
-  return service;
-};
+export let config = { url: '', options: {} };
+export function searchManagerFactory() {
+  return (c: any) => {
+    const searchManager = new SearchManager(config.url, config.options);
+    const service = new NgxSearchManagerService();
+    service.initialize(searchManager);
+    return service;
+  }
+}
 
 @NgModule({
   declarations: [

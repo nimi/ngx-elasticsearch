@@ -1,4 +1,4 @@
-import {reduce, map, reject, isUndefined} from 'lodash';
+import { reduce, map, reject, isUndefined } from 'lodash';
 
 export * from './http';
 export * from './immutability-helper';

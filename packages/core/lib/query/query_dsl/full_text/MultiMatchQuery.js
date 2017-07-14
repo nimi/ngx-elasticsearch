@@ -8,11 +8,15 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-function MultiMatchQuery(query, options) {
-    if (!query) {
-        return;
-    }
-    return { multi_match: __assign({ query: query }, (options || {})) };
-}
-exports.MultiMatchQuery = MultiMatchQuery;
+/**
+ * @name MultiMatchQuery
+ * @description
+ *
+ * The multi_match query builds on the match query to allow multi-field queries
+ * See: https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html
+ *
+ */
+exports.MultiMatchQuery = function (query, options) {
+    return query ? ({ multi_match: __assign({ query: query }, (options || {})) }) : void 0;
+};
 //# sourceMappingURL=MultiMatchQuery.js.map

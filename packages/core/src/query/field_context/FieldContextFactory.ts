@@ -8,8 +8,7 @@ export const FieldContextFactory = (fieldOptions: any) => {
       return new NestedFieldContext(fieldOptions);
     case 'children':
       return new ChildrenFieldContext(fieldOptions);
-    case 'embedded':
-    default:
+    default: // case: 'embedded'
       return new EmbeddedFieldContext(fieldOptions);
   }
 };

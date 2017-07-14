@@ -1,5 +1,9 @@
 const hasOwnProperty = {}.hasOwnProperty;
 
+/**
+ * Create a shallow copy of either an object or array
+ * @param x 
+ */
 export function shallowCopy(x: any) {
   if (Array.isArray(x)) {
     return x.concat();
@@ -27,14 +31,18 @@ const ALL_COMMANDS_SET = new Set([
 ]);
 
 /**
+ * @name update
+ * 
  * Returns a updated shallow copy of an object without mutating the original.
+ * @param value
+ * @param spec
  */
 export function update(value: any, spec: any) {
   if (hasOwnProperty.call(spec, COMMAND_SET)) {
     return spec[COMMAND_SET];
   }
 
-  var nextValue = shallowCopy(value);
+  let nextValue = shallowCopy(value);
 
   if (hasOwnProperty.call(spec, COMMAND_MERGE)) {
     Object.assign(nextValue, spec[COMMAND_MERGE]);

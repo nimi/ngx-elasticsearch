@@ -1,26 +1,12 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
-var FieldContext_1 = require("./FieldContext");
 var query_dsl_1 = require("../query_dsl");
 var lodash_1 = require("lodash");
-var NestedFieldContext = (function (_super) {
-    __extends(NestedFieldContext, _super);
+var NestedFieldContext = (function () {
     function NestedFieldContext(fieldOptions) {
-        var _this = _super.call(this, fieldOptions) || this;
-        if (!lodash_1.get(_this.fieldOptions, 'options.path')) {
+        if (!lodash_1.get(this.fieldOptions, 'options.path')) {
             throw new Error('fieldOptions type:nested requires options.path');
         }
-        return _this;
     }
     NestedFieldContext.prototype.getAggregationPath = function () {
         return 'inner';
@@ -39,6 +25,6 @@ var NestedFieldContext = (function (_super) {
         return query_dsl_1.NestedQuery(this.fieldOptions.options.path, filter, this.fieldOptions.options);
     };
     return NestedFieldContext;
-}(FieldContext_1.FieldContext));
+}());
 exports.NestedFieldContext = NestedFieldContext;
 //# sourceMappingURL=NestedFieldContext.js.map

@@ -6,4 +6,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./RangeQuery"));
 __export(require("./TermQuery"));
 __export(require("./TermsQuery"));
+__export(require("./ExistsQuery"));
 //# sourceMappingURL=index.js.map

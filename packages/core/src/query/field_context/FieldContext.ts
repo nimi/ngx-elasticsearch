@@ -1,9 +1,11 @@
-import { FieldOptions } from './FieldOptions';
+export interface FieldOptions {
+  type: string,
+  field?: string,
+  options?: any
+}
 
-export abstract class FieldContext {
-  constructor(public fieldOptions: FieldOptions){ }
-
-  abstract getAggregationPath(): any
-  abstract wrapAggregations(...aggs: any[]): Array<any>
-  abstract wrapFilter(filter: any): any
+export interface FieldContext {
+  getAggregationPath(): any
+  wrapAggregations(...aggs: any[]): Array<any>
+  wrapFilter(filter: any): any
 }

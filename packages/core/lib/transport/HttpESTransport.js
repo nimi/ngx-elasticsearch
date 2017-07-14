@@ -13,12 +13,13 @@ var HttpESTransport = (function () {
     function HttpESTransport(host, options) {
         if (options === void 0) { options = {}; }
         this.host = host;
+        this.options = options;
         this.http = new http_1.HttpClient();
         this.options = __assign({ headers: {}, searchUrlPath: '/_search', timeout: HttpESTransport.timeout }, options);
         var credentials = HttpESTransport.parseCredentials(this.options);
         var config = __assign({ baseURL: this.host, timeout: this.options.timeout, headers: this.options.headers }, credentials);
         this.http.configure(function (conf) {
-            conf
+            return conf
                 .withBaseUrl(config.baseURL)
                 .withDefaults({
                 credentials: 'omit',
@@ -27,15 +28,16 @@ var HttpESTransport = (function () {
             });
         });
     }
-    HttpESTransport.parseCredentials = function (options) {
+    HttpESTransport.parseCredentials = function (_a) {
+        var basicAuth = _a.basicAuth, withCredentials = _a.withCredentials;
         var credentials = {};
-        if (options.basicAuth !== undefined) {
-            var parsed = options.basicAuth.split(':');
+        if (basicAuth !== undefined) {
+            var parsed = basicAuth.split(':');
             var auth = { username: parsed[0], password: parsed[1] };
-            credentials['auth'] = auth;
+            Object.assign(credentials, { auth: auth });
         }
-        if (options.withCredentials !== undefined) {
-            credentials['withCredentials'] = options.withCredentials;
+        if (withCredentials !== undefined) {
+            Object.assign(credentials, { withCredentials: withCredentials });
         }
         return credentials;
     };
@@ -45,8 +47,7 @@ var HttpESTransport = (function () {
             .then(this.getData);
     };
     HttpESTransport.prototype.getData = function (response) {
-        var json = response.json();
-        return json;
+        return response.json();
     };
     return HttpESTransport;
 }());

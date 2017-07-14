@@ -17,19 +17,17 @@ export class HitsAccessor extends Accessor {
   }
 
   scrollIfNeeded(){
-    if (this.searchManager.hasHitsChanged()) {
-      if (this.options.scrollTo) {
-        const el = document.querySelector(this.getScrollSelector());
-        if (el) {
-          el.scrollTop = 0;
-        }
+    if (this.searchManager.hasHitsChanged() && this.options.scrollTo) {
+      const el = document.querySelector(this.getScrollSelector());
+      if (el) {
+        el.scrollTop = 0;
       }
     }
   }
 
   getScrollSelector(){
-    return (this.options.scrollTo == true) ?
-      'body' :
-      this.options.scrollTo.toString();
+    return (this.options.scrollTo == true)
+      ? 'body'
+      : this.options.scrollTo.toString();
   }
 }

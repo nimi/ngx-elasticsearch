@@ -23,19 +23,17 @@ var HitsAccessor = (function (_super) {
         this.scrollIfNeeded();
     };
     HitsAccessor.prototype.scrollIfNeeded = function () {
-        if (this.searchManager.hasHitsChanged()) {
-            if (this.options.scrollTo) {
-                var el = document.querySelector(this.getScrollSelector());
-                if (el) {
-                    el.scrollTop = 0;
-                }
+        if (this.searchManager.hasHitsChanged() && this.options.scrollTo) {
+            var el = document.querySelector(this.getScrollSelector());
+            if (el) {
+                el.scrollTop = 0;
             }
         }
     };
     HitsAccessor.prototype.getScrollSelector = function () {
-        return (this.options.scrollTo == true) ?
-            'body' :
-            this.options.scrollTo.toString();
+        return (this.options.scrollTo == true)
+            ? 'body'
+            : this.options.scrollTo.toString();
     };
     return HitsAccessor;
 }(Accessor_1.Accessor));

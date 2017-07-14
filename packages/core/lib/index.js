@@ -24,24 +24,27 @@ __export(require("./transport"));
 __export(require("./SearchManagerService"));
 __export(require("./SearchComponent"));
 __export(require("./utils"));
-var config = { url: '', options: {} };
-exports.searchManagerFactory = function () {
-    var searchManager = new SearchManager_1.SearchManager(config.url, config.options);
-    var service = new SearchManagerService_1.NgxSearchManagerService();
-    service.initialize(searchManager);
-    return service;
-};
+exports.config = { url: '', options: {} };
+function searchManagerFactory() {
+    return function (c) {
+        var searchManager = new SearchManager_1.SearchManager(exports.config.url, exports.config.options);
+        var service = new SearchManagerService_1.NgxSearchManagerService();
+        service.initialize(searchManager);
+        return service;
+    };
+}
+exports.searchManagerFactory = searchManagerFactory;
 var NgxElasticsearchModule = NgxElasticsearchModule_1 = (function () {
     function NgxElasticsearchModule() {
     }
     NgxElasticsearchModule.forRoot = function (conf) {
-        Object.assign(config, conf || {});
+        Object.assign(exports.config, conf || {});
         return {
             ngModule: NgxElasticsearchModule_1,
             providers: [
                 {
                     provide: SearchManagerService_1.NgxSearchManagerService,
-                    useFactory: exports.searchManagerFactory
+                    useFactory: searchManagerFactory
                 }
             ]
         };

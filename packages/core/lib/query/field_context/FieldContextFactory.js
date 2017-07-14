@@ -9,7 +9,6 @@ exports.FieldContextFactory = function (fieldOptions) {
             return new NestedFieldContext_1.NestedFieldContext(fieldOptions);
         case 'children':
             return new ChildrenFieldContext_1.ChildrenFieldContext(fieldOptions);
-        case 'embedded':
         default:
             return new EmbeddedFieldContext_1.EmbeddedFieldContext(fieldOptions);
     }

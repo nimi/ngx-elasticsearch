@@ -1,5 +1,5 @@
-import {Accessor} from './Accessor';
-import {mapValues, zipObject, constant} from 'lodash';
+import { Accessor } from './Accessor';
+import { mapValues, zipObject, constant } from 'lodash';
 import { ImmutableQuery } from '../query/ImmutableQuery';
 
 

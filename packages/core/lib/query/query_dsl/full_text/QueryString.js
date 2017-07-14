@@ -8,12 +8,16 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-function QueryString(query, options) {
+/**
+ * @name QueryString
+ * @description
+ *
+ * A query that uses a query parser in order to parse its content.
+ * See: https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
+ *
+ */
+exports.QueryString = function (query, options) {
     if (options === void 0) { options = {}; }
-    if (!query) {
-        return;
-    }
-    return { "query_string": __assign({ query: query }, options) };
-}
-exports.QueryString = QueryString;
+    return query ? ({ query_string: __assign({ query: query }, options) }) : void 0;
+};
 //# sourceMappingURL=QueryString.js.map
