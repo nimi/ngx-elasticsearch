@@ -31,7 +31,7 @@ export class AccessorManager {
    * @description Getter for accessors that are currently active
    */
   getActiveAccessors() {
-    return filter(this.accessors, {active:true});
+    return filter(this.accessors, { active:true });
   }
 
   /**
@@ -65,7 +65,7 @@ export class AccessorManager {
   add(accessor: any) {
     if (accessor instanceof StatefulAccessor) {
       if (accessor instanceof BaseQueryAccessor && accessor.key === 'q') {
-        if(this.queryAccessor !== noopQueryAccessor){
+        if (this.queryAccessor !== noopQueryAccessor) {
           throw new Error('Only a single instance of BaseQueryAccessor is allowed');
         } else {
           this.queryAccessor = accessor;

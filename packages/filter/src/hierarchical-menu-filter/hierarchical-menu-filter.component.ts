@@ -71,10 +71,6 @@ export class NgxHierarchicalMenuFilterComponent extends NgxElasticsearchComponen
 
   private resultsSub: Subscription;
 
-  constructor(private service: NgxSearchManagerService) {
-    super(service);
-  }
-
   ngOnInit() {
     super.ngOnInit();
     this.resultsSub = this.service.results$
@@ -98,7 +94,6 @@ export class NgxHierarchicalMenuFilterComponent extends NgxElasticsearchComponen
     event.stopPropagation();
     this.accessor.state =
       this.accessor.state.toggleLevel(level, option.key);
-    console.log('addFilter', level, option.key, this.accessor.state);
     this.service.search();
   }
 

@@ -7,7 +7,6 @@ import { Routing } from './app.routing';
 
 import { AppComponent } from './app.component';
 
-
 import { NgxElasticsearchModule } from '@ngx-elasticsearch/core';
 import { HockeyEventsModule } from './hockey-events/hockey-events.module';
 
@@ -28,21 +27,11 @@ const options = {
     BrowserModule,
     FormsModule,
     HttpModule,
-    // SharedModule,
-    // ExamplesModule,
-    // RootComponentsModule,
     Routing,
-
     NgxElasticsearchModule.forRoot({ url, options }),
     HockeyEventsModule
   ],
-  providers: [
-    // ComponentRegistryService,
-    // ComponentService,
-    // resolvedExampleModule(),
-    // componentExamples()
-  ],
-  // entryComponents: [ ...exampleComponents ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

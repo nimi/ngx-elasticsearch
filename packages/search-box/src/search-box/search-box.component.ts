@@ -123,11 +123,6 @@ export class NgxSearchBoxComponent extends NgxElasticsearchComponent {
   private service: NgxSearchManagerService;
   private onSearchingSub: Subscription;
 
-  constructor(service: NgxSearchManagerService) {
-    super(service);
-    this.service = service;
-  }
-
   ngOnInit() {
     super.ngOnInit();
   }

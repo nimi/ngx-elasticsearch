@@ -24,7 +24,7 @@ export class Accessor {
     return this;
   }
 
-  setSearchManager(search: SearchManager){
+  setSearchManager(search: SearchManager) {
     this.searchManager = search;
   }
 

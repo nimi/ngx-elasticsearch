@@ -33,7 +33,7 @@ export class SearchManager {
   public host: string;
 
   // Function assigned to resolve function of completed registration promise
-  public completeRegistration: Function = () => void 0;
+  public completeRegistration: Function;
 
   // Accessor state
   public state: any;
@@ -53,14 +53,14 @@ export class SearchManager {
   // Communication module for a ES Communication (i.e HTTP)
   public transport: ESTransport;
 
-  // Accessors are used to manage state and produce a fragment of an ElasticSearch query
-  public accessors: AccessorManager = new AccessorManager();
-
   // Stateful processor for searches, defaults to identity
   public queryProcessor: Function = x => x;
 
   // Immutable query object
-  public query: ImmutableQuery = new ImmutableQuery();
+  public query: ImmutableQuery;
+
+  // Accessors are used to manage state and produce a fragment of an ElasticSearch query
+  public accessors: AccessorManager;
 
   // Query loading state 
   public loading: boolean;
@@ -80,14 +80,12 @@ export class SearchManager {
 
   // Private
   private _unlistenHistory: Function = x => x;
-  private registrationCompleted: Promise<any> = new Promise((resolve) => {
-    this.completeRegistration = resolve;
-  });
+  private registrationCompleted: Promise<any>;
 
   constructor(host: string, options: SearchManagerOptions = {}){
     this.host = host;
     this.options = defaults(options, {
-      useHistory: true,
+      useHistory: false,
       httpHeaders: {},
       searchOnLoad: true,
     });
@@ -97,15 +95,17 @@ export class SearchManager {
       searchUrlPath: this.options.searchUrlPath || '_search',
       timeout:  this.options.timeout
     });
+    this.accessors = new AccessorManager();
+		this.registrationCompleted = new Promise((resolve) => {
+			this.completeRegistration = resolve;
+		});
+    this.query = new ImmutableQuery();
   }
 
   setupListeners() {
     this.initialLoading = true;
     if(this.options.useHistory) {
       // TODO: Add history logic
-      // this.unlistenHistory();
-      // this.history = createHistoryInstance();
-      // this.listenToHistory();
     } else {
       this.runInitialSearch();
     }
@@ -207,7 +207,7 @@ export class SearchManager {
   runInitialSearch(){
     if(this.options.searchOnLoad) {
       this.registrationCompleted.then(()=> {
-        this._search();
+        window.setTimeout(() => this.performSearch(true), 0);
       });
     }
   }
@@ -219,7 +219,7 @@ export class SearchManager {
    */
   searchFromUrlQuery(query: any){
     this.accessors.setState(query);
-    this._search();
+    this.performSearch();
   }
 
   /**
@@ -313,7 +313,7 @@ export class SearchManager {
   compareResults(previousResults: any, results: any) {
     let ids  = map(get(results, ['hits', 'hits'], []), '_id').join(',');
     let previousIds = get(previousResults, ['hits', 'ids'], '');
-    if(results.hits){
+    if (results.hits) {
       results.hits.ids = ids;
       results.hits.hasChanged = !(ids && ids === previousIds);
     }

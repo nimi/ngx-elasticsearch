@@ -20,12 +20,10 @@ export * from './utils';
 
 export let config = { url: '', options: {} };
 export function searchManagerFactory() {
-  return (c: any) => {
-    const searchManager = new SearchManager(config.url, config.options);
-    const service = new NgxSearchManagerService();
-    service.initialize(searchManager);
-    return service;
-  }
+  const searchManager = new SearchManager(config.url, config.options);
+  const service = new NgxSearchManagerService();
+  service.initialize(searchManager);
+  return service;
 }
 
 @NgModule({

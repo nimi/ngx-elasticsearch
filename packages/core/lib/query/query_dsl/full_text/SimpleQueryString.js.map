@@ -1,1 +1,0 @@
-{"version":3,"file":"SimpleQueryString.js","sourceRoot":"","sources":["../../../../src/query/query_dsl/full_text/SimpleQueryString.ts"],"names":[],"mappings":";;;;;;;;;;AAQA;;;;;;;;;GASG;AACU,QAAA,iBAAiB,GAAG,UAAC,KAAU,EAAE,OAAsC;IAAtC,wBAAA,EAAA,YAAsC;IAClF,OAAA,KAAK,GAAG,CAAC,EAAE,mBAAmB,aAAI,KAAK,OAAA,IAAK,OAAO,CAAE,EAAE,CAAC,GAAG,KAAK,CAAC;AAAjE,CAAiE,CAAC"}

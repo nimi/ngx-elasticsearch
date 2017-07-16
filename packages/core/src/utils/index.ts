@@ -5,7 +5,7 @@ export * from './immutability-helper';
 export * from './bem-helper';
 
 let guidCounter: number = 0;
-export const guid = (prefix: string = '') => {
+export const guid = (prefix: string = '__esx_id__') => {
   let id = ++guidCounter;
   return prefix.toString() + id;
 };

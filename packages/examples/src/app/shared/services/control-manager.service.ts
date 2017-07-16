@@ -34,7 +34,6 @@ export class ControlManagerService {
 
     controlStore.set(name, controlInfo);
 
-    console.log('gettting control value', name, controlStore.get(name));
     return controlStore.get(name).value;
   }
 

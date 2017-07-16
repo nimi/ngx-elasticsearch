@@ -47,8 +47,7 @@ export class SearchRequest {
    * @description Set results in search manager
    */
   private setResults(results: any) {
-    console.log('RESULTS', results);
-    if(this.active){
+    if (this.active) {
       this.searchManager.setResults(results);
     }
   }

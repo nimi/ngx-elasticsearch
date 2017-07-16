@@ -6,7 +6,7 @@ import { SearchManager } from './SearchManager';
 
 @Component({
   selector: 'ngx-search-component',
-  template: ''
+  template: '<div></div>'
 })
 export class NgxElasticsearchComponent implements OnDestroy {
   protected accessor: Accessor | void;
@@ -20,7 +20,7 @@ export class NgxElasticsearchComponent implements OnDestroy {
 
   ngOnInit() {
     this.accessor = this.defineAccessor();
-    if (this.accessor) {
+    if (this.accessor && this.manager) {
       this.accessor = this.manager.addAccessor(this.accessor);
     }
   }

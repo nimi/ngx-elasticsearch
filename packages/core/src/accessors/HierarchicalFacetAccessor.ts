@@ -40,7 +40,6 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor<LevelState> {
     return this.getAggregations([this.options.id, field, field, 'buckets'], []);
   }
 
-
   getOrder() {
     if (this.options.orderKey) {
       let orderDirection = this.options.orderDirection || 'asc';

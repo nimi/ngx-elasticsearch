@@ -178,7 +178,6 @@ export class NgxInputFilterComponent extends NgxElasticsearchComponent {
   }
 
   handleChange(value: string) {
-    console.log('handle change', value, this.searchOnChange);
     if (this.searchOnChange) {
       if (value.length > this.minLength) {
         this.searchQuery(value);
