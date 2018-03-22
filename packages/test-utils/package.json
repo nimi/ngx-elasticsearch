@@ -1,6 +1,6 @@
 {
   "name": "@ngx-elasticsearch/test-utils",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "license": "MIT",
   "main": "test.js",
   "scripts": {
@@ -53,5 +53,8 @@
     "ts-helpers": "^1.1.2",
     "webpack": "^3.0.0",
     "webpack-combine-loaders": "^2.0.3"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

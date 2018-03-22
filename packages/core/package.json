@@ -1,6 +1,6 @@
 {
   "name": "@ngx-elasticsearch/core",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Core package for elastic search components",
   "main": "lib/index.js",
   "scripts": {
@@ -33,12 +33,15 @@
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
-    "@ngx-elasticsearch/test-utils": "1.0.3",
+    "@ngx-elasticsearch/test-utils": "^1.0.4",
     "@types/qs": "^6.2.31",
     "core-js": "^2.4.0",
     "rxjs": "^5.2.0",
     "zone.js": "^0.8.4"
   },
   "author": "Nicholas Mitchell",
-  "license": "MIT"
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
 }
