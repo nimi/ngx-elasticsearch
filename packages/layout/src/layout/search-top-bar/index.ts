@@ -1,0 +1,1 @@
+export * from './search-top-bar.component';

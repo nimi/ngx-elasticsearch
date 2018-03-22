@@ -1,0 +1,20 @@
+# Editor-specific
+.idea
+*.sublime-project
+*.sublime-workspace
+.settings
+.vscode
+
+# Installed libs
+node_modules
+/packages/**/node_modules
+/packages/**/lib
+/packages/**/lib/**
+/packages/**/.angular-cli.json
+
+
+# Misc
+npm-debug.log
+lerna-debug.log
+.DS_Store
+ignore/

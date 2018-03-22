@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.common.json",
+  "compilerOptions": {
+    "outDir": "lib/",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "lib": [
+      "dom",
+      "es2015",
+      "es2016"
+    ],
+    "typeRoots" : [
+      "node_modules/@types",
+      "./typings"
+    ]
+  },
+  "files": [
+    "./src/index.ts"
+  ]
+}
