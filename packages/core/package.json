@@ -1,6 +1,6 @@
 {
   "name": "@ngx-elasticsearch/core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Core package for elastic search components",
   "main": "lib/index.js",
   "scripts": {
@@ -33,7 +33,7 @@
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
-    "@ngx-elasticsearch/test-utils": "^1.0.0",
+    "@ngx-elasticsearch/test-utils": "1.0.1",
     "@types/qs": "^6.2.31",
     "core-js": "^2.4.0",
     "rxjs": "^5.2.0",
